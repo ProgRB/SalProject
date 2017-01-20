@@ -1,0 +1,4 @@
+select *
+from {0}.MESSAGE M
+where UPPER(M.APP_NAME) in ('SALARY')
+ORDER BY DATE_MESSAGE DESC

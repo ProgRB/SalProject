@@ -1,0 +1,36 @@
+﻿<Window x:Class="Salary.View.FindOrders"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Salary.View"
+        Title="Поиск заказа" MinHeight="332" MaxHeight="500" WindowStartupLocation="CenterScreen" 
+        ShowInTaskbar="False" ResizeMode="CanResize" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="428" d:DesignWidth="500" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="local:FindOrders.AddNewOrderSalary" CanExecute="AddNewOrder_CanExecute" Executed="AddNewOrder_Executed"/>
+        <CommandBinding Command="local:FindOrders.SelectOrder" CanExecute="SelectOrder_CanExecute" Executed="SelectOrder_Executed"/>
+    </Window.CommandBindings>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+            <Button TabIndex="1" Name="btExit" Margin="4,4,20,4" Padding="10,1" Click="btExit_Click" Content="Выход" DockPanel.Dock="Right" IsCancel="True"/>
+            <Button TabIndex="1" Margin="4,4,10,4" Padding="10,1" IsDefault="True"  Command="local:FindOrders.SelectOrder" Content="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}" IsCancel="True"/>
+            <Button TabIndex="1" Name="btAddOrder" Margin="10,4,4,4" Padding="10,1"  Command="local:FindOrders.AddNewOrderSalary" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" DockPanel.Dock="Left"/>
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Bottom" >
+            <TextBlock Margin="7">Номер заказа</TextBlock>
+            <TextBox Name="tbOrder_name" Margin="4,4,10,4" TextChanged="tbOrder_name_TextChanged" 
+                     PreviewTextInput="tbOrder_name_PreviewTextInput" MinWidth="100"/>            
+        </DockPanel>
+        <DataGrid Name="dgOrders" ItemsSource="{Binding}" MouseDoubleClick="dgOrders_MouseDoubleClick" IsReadOnly="True" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер заказа" Binding="{Binding Path=ORDER_NAME}"/>                
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

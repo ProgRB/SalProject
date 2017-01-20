@@ -1,0 +1,553 @@
+﻿<Window x:Class="Salary.View.VacToSalaryImport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:l="clr-namespace:Salary"
+        xmlns:lv="clr-namespace:Salary.View"
+        xmlns:hlp="clr-namespace:Salary.Helpers"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        Title="Добавление/сравнение оплаты отпускных" Height="650" Width="1253" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.DumpVacToSalary" CanExecute="Dump_CanExecute" Executed="Dump_Executed"/>
+    </Window.CommandBindings>
+    <Window.Resources>
+        <lv:EqualConverter x:Key="EqualConverter">
+            <lv:EqualConverter.DefaulValue>
+                <SolidColorBrush Color="#FFE8E8E8"></SolidColorBrush>
+            </lv:EqualConverter.DefaulValue>
+            <lv:EqualConverter.FalseValue>
+                <SolidColorBrush>
+                    Coral
+                </SolidColorBrush>
+            </lv:EqualConverter.FalseValue>
+            <lv:EqualConverter.TrueValue>
+                <SolidColorBrush>
+                    LightGreen
+                </SolidColorBrush>
+            </lv:EqualConverter.TrueValue>
+        </lv:EqualConverter>
+        <l:MinusConverter x:Key="MinusConverter"/>
+        <Style TargetType="Label" x:Key="Day226Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="D226"/>
+                        <Binding Path="D226_D"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="Sum226Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="P226"/>
+                        <Binding Path="D226_P"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="Day227Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="D227"/>
+                        <Binding Path="D227_D"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="Sum227Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="P227"/>
+                        <Binding Path="D227_P"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="Day228Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="D228"/>
+                        <Binding Path="D228_D"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="Sum228Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="P228"/>
+                        <Binding Path="D228_P"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="Day258Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="D258"/>
+                        <Binding Path="D258_D"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="Sum258Style">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="P258"/>
+                        <Binding Path="D258_P"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+
+        <Style TargetType="Label" x:Key="LabelSumStyle">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="SumVac"/>
+                        <Binding Path="SumSalary"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <Style TargetType="Label" x:Key="LabelDayStyle">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource EqualConverter}">
+                        <Binding Path="DaysVac"/>
+                        <Binding Path="DaysSalary"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+        </Style>
+        <lv:VacToDataConverter x:Key="VacToDataConverter"/>
+        <DataTemplate x:Key="VacCellTemplate">
+            <Grid HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" >
+                <Grid.DataContext>
+                    <MultiBinding Converter="{StaticResource VacToDataConverter}">
+                        <Binding Path="."/>
+                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=DataGridCell}" Path="(Column)"/>
+                    </MultiBinding>
+                </Grid.DataContext>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridCell}, Path=ActualWidth, Converter={StaticResource MinusConverter}, ConverterParameter=50}"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="{Binding DaysVac}" BorderBrush="Gray" BorderThickness="0,0,1,1" ToolTip="Дни из графиков отпусков" Style="{StaticResource LabelDayStyle}"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="{Binding DaysSalary}" BorderBrush="Gray" BorderThickness="0,0,1,0" ToolTip="Дни из зарплаты" Style="{StaticResource LabelDayStyle}"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="{Binding SumVac}" ContentStringFormat="F2" BorderBrush="Gray" BorderThickness="0,0,0,1" HorizontalContentAlignment="Right" ToolTip="Сумма из графиков отпусков" Style="{StaticResource LabelSumStyle}"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="{Binding SumSalary}" ContentStringFormat="F2" BorderBrush="Gray" BorderThickness="0,0,0,0" HorizontalContentAlignment="Right" ToolTip="Сумма из зарплаты" Style="{StaticResource LabelSumStyle}"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GroupBox x:Name="gbFilter">
+            <GroupBox.Resources>
+                <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Width" Value="150"/>
+                    <Setter Property="Margin" Value="0,3"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                </Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="Margin" Value="15,2,5,2"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="2,3"/>
+                </Style>
+            </GroupBox.Resources>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <l:SubdivSelector Grid.ColumnSpan="2" AppRoleName="SALARY" Margin="26,3,0,3" Width="428" HorizontalAlignment="Left"
+                                  SubdivId="{Binding SubdivID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="1" Text="Начало периода"/>
+                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DateBegin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="Начало периода формирования отпусков"/>
+                <TextBlock Grid.Row="2" Text="Окончание периода"/>
+                <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding DateEnd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="Окончание периода формирования отпусков"/>
+                <Button Grid.Row="2" Grid.Column="1" x:Name="btClickRefresh" Click="btClickRefresh_Click" HorizontalAlignment="Left" Margin="155,2,2,2" Width="30"
+                        ToolTip="Применить фильтр">
+                    <Image Source="/Images/filter_3232.png" Stretch="UniformToFill"/>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <DockPanel Grid.Row="1">
+            <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                <Menu VerticalAlignment="Center" Background="Transparent">
+                    <MenuItem Command="cmd:AppCommands.DumpVacToSalary" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        <MenuItem.Header>
+                            <TextBlock Text="Сформировать в зарплату" VerticalAlignment="Center"/>
+                        </MenuItem.Header>
+                        <MenuItem.Icon>
+                            <Image Source="/Images/download_1616.png" Width="22"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </Menu>
+            </ToolBar>
+            <Grid >
+                <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding MainView}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="45" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding FL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="Отм." TextWrapping="Wrap" ToolTip="Отмеченные записи будут сформированы в зарплату" HorizontalAlignment="Center"/>
+                                    <CheckBox Grid.Row="1" IsChecked="False" x:Name="cbCheckAll" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5"
+                                              ToolTip="Отметить/снять все" Checked="cbCheckAll_Checked" Unchecked="cbCheckAll_Checked">
+                                        <CheckBox.LayoutTransform>
+                                            <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+                                        </CheckBox.LayoutTransform>
+                                    </CheckBox>
+                                </Grid>
+                    </DataGridTemplateColumn.Header>
+                </DataGridTemplateColumn>
+                        <DataGridTextColumn Width="50" Binding="{Binding PER_NUM}"  IsReadOnly="True">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Таб.№" HorizontalAlignment="Center"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                        <DataGridTextColumn Width="130" Binding="{Binding FIO}"  IsReadOnly="True">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="ФИО" HorizontalAlignment="Center"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                        <DataGridTextColumn Width="25" Binding="{Binding SIGN_COMB}"  IsReadOnly="True">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Совм." Margin="0,30,-20,-20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <TextBlock.RenderTransform>
+                                <RotateTransform Angle="-90"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                        <DataGridTextColumn Width="25" Binding="{Binding SIGN_FIRE}"  IsReadOnly="True">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Уволен" Margin="0,30,-30,-20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <TextBlock.RenderTransform>
+                                <RotateTransform Angle="-90"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                        <DataGridTemplateColumn Width="60" IsReadOnly="True">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="Тип" Margin="15,20,-10,-20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <TextBlock.RenderTransform>
+                                        <RotateTransform Angle="-90"/>
+                                    </TextBlock.RenderTransform>
+                                </TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Stretch" Margin="0">
+                                        <Grid.Resources>
+                                            <Style TargetType="Label">
+                                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="MinHeight" Value="22"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                            </Style>
+                                        </Grid.Resources>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <ToggleButton Grid.Row="0" Grid.Column="0" Content="Гр.отп." BorderBrush="Gray" BorderThickness="0,0,0,1" x:Name="tgButton1" Background="Transparent"
+                                                      Foreground="White"/>
+                                        <Popup IsOpen="{Binding ElementName=tgButton1, Path=IsChecked}" StaysOpen="False" AllowsTransparency="True">
+                                            <Border BorderBrush="Gray" CornerRadius="10" BorderThickness="2" Padding="15,10">
+                                                <TextBlock Foreground="Black" FontWeight="Bold" FontSize="12">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="Отпуск с {0:dd/MM/yyyy} по {1:dd/MM/yyyy} ">
+                                                            <Binding Path="ACTUAL_BEGIN"/>
+                                                            <Binding Path="ACTUAL_END"/>
+                                                        </MultiBinding>
+                                                        </TextBlock.Text>
+                                                </TextBlock>
+                                                <Border.Background>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFEBEBEB" Offset="0" />
+                                                        <GradientStop Color="#FFE5FFE5" Offset="1" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                        </Popup>
+                                        
+                                        <Label Grid.Row="1" Grid.Column="0" Content="ЗП" BorderThickness="0,0,0,0"/>
+                                        <Grid.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="#FF272727" Offset="0" />
+                                                <GradientStop Color="#FF545E6C" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Grid.Background>
+                                    </Grid>
+                                </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="180"  IsReadOnly="True" CellTemplate="{StaticResource VacCellTemplate}" hlp:SomeClass.Tag="226">
+                            <DataGridTemplateColumn.Header>
+                                <Grid HorizontalAlignment="Stretch" Margin="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="226 в.о." HorizontalAlignment="Center" Padding="10,2"/>
+                                    <Label Grid.Row="1" Content="Дни" BorderBrush="Gray" BorderThickness="0,1,1,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Content="Сумма" BorderBrush="Gray" BorderThickness="0,1,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                </Grid>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="0,1"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="180"  IsReadOnly="True" CellTemplate="{StaticResource VacCellTemplate}" hlp:SomeClass.Tag="227">
+                            <DataGridTemplateColumn.Header>
+                                <Grid HorizontalAlignment="Stretch" Margin="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="227 в.о." HorizontalAlignment="Center" Padding="10,2"/>
+                                    <Label Grid.Row="1" Content="Дни" BorderBrush="Gray" BorderThickness="0,1,1,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Content="Сумма" BorderBrush="Gray" BorderThickness="0,1,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                </Grid>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="0,1"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="160"  IsReadOnly="True" CellTemplate="{StaticResource VacCellTemplate}" hlp:SomeClass.Tag="228">
+                            <DataGridTemplateColumn.Header>
+                                <Grid HorizontalAlignment="Stretch" Margin="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="228 в.о." HorizontalAlignment="Center" Padding="10,2"/>
+                                    <Label Grid.Row="1" Content="Дни" BorderBrush="Gray" BorderThickness="0,1,1,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Content="Сумма" BorderBrush="Gray" BorderThickness="0,1,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                </Grid>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="0,1"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="180"  IsReadOnly="True" CellTemplate="{StaticResource VacCellTemplate}" hlp:SomeClass.Tag="258">
+                            <DataGridTemplateColumn.Header>
+                                <Grid HorizontalAlignment="Stretch" Margin="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" x:Name="cl258D"/>
+                                        <ColumnDefinition x:Name="cl258S"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="258 в.о." HorizontalAlignment="Center" Padding="10,2"/>
+                                    <Label Grid.Row="1" Content="Дни" BorderBrush="Gray" BorderThickness="0,1,1,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Content="Сумма" BorderBrush="Gray" BorderThickness="0,1,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                </Grid>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="0,1"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="180"  IsReadOnly="True" CellTemplate="{StaticResource VacCellTemplate}" hlp:SomeClass.Tag="215">
+                            <DataGridTemplateColumn.Header>
+                                <Grid HorizontalAlignment="Stretch" Margin="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50" x:Name="cl215D"/>
+                                        <ColumnDefinition x:Name="cl215S"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="215 в.о." HorizontalAlignment="Center" Padding="10,2"/>
+                                    <Label Grid.Row="1" Content="Дни" BorderBrush="Gray" BorderThickness="0,1,1,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Content="Сумма" BorderBrush="Gray" BorderThickness="0,1,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                                </Grid>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="0,1"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="5,2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="SeparatorBrush" Value="Gray"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+                <xctk:BusyIndicator IsBusy="{Binding IsBusy}" Grid.Row="1">
+                    <xctk:BusyIndicator.BusyContent>
+                        <TextBlock Text="Формирование данных"/>
+                    </xctk:BusyIndicator.BusyContent>
+                </xctk:BusyIndicator>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="Salary.View.RetentionCalcMethods"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Salary"
+             xmlns:viewmodel="clr-namespace:Salary.ViewModel"
+             xmlns:l="clr-namespace:Salary.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="367" d:DesignWidth="728">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="viewmodel:AppCommands.AddRetentSettings" CanExecute="AddRetSetting_CanExecute" Executed="AddRetSet_Executed"/>
+        <CommandBinding Command="viewmodel:AppCommands.DeleteRetentSettings" CanExecute="DelRetSetting_CanExecute" Executed="DelRetSet_Executed"/>
+        <CommandBinding Command="viewmodel:AppCommands.EditRetentSettings" CanExecute="EditRetSetting_CanExecute" Executed="EditRetSet_Executed"/>
+    </UserControl.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="1" x:Name="dgRetentMethod" AutoGenerateColumns="False" IsReadOnly="True" local:DataGridAddition.DoubleClickCommand="viewmodel:AppCommands.EditRetentSettings"
+                  Style="{StaticResource DataGridSalaryStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding METHOD_NAME}" Header="Наименование метода"/>
+                <DataGridTextColumn Binding="{Binding MAX_SALARY_PERCENT}" Header="Макс. % от ЗП"/>
+                <DataGridCheckBoxColumn Binding="{Binding USE_TAX_DISC}" Width="80">
+                    <DataGridCheckBoxColumn.Header>
+                        <TextBlock Text="Применять налоговые вычеты" TextWrapping="Wrap"/>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Binding="{Binding SIGN_INDIVIDUAL}" Header="Индивидуально"/>
+                <!--<DataGridCheckBoxColumn Binding="{Binding CALC_FULL_YEAR_SIGN}" Width="70">
+                    <DataGridCheckBoxColumn.Header>
+                        <TextBlock Text="С начала года" TextWrapping="Wrap"/>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>-->
+                <DataGridTextColumn Binding="{Binding PERCENT_RETENT}" Width="90">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Стандартный % удержания" TextWrapping="Wrap"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding SUM_RETENT}" Header="Сумма удержания стандартная"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="6"/>
+        <ToolBar>
+            <Button Command="viewmodel:AppCommands.AddRetentSettings" Style="{StaticResource ToolBoxBtStyle}">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+            </Button>
+            <Button Command="viewmodel:AppCommands.EditRetentSettings" Style="{StaticResource ToolBoxBtStyle}" >
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+            </Button>
+            <Button Command="viewmodel:AppCommands.DeleteRetentSettings" Style="{StaticResource ToolBoxBtStyle}" >
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+            </Button>
+        </ToolBar>
+        <GroupBox Grid.Row="3" Header="Шифры оплат для снятия удержания">
+            <DataGrid  x:Name="dgTaxedPayType" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" IsReadOnly="True"
+                       Style="{StaticResource DataGridSalaryStyle}">
+            <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding CODE_PAYMENT}" Width="60">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Шифр" ToolTip="Шифр начисления"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="80">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Сумма без удержания" ToolTip="Сумма начисления за год, с которой не производится удержание ЗП" TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding NOT_RET_SUM}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <local:NumericUpDown Value="{Binding NOT_RET_SUM}"></local:NumericUpDown>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding NAME_PAYMENT}" Width="300">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Наименование начисления" ToolTip="Наименование начисления" TextWrapping="Wrap"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                    <DataGridTextColumn Header="Зависимость" Binding="{Binding USE_FOR_RELATION}"/>
+                    <DataGridTextColumn Header="Расчет" Binding="{Binding USE_FOR_CALC}"/>
+                    <DataGridTextColumn Header="Другие" Binding="{Binding USE_FOR_OTHER_CALC}"/>
+                </DataGrid.Columns>
+        </DataGrid>
+        </GroupBox>
+    </Grid>
+</UserControl>

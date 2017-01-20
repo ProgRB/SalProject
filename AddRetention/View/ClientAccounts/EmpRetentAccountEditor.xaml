@@ -1,0 +1,159 @@
+﻿<Window x:Class="Salary.View.EmpRetentAccountEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        xmlns:view="clr-namespace:Salary.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Редактирование перечислений" Height="559" Width="877" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.AddClientRetention" CanExecute="Add_CanExecute" Executed="Add_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteClientRetention" CanExecute="Delete_CanExecute" Executed="Delete_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.ReplaceClientRetention" CanExecute="Delete_CanExecute" Executed="Replace_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.SaveClientAccount" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.AddClientRetentAccount" CanExecute="AddRelation_CanExecute" Executed="AddRelation_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteClientRetentAccount" CanExecute="DeleteRelation_CanExecute" Executed="DeleteRelation_Executed"/>
+        
+    </Window.CommandBindings>
+    <Window.Resources>
+        <view:EmpRetentAccountModel x:Key="Model">
+        </view:EmpRetentAccountModel>
+        <CollectionViewSource Source="{Binding Source={StaticResource Model}, Path=EmpAccounts}" x:Key="ClientAccounts"/>
+        <ObjectDataProvider x:Key="SalaryModel" ObjectInstance="{StaticResource Model}" MethodName="GetView">
+            <ObjectDataProvider.MethodParameters>
+                <sys:String>287</sys:String>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="AdvanceModel" ObjectInstance="{StaticResource Model}" MethodName="GetView">
+            <ObjectDataProvider.MethodParameters>
+                <sys:String>487</sys:String>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="OtherModel" ObjectInstance="{StaticResource Model}" MethodName="GetView">
+            <ObjectDataProvider.MethodParameters>
+                <sys:String>488</sys:String>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <Style x:Key="MySelectedItemStyle" TargetType="ListViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border 
+                            CornerRadius="8"
+                            BorderThickness="3"
+                            x:Name="IconBorder"
+                            Margin="2" >
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.703,0.958" StartPoint="0.504,0.087">
+                                    <GradientStop Color="#FFC9FFBB"/>
+                                    <GradientStop Color="#FF9ECC98" Offset="1"/>
+                                    <GradientStop Color="#FFB6D8AF" Offset="0.578"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                                <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="IconBorder" Property="BorderBrush" Value="Blue">
+                                </Setter>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding IS_CURRENT}" Value="0">
+                                <Setter TargetName="IconBorder" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.703,0.958" StartPoint="0.504,0.087">
+                                            <GradientStop Color="#FFF1F1F1"/>
+                                            <GradientStop Color="#FFD2D2D2" Offset="1"/>
+                                            <GradientStop Color="#FFCACDCE" Offset="0.578"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--<Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="true">
+                    <Setter Property="IsSelected" Value="true" />
+                </Trigger>
+            </Style.Triggers>-->
+        </Style>
+    </Window.Resources>
+    <Grid DataContext="{Binding Source={StaticResource Model}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl x:Name="tcAccounts">
+            <TabControl.Items>
+                <TabItem Header="Перечисление ЗП">
+                    <DockPanel>
+                        <ToolBarTray Orientation="Vertical" IsLocked="True" FocusManager.IsFocusScope="False">
+                            <ToolBar DockPanel.Dock="Left">
+                                <Button Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.AddClientRetention" CommandParameter="287">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                                </Button>
+                                <Button  Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.DeleteClientRetention" CommandParameter="{Binding ElementName=listViewSalary, Path=SelectedItem}">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                                </Button>
+                                <Separator></Separator>
+                                <Button  Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.ReplaceClientRetention" CommandParameter="{Binding ElementName=listViewSalary, Path=SelectedItem}">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/replace_3232.png"/>
+                                </Button>
+                            </ToolBar>
+                        </ToolBarTray>
+                        <ListView ItemTemplate="{DynamicResource DataTemplate1}" ItemsSource="{Binding Source={StaticResource SalaryModel}}" x:Name="listViewSalary"
+                                  ItemContainerStyle="{StaticResource MySelectedItemStyle}" IsSynchronizedWithCurrentItem="True" VirtualizingStackPanel.IsVirtualizing="False">
+                        </ListView>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Перечисление аванса">
+                    <DockPanel>
+                        <ToolBarTray Orientation="Vertical" IsLocked="True">
+                            <ToolBar DockPanel.Dock="Left">
+                                <Button Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.AddClientRetention" CommandParameter="487">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                                </Button>
+                                <Button  Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.DeleteClientRetention" CommandParameter="{Binding ElementName=listViewAdvance, Path=SelectedItem}">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                                </Button>
+                                <Separator></Separator>
+                                <Button  Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.ReplaceClientRetention" CommandParameter="{Binding ElementName=listViewAdvance, Path=SelectedItem}">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/replace_3232.png"/>
+                                </Button>
+                            </ToolBar>
+                        </ToolBarTray>
+                        <ListView ItemTemplate="{DynamicResource DataTemplate1}" ItemsSource="{Binding Source={StaticResource AdvanceModel}}" x:Name="listViewAdvance"
+                                  ItemContainerStyle="{StaticResource MySelectedItemStyle}"/>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Прочие перечисления">
+                    <DockPanel>
+                        <ToolBarTray Orientation="Vertical" IsLocked="True">
+                            <ToolBar DockPanel.Dock="Left">
+                                <Button Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.AddClientRetention" CommandParameter="488">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                                </Button>
+                                <Button  Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.DeleteClientRetention" CommandParameter="{Binding ElementName=listViewOther, Path=SelectedItem}">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                                </Button>
+                                <Separator></Separator>
+                                <Button  Style="{StaticResource ToolBoxBtStyle}" Command="cmd:AppCommands.ReplaceClientRetention" CommandParameter="{Binding ElementName=listViewOther, Path=SelectedItem}">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/replace_3232.png"/>
+                                </Button>
+                            </ToolBar>
+                        </ToolBarTray>
+                        <ListView ItemTemplate="{DynamicResource DataTemplate1}" ItemsSource="{Binding Source={StaticResource OtherModel}}" x:Name="listViewOther"
+                                  ItemContainerStyle="{StaticResource MySelectedItemStyle}"/>
+                    </DockPanel>
+                </TabItem>
+            </TabControl.Items>
+        </TabControl>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Background="{StaticResource LightBrush}" >
+            <Button Command="cmd:AppCommands.SaveClientAccount" Content="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}" Width="Auto" HorizontalAlignment="Center" Margin="10,3" Padding="10,1"/>
+            <Button Content="Закрыть" Width="Auto" Margin="10,3" Padding="10,1" Click="Button_Click" IsCancel="True"/>
+            <ToggleButton Margin="10,3" IsChecked="{Binding IsArchiv}" ToolTip="Показать/скрыть архивные записи">
+                <Image Source="/Images/archive_3232.png" Height="18" Width="35"/>
+            </ToggleButton>
+        </StackPanel>
+    </Grid>
+</Window>

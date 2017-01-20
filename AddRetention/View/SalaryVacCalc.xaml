@@ -1,0 +1,557 @@
+﻿<UserControl x:Class="Salary.View.SalaryVacCalc"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        mc:Ignorable="d" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:my="clr-namespace:Salary"
+        xmlns:vm ="clr-namespace:Salary.ViewModel" 
+        xmlns:v="clr-namespace:Salary.View"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:dat ="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        d:DesignHeight="433" d:DesignWidth="1036">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/View/ResourceDictionaryEmpRetention.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <AlternationConverter x:Key="AlternationConv" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    <sys:String>Нетdasfadsdsf</sys:String>
+                    <sys:String>Начислено</sys:String>
+                    <sys:String>Прочие шифры</sys:String>
+                    <sys:String>Взносы предприятия</sys:String>
+                    <sys:String>Невыплаченная ЗП</sys:String>
+                    <sys:String>Выплаченная ЗП</sys:String>
+                    <sys:String>Прочие доходы</sys:String>
+                    <sys:String>Нет</sys:String>
+                    <sys:String>Нет</sys:String>
+                    <sys:String>Перечисление</sys:String>
+            </AlternationConverter>
+            <CollectionViewSource x:Key="SalaryDocRelation" Source="{Binding SalaryDocRelation}">
+                <CollectionViewSource.GroupDescriptions>
+                    <dat:PropertyGroupDescription PropertyName="TYPE_PAYMENT_TYPE_ID"/>
+                </CollectionViewSource.GroupDescriptions>
+                <CollectionViewSource.SortDescriptions>
+                    <cm:SortDescription PropertyName="TYPE_PAYMENT_TYPE_ID"/>
+                    <cm:SortDescription PropertyName="CODE_PAYMENT"/>
+                    <cm:SortDescription PropertyName="DAYS"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+            <v:CollectionToSumConverter x:Key="CollectionToSumConverter" SumField="SUM_SAL"/>
+            <my:IsNullConverter x:Key="IsNullConverter"/>
+            <CollectionViewSource x:Key="SalaryDocumStatic" Source="{Binding SalaryDocum}">
+                <CollectionViewSource.GroupDescriptions>
+                    <dat:PropertyGroupDescription PropertyName="DATE_CLOSE" Converter="{StaticResource IsNullConverter}"/>
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="vm:AppCommands.CreateDocumentVac" CanExecute="CreateDocumentVac_CanExecute" Executed="CreateDocumentVac_Executed"/>
+        <CommandBinding Command="vm:AppCommands.CalcCheckedVacTypeByDocum" CanExecute="CalcCheckedVacTypeByDocum_CanExecute" Executed="CalcCheckedVacTypeByDocum_Executed"/>
+        <CommandBinding Command="vm:AppCommands.AddSalaryDocum" CanExecute="CreateDocumentVac_CanExecute" Executed="AddSalaryDocum_Executed"/>
+        <CommandBinding Command="vm:AppCommands.EditSalaryDocum" CanExecute="EditSalaryDocum_CanExecute" Executed="EditSalaryDocum_Executed"/>
+        <CommandBinding Command="vm:AppCommands.DeleteSalaryDocum" CanExecute="EditSalaryDocum_CanExecute" Executed="DeleteSalaryDocum_Executed"/>
+        <CommandBinding Command="vm:AppCommands.AddEmpPaySalary" CanExecute="AddSalaryDocumRel_CanExecute" Executed="AddSalaryDocumRelation_Executed"/>
+        <CommandBinding Command="vm:AppCommands.EditEmpPaySalary" CanExecute="DeleteSalaryDocumRelation_CanExecute" Executed="EditSalary_Executed"/>
+
+        <CommandBinding Command="vm:AppCommands.DeleteEmpPaySalary" CanExecute="DeleteSalaryDocumRelation_CanExecute" Executed="DeleteSalary_Executed"/>
+        <CommandBinding Command="vm:AppCommands.DeleteSalaryDocumRelation" CanExecute="DeleteSalaryDocumRelation_CanExecute" Executed="DeleteSalaryDocumRelation_Executed"/>
+        <CommandBinding Command="vm:AppCommands.ReAddSalaryDocumRelation" CanExecute="AddSalaryDocumRel_CanExecute" Executed="ReAddSalaryDocumRelation_Executed"/>
+        
+        <CommandBinding Command="vm:AppCommands.AddSalaryVac" CanExecute="AddSalaryDocumRel_CanExecute" Executed="AddSalaryVac_Executed"/>
+        <CommandBinding Command="vm:AppCommands.EditSalaryVac" CanExecute="DeleteSalaryVac_CanExecute" Executed="EditSalaryVac_Executed"/>
+        <CommandBinding Command="vm:AppCommands.DeleteSalaryVac" CanExecute="DeleteSalaryVac_CanExecute" Executed="DeleteSalaryVac_Executed"/>
+        <CommandBinding Command="vm:AppCommands.DumpSalaryVacs" CanExecute="CreateDocumentVac_CanExecute" Executed="DumpSalaryVacs_Executed"/>
+
+        <CommandBinding Command="vm:AppCommands.LockSalaryDocum" CanExecute="CalcCheckedVacTypeByDocum_CanExecute" Executed="LockSalaryDocum_Executed"/>
+        <CommandBinding Command="vm:AppCommands.UnlockSalaryDocum" CanExecute="CalcCheckedVacTypeByDocum_CanExecute" Executed="UnlockSalaryDocum_Executed"/>
+
+        <CommandBinding Command="vm:AppCommands.RepVacSalDeptAndPaid" CanExecute="ReportSelected_CanExecute" Executed="RepVacSalDeptAndPaid_Executed"/>
+        <CommandBinding Command="vm:AppCommands.RepConsolidVacReport" CanExecute="Report_CanExecute" Executed="RepConsolidVacReport_Executed"/>
+        <CommandBinding Command="vm:AppCommands.RepVacNote" CanExecute="ReportSelected_CanExecute" Executed="RepVacNote_Executed"/>
+        <CommandBinding Command="vm:AppCommands.EmpAVGDayPrice_Short" CanExecute="ReportSelected_CanExecute" Executed="EmpAVGDayPrice_Short_Executed"/>
+    </UserControl.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="334*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.ColumnSpan="3" Header="Фильтр" KeyDown="GroupBox_KeyDown">
+            <GroupBox.BindingGroup>
+                <BindingGroup x:Name="filterGroup"/>
+            </GroupBox.BindingGroup>
+            <Grid Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="10,2,5,2"/>
+                    </Style>
+                    <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="5,2"/>
+                        <Setter Property="MinWidth" Value="150"/>
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="2,2"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="ColumnA" Width="Auto"/>
+                        <ColumnDefinition SharedSizeGroup="ColumnBB" Width="Auto"/>
+                        <ColumnDefinition SharedSizeGroup="ColumnCC" Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Даты документов с"/>
+                    <DatePicker Grid.Column="1" x:Name="dpDateBegin" SelectedDate="{Binding DateBegin, Mode=TwoWay, UpdateSourceTrigger=Explicit}"/>
+                    <TextBlock Grid.Column="2" Text="по"/>
+                    <DatePicker Grid.Column="3" x:Name="dpDateEnd" SelectedDate="{Binding DateEnd, Mode=TwoWay, UpdateSourceTrigger=Explicit}"/>
+                    <TextBlock Grid.Column="4" Text="Тип документов"/>
+                    <ComboBox Grid.Column="5" Width="300" ItemsSource="{Binding TypeDocumSource}" DisplayMemberPath="TYPE_SAL_DOC_NAME" SelectedValue="{Binding TypeSalDocumID, UpdateSourceTrigger=Explicit}"
+                              SelectedValuePath="TYPE_SAL_DOCUM_ID"/>
+                </Grid>
+                <my:SubdivSelector Grid.Row="1" HorizontalAlignment="Left" x:Name="subdivSelector1" AppRoleName="SALARY" Width="452" Margin="2,2"
+                                   SubdivId="{Binding SubdivID, UpdateSourceTrigger=Explicit, Mode=TwoWay}"/>
+                <Button Grid.Row="1" x:Name="btFilter" Margin="460,2,0,2" Width="30" Click="btFilter_Click" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/filter_3232.png" Height="18"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Header="Документы расчета">
+            <DockPanel>
+                <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                    <Button Command="vm:AppCommands.DumpSalaryVacs" Style="{StaticResource ToolBoxBtStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/download_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            <TextBlock Text="Отпуска" VerticalAlignment="Center" Margin="5,2"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator/>
+                    <Button Command="vm:AppCommands.CreateDocumentVac" Style="{StaticResource ToolBoxBtStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/map_create_2424.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            <TextBlock Text="Документы" VerticalAlignment="Center" Margin="5,2"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator/>
+                    <Button Command="vm:AppCommands.CalcCheckedVacTypeByDocum" Style="{StaticResource ToolBoxBtStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/calc_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            <TextBlock Text="Расчет" VerticalAlignment="Center" Margin="5,2"/>
+                        </StackPanel>
+                    </Button>
+                    <Separator/>
+                    <Button Command="vm:AppCommands.LockSalaryDocum" Style="{StaticResource ToolBoxBtStyle}" CommandParameter="1">
+                        <Image Source="/Images/locked_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                    </Button>
+                    <Button Command="vm:AppCommands.UnlockSalaryDocum" Style="{StaticResource ToolBoxBtStyle}" CommandParameter="0">
+                        <Image Source="/Images/unlocked_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                    </Button>
+                    <Separator/>
+                    <Button Command="vm:AppCommands.AddSalaryDocum" Style="{StaticResource ToolBoxBtStyle}">
+                        <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                    </Button>
+                    <Button Command="vm:AppCommands.EditSalaryDocum" Style="{StaticResource ToolBoxBtStyle}">
+                        <Image Source="/Images/edit_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                    </Button>
+                    <Button Command="vm:AppCommands.DeleteSalaryDocum" Style="{StaticResource ToolBoxBtStyle}">
+                        <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                    </Button>
+                    <Separator/>                    
+                    <Menu VerticalAlignment="Center" Background="Transparent">
+                        <MenuItem ToolTip="Отчеты по документам" HorizontalAlignment="Center" VerticalAlignment="Center" Header="Отчеты">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/print2424.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </MenuItem.Icon>
+                            <!--<MenuItem Command="vm:AppCommands.RepVacSalDeptAndPaid" Header="Ведомость начислений и перечислений отпускных (для выбранных)"/>
+                            <Separator/>-->
+                            <MenuItem Command="vm:AppCommands.RepVacNote" Header="Записка-расчет о предоставлении отпуска"/>
+                            <Separator/>
+                            <MenuItem Header="Текстовые отчеты для печати на АЦПУ">
+                                <MenuItem Command="vm:AppCommands.EmpAVGDayPrice_Short" Header="Расчет среднего для отпуска" CommandParameter="Rep_TXTAvgPriceDay"/>
+                                <MenuItem Command="vm:AppCommands.EmpAVGDayPrice_Short" Header="Записка-расчет" CommandParameter="Rep_TXTVacNoteAccount"/>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Сводная ведомость за месяц по подразделению" Command="vm:AppCommands.RepConsolidVacReport" CommandParameter="Rep_ConsolidVacsMonth.rdlc"/>
+                            <MenuItem Header="Сводная ведомость за месяц по подразделению (подробный)" Command="vm:AppCommands.RepConsolidVacReport" CommandParameter="Rep_ConsolidVacsMonthFull.rdlc"/>
+                        </MenuItem>
+                    </Menu>
+                </ToolBar>
+                <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                          ItemsSource="{Binding Source={StaticResource SalaryDocumStatic}}" SelectedValue="{Binding CurrentDocument, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="dgSalDocum"
+                          my:DataGridAddition.DoubleClickCommand="vm:AppCommands.EditSalaryDocum">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="35">
+                            <DataGridTemplateColumn.Header>
+                                <CheckBox VerticalAlignment="Center" ToolTip="Отметить все" Checked="CheckAll_Checked" Unchecked="CheckAll_Checked">
+                                    <CheckBox.LayoutTransform>
+                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                    </CheckBox.LayoutTransform>
+                                </CheckBox>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding FL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <CheckBox.LayoutTransform>
+                                            <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
+                                        </CheckBox.LayoutTransform>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="Статус документа" TextWrapping="Wrap" Width="60" TextAlignment="Center">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform Angle="-90"/>
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="23" Height="23">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DATE_CLOSE, Converter={StaticResource IsNullConverter}}" Value="True">
+                                                        <Setter Property="Source" Value="/Images/unlocked_3232.png"/>
+                                                        <Setter Property="ToolTip" Value="Документ доступен для редактирования"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding DATE_CLOSE, Converter={StaticResource IsNullConverter}}" Value="False">
+                                                        <Setter Property="Source" Value="/Images/locked_3232.png"/>
+                                                        <Setter Property="ToolTip">
+                                                            <Setter.Value>
+                                                                <Binding Path="DATE_CLOSE" StringFormat="Документ закрыт в {0:HH:mm:ss dd/MM/yyyy}"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding DATE_DOC, StringFormat={}{0:dd/MM/yyyy}}" Width="80" IsReadOnly="True" SortMemberPath="DATE_DOC">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Дата документа" TextWrapping="Wrap" TextAlignment="Center"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding SIGN_FIRED}" Width="30" IsReadOnly="True">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Уволен">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform Angle="-90"/>
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Таб.№" Binding="{Binding PER_NUM}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ФИО" Binding="{Binding FIO}" Width="150" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding SIGN_COMB}" Width="30" IsReadOnly="True">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Совм.">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform Angle="-90"/>
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding DATE_FORM_DOCUM, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}" Width="150" IsReadOnly="True" SortMemberPath="DATE_FORM_DOCUM">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Дата создания документа" TextWrapping="Wrap" TextAlignment="Center"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="5,2"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SIGN_ERROR}" Value="1">
+                                    <Setter Property="Background" Value="Coral"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    
+                    <DataGrid.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="GroupItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Expander BorderBrush="Gray" BorderThickness="2" Margin="0,5" IsExpanded="True">
+                                                    <Expander.Header>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition SharedSizeGroup="ColumnA23"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Foreground="White" HorizontalAlignment="Stretch"
+                                                                       Padding="15,5" FontWeight="Bold">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding Name}" Value="True">
+                                                                                <Setter Property="Text" Value="Открытые документы"/>
+                                                                                <Setter Property="Background">
+                                                                                    <Setter.Value>
+                                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                                            <GradientStop Color="#FF206213" Offset="0" />
+                                                                                            <GradientStop Color="#FF287210" Offset="0.994" />
+                                                                                        </LinearGradientBrush>
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Name}" Value="False">
+                                                                                <Setter Property="Text" Value="Закрытые документы"/>
+                                                                                <Setter Property="Background">
+                                                                                    <Setter.Value>
+                                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                                            <GradientStop Color="#FF094D76" Offset="0" />
+                                                                                            <GradientStop Color="#FF698CA3" Offset="0.994" />
+                                                                                        </LinearGradientBrush>
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </Grid>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter Margin="10,2"/>
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </DataGrid.GroupStyle>
+                </DataGrid>
+            </DockPanel>
+        </GroupBox>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <Grid Grid.Column="2" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <GroupBox Header="Связанные выплаты">
+                <DockPanel>
+                    <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                        <Button Command="vm:AppCommands.AddEmpPaySalary" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                        <Button Command="vm:AppCommands.EditEmpPaySalary" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/edit_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                        <Button Command="vm:AppCommands.DeleteEmpPaySalary" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                        <Separator/>
+                        <Button Command="vm:AppCommands.DeleteSalaryDocumRelation" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/break_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                        <Separator/>
+                        <Button Command="vm:AppCommands.ReAddSalaryDocumRelation" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/copydoc_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                    </ToolBar>
+                    <DataGrid AutoGenerateColumns="False" IsReadOnly="True"
+                              SelectedValue="{Binding CurrentSalary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              ItemsSource="{Binding Source={StaticResource SalaryDocRelation}}" Language="ru-RU" Grid.IsSharedSizeScope="True" 
+                              my:DataGridAddition.DoubleClickCommand="vm:AppCommands.EditEmpPaySalary">
+                        <DataGrid.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.ContainerStyle>
+                                    <Style TargetType="GroupItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <GroupBox BorderBrush="Gray" BorderThickness="2" Margin="0,5">
+                                                        <GroupBox.Header>
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition SharedSizeGroup="Column11"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Text="{Binding Name, Converter={StaticResource AlternationConv}}" Foreground="White" HorizontalAlignment="Stretch"
+                                                                       Padding="15,5" FontWeight="Bold">
+                                                                    <TextBlock.Background>
+                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                            <GradientStop Color="#FF3E3E3E" Offset="0" />
+                                                                            <GradientStop Color="#FF96A2A7" Offset="1" />
+                                                                        </LinearGradientBrush>
+                                                                    </TextBlock.Background>
+                                                                </TextBlock>
+                                                            </Grid>
+                                                        </GroupBox.Header>
+                                                        <DockPanel>
+                                                            <Grid DockPanel.Dock="Bottom">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition SharedSizeGroup="Column11"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock FontWeight="Bold" AllowDrop="False" Foreground="White" Padding="15,5">
+                                                                    <TextBlock.Background><LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0"><GradientStop Color="#FF3FC43F" Offset="0" /><GradientStop Color="#FF365236" Offset="0.983" /></LinearGradientBrush></TextBlock.Background>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="Итого {0}: {1:F2}">
+                                                                            <Binding Path="Name" Converter="{StaticResource AlternationConv}"/>
+                                                                            <Binding Path="Items" Converter="{StaticResource CollectionToSumConverter}"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                            </Grid>
+                                                            <ItemsPresenter Margin="15,2,2,2"/>
+                                                        </DockPanel>
+                                                    </GroupBox>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </GroupStyle.ContainerStyle>
+                            </GroupStyle>
+                        </DataGrid.GroupStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Шифр" Binding="{Binding CODE_PAYMENT}"/>
+                            <DataGridTextColumn Header="Дни" Binding="{Binding DAYS}"/>
+                            <DataGridTextColumn Header="Сумма" Binding="{Binding SUM_SAL, StringFormat={}{0:F2}}" Width="100"/>
+                            <DataGridTextColumn Header="Категория" Binding="{Binding CODE_DEGREE}" Width="80"/>
+                            <DataGridTextColumn Header="Заказ" Binding="{Binding ORDER_NAME}" Width="120"/>
+                            <DataGridTextColumn Header="Назначение" Binding="{Binding BANK_NAME}" Width="220"/>
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="5,2"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                            <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.CellStyle>
+                    </DataGrid>
+                </DockPanel>
+            </GroupBox>
+            <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Height="5"/>
+            <GroupBox Grid.Row="2"  Header="Удержано">
+                <DockPanel>
+                    <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                        <Button Command="vm:AppCommands.AddSalaryVac" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                        <Button Command="vm:AppCommands.EditSalaryVac" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/edit_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                        <Button Command="vm:AppCommands.DeleteSalaryVac" Style="{StaticResource ToolBoxBtStyle}">
+                            <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                        </Button>
+                    </ToolBar>
+                    <DataGrid AutoGenerateColumns="False" IsReadOnly="True" SelectedValue="{Binding CurrentSalaryVac, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding SalaryVac}" Language="ru-RU" Grid.IsSharedSizeScope="True"
+                              my:DataGridAddition.DoubleClickCommand="vm:AppCommands.EditSalaryVac">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding CODE_PAYMENT}" Header="Шифр"/>
+                            <DataGridTextColumn Binding="{Binding SUM_SAL, StringFormat='{}{0:0,0.00}'}" Header="Сумма" Width="80">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTemplateColumn Width="300">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="Документ удержания"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Background" Value="DarkGray"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Style>
+                                        </DataTemplate.Resources>
+                                        <ContentPresenter Grid.IsSharedSizeScope="True" ContentTemplate="{StaticResource RetentTemplate}">
+                                            
+                                        </ContentPresenter>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="5,2"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                            <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.CellStyle>
+                    </DataGrid>
+                </DockPanel>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="Salary.Loan.Loan_Cost_Item_Viewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lcl="clr-namespace:Salary.Loan.Classes"        
+             xmlns:lhelp="clr-namespace:Salary.Helpers"
+             mc:Ignorable="d" Language="ru-RU"
+             d:DesignHeight="300" d:DesignWidth="428">
+    <!--<UserControl.Resources>
+        <lhelp:BindingProxy x:Key="proxy" Data="{Binding ElementName=dgLoan_Cost_Item, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}" />
+    </UserControl.Resources>-->
+    <UserControl.CommandBindings>
+        <CommandBinding Command="lcl:LoanCommands.AddLoan_Cost_Item" CanExecute="AddLoan_Cost_Item_CanExecute" Executed="AddLoan_Cost_Item_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.DeleteLoan_Cost_Item" CanExecute="DeleteLoan_Cost_Item_CanExecute" Executed="DeleteLoan_Cost_Item_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.SaveLoan_Cost_Item" CanExecute="SaveLoan_Cost_Item_CanExecute" Executed="SaveLoan_Cost_Item_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.CancelLoan_Cost_Item" CanExecute="CancelLoan_Cost_Item_CanExecute" Executed="CancelLoan_Cost_Item_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.AddItem_Fin_Plan" CanExecute="AddItem_Fin_Plan_CanExecute" Executed="AddItem_Fin_Plan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.DeleteItem_Fin_Plan" CanExecute="DeleteItem_Fin_Plan_CanExecute" Executed="DeleteItem_Fin_Plan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.SaveItem_Fin_Plan" CanExecute="SaveItem_Fin_Plan_CanExecute" Executed="SaveItem_Fin_Plan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.CancelItem_Fin_Plan" CanExecute="CancelItem_Fin_Plan_CanExecute" Executed="CancelItem_Fin_Plan_Executed"/>
+    </UserControl.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--<ToolBarTray Focusable="False">
+            <ToolBar Grid.Row="0"  Focusable="False">
+            <Button Style="{StaticResource ToolBoxBtStyle}" Focusable="False" Command="lcl:LoanCommands.AddLoan_Cost_Item">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+            </Button>
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.DeleteLoan_Cost_Item">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+            </Button>
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.SaveLoan_Cost_Item">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/save_2222.png"/>
+            </Button>
+            <Button  Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.CancelLoan_Cost_Item">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/undo_2424.png"/>
+            </Button>
+            </ToolBar>
+        </ToolBarTray>-->
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="#FFCECEA9" Offset="1" />
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.AddLoan_Cost_Item">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+            </Button>
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.DeleteLoan_Cost_Item">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+            </Button>
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.SaveLoan_Cost_Item">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/save_2222.png"/>
+            </Button>
+            <Button  Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.CancelLoan_Cost_Item">
+                <Button.Foreground>
+                    <SolidColorBrush />
+                </Button.Foreground>
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                        <GradientStop Color="White" Offset="0" />
+                        <GradientStop Color="Transparent" Offset="1" />
+                    </LinearGradientBrush>
+                </Button.Background>
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/undo_2424.png"/>
+            </Button>
+        </StackPanel>
+        <DataGrid Grid.Row="1" Name="dgLoan_Cost_Item" ItemsSource="{Binding}" Style="{StaticResource DataGridSalaryStyle}"
+                  SelectionUnit="FullRow" SelectionMode="Single" SelectionChanged="dgLoan_Cost_Item_SelectionChanged"
+                  SelectedCellsChanged="dg_SelectedCellsChanged" CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Наименование статьи затрат" Binding="{Binding Path=LOAN_COST_ITEM_NAME, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Код статьи затрат" Binding="{Binding Path=LOAN_COST_ITEM_CODE, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Grid.Row="2">
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Background>
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                        <GradientStop Color="White" Offset="0" />
+                        <GradientStop Color="#FFA8A884" Offset="1" />
+                    </LinearGradientBrush>
+                </StackPanel.Background>
+                <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.AddItem_Fin_Plan">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                </Button>
+                <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.DeleteItem_Fin_Plan">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                </Button>
+                <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.SaveItem_Fin_Plan">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/save_2222.png"/>
+                </Button>
+                <Button  Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.CancelItem_Fin_Plan">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/undo_2424.png"/>
+                </Button>
+            </StackPanel>
+            <DataGrid Grid.Row="1" Name="dgItem_Fin_Plan" Style="{StaticResource DataGridSalaryStyle}"
+                      ItemsSource="{Binding ElementName=dgLoan_Cost_Item, Path=SelectedItem, Converter={StaticResource ChildConverter}, ConverterParameter=LOAN_COST_ITEM_id_fk}"
+                      SelectionUnit="CellOrRowHeader" SelectionMode="Single"
+                      SelectedCellsChanged="dg_SelectedCellsChanged" CanUserAddRows="False" CanUserDeleteRows="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Дата установки статьи">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=ITEM_DATE, StringFormat={}{0:d}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding Path=ITEM_DATE, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Обозначение статьи финплана" Binding="{Binding Path=ITEM_NOTE, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTextColumn Header="Код статьи финплана" Binding="{Binding Path=ITEM_CODE, UpdateSourceTrigger=PropertyChanged}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</UserControl>

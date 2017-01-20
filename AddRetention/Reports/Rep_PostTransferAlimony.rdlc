@@ -1,0 +1,1453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
+  <DataSources>
+    <DataSource Name="ReportDataSet">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>59789946-8f59-4131-a51b-0b3e30da7efa</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet1">
+      <Fields>
+        <Field Name="CODE_DEGREE">
+          <DataField>CODE_DEGREE</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CODE_ORDER">
+          <DataField>CODE_ORDER</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SUM_SAL">
+          <DataField>SUM_SAL</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="HOURS">
+          <DataField>HOURS</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="PAY_TYPE_ID">
+          <DataField>PAY_TYPE_ID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ZONE_ADD">
+          <DataField>ZONE_ADD</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="EXP_ADD">
+          <DataField>EXP_ADD</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ALL_SUM">
+          <DataField>ALL_SUM</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="ID">
+          <DataField>ID</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SUM_SAL_ROUND">
+          <DataField>SUM_SAL_ROUND</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SUM_CENT">
+          <DataField>SUM_CENT</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SUM_SAL_WORD">
+          <DataField>SUM_SAL_WORD</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="INDEX1">
+          <DataField>INDEX1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ADDRESS">
+          <DataField>ADDRESS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FIO1">
+          <DataField>FIO1</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FIO2">
+          <DataField>FIO2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PER_NUM">
+          <DataField>PER_NUM</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CODE_SUBDIV">
+          <DataField>CODE_SUBDIV</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="INDEX2">
+          <DataField>INDEX2</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PAY_DATE">
+          <DataField>PAY_DATE</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PLF_ADDRESS">
+          <DataField>PLF_ADDRESS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>ReportDataSet</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <rd:DataSetInfo>
+        <rd:DataSetName>ReportDataSet</rd:DataSetName>
+        <rd:SchemaPath>C:\JOB\AddRetention\AddRetention\Reports\ReportDataSet.xsd</rd:SchemaPath>
+        <rd:TableName>RepTable</rd:TableName>
+        <rd:TableAdapterFillMethod />
+        <rd:TableAdapterGetDataMethod />
+        <rd:TableAdapterName />
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
+  <Body>
+    <ReportItems>
+      <Tablix Name="Tablix2">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>7.73625in</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>5.3446in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Rectangle Name="Rectangle2">
+                      <ReportItems>
+                        <Textbox Name="Textbox47">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>_____________________________________________________________________________________________________________________________________________________________________</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox47</rd:DefaultName>
+                          <Top>8.34602cm</Top>
+                          <Left>8.71537cm</Left>
+                          <Height>1.31358cm</Height>
+                          <Width>10.35492cm</Width>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox20">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Сообщение:</Value>
+                                  <Style>
+                                    <FontStyle>Italic</FontStyle>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Top>11.11003cm</Top>
+                          <Left>3.85875cm</Left>
+                          <Height>0.57354cm</Height>
+                          <Width>2.33245cm</Width>
+                          <ZIndex>1</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox21">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Адрес:</Value>
+                                  <Style>
+                                    <FontStyle>Italic</FontStyle>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Top>10.70132cm</Top>
+                          <Left>4.17625cm</Left>
+                          <Height>0.57354cm</Height>
+                          <Width>1.58039cm</Width>
+                          <ZIndex>2</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox18">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Кому:</Value>
+                                  <Style>
+                                    <FontStyle>Italic</FontStyle>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Top>9.69488cm</Top>
+                          <Left>4.36675cm</Left>
+                          <Height>0.57354cm</Height>
+                          <Width>1.48514cm</Width>
+                          <ZIndex>3</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox22">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>От кого:</Value>
+                                  <Style>
+                                    <FontStyle>Italic</FontStyle>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Top>10.21244cm</Top>
+                          <Left>3.80936cm</Left>
+                          <Height>0.57354cm</Height>
+                          <Width>1.75677cm</Width>
+                          <ZIndex>4</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Image Name="Image1">
+                          <Source>Embedded</Source>
+                          <Value>gerb</Value>
+                          <Sizing>FitProportional</Sizing>
+                          <Top>2.45364cm</Top>
+                          <Left>3.85875cm</Left>
+                          <Height>2.83104cm</Height>
+                          <Width>2.56958cm</Width>
+                          <ZIndex>5</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Image>
+                        <Textbox Name="Textbox1">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Приложение к Распоряжению</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>от "__"_______________20__г.</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>№_______________________</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Top>0.79798cm</Top>
+                          <Left>14.46423cm</Left>
+                          <Height>1.74625cm</Height>
+                          <Width>5.18583cm</Width>
+                          <ZIndex>6</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line1">
+                          <Top>2.54889cm</Top>
+                          <Left>0.11324cm</Left>
+                          <Height>0cm</Height>
+                          <Width>19.3675cm</Width>
+                          <ZIndex>7</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Line Name="Line3">
+                          <Top>2.54889cm</Top>
+                          <Left>3.7cm</Left>
+                          <Height>10.07388cm</Height>
+                          <Width>0cm</Width>
+                          <ZIndex>8</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox3">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>ПРИЕМ</Value>
+                                  <Style>
+                                    <FontSize>14pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Top>2.96164cm</Top>
+                          <Left>6.66962cm</Left>
+                          <Height>3.24909cm</Height>
+                          <Width>0.68792cm</Width>
+                          <ZIndex>9</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox2">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Почта России</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Top>4.91956cm</Top>
+                          <Left>3.80583cm</Left>
+                          <Height>0.6cm</Height>
+                          <Width>2.80635cm</Width>
+                          <ZIndex>10</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox4">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>№__________</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
+                          <Top>5.51223cm</Top>
+                          <Left>3.82799cm</Left>
+                          <Height>0.6985cm</Height>
+                          <Width>2.80635cm</Width>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox5">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>(по р.ф.11)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <Top>5.89852cm</Top>
+                          <Left>3.88091cm</Left>
+                          <Height>0.6cm</Height>
+                          <Width>2.31029cm</Width>
+                          <ZIndex>12</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox6">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>ПОЧТОВЫЙ ПЕРЕВОД</Value>
+                                  <Style>
+                                    <FontSize>14pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <Top>6.70666cm</Top>
+                          <Left>3.84111cm</Left>
+                          <Height>0.71712cm</Height>
+                          <Width>6.08542cm</Width>
+                          <ZIndex>13</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox7">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>(Электронный) на</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox7</rd:DefaultName>
+                          <Top>6.72254cm</Top>
+                          <Left>10.06157cm</Left>
+                          <Height>0.60952cm</Height>
+                          <Width>3.21204cm</Width>
+                          <ZIndex>14</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SUM_SAL_ROUND">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!SUM_SAL_ROUND.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SUM_SAL_ROUND</rd:DefaultName>
+                          <Top>6.72254cm</Top>
+                          <Left>13.42496cm</Left>
+                          <Height>0.53897cm</Height>
+                          <Width>2.85009cm</Width>
+                          <ZIndex>15</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Bottom</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line2">
+                          <Top>12.62278cm</Top>
+                          <Left>0.08466cm</Left>
+                          <Height>0cm</Height>
+                          <Width>19.3675cm</Width>
+                          <ZIndex>16</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox10">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>руб.</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <Top>6.72254cm</Top>
+                          <Left>16.3195cm</Left>
+                          <Height>0.6cm</Height>
+                          <Width>0.89958cm</Width>
+                          <ZIndex>17</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line8">
+                          <Top>7.29678cm</Top>
+                          <Left>13.49904cm</Left>
+                          <Height>0cm</Height>
+                          <Width>2.77601cm</Width>
+                          <ZIndex>18</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="SUM_CENT">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!SUM_CENT.Value*100</Value>
+                                  <Style>
+                                    <Format>00</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SUM_CENT</rd:DefaultName>
+                          <Top>6.72254cm</Top>
+                          <Left>17.34785cm</Left>
+                          <Height>0.53897cm</Height>
+                          <Width>1.25412cm</Width>
+                          <ZIndex>19</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Bottom</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line10">
+                          <Top>7.30885cm</Top>
+                          <Left>18.58434cm</Left>
+                          <Height>0cm</Height>
+                          <Width>-1.24354cm</Width>
+                          <ZIndex>20</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox12">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>коп.</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Top>6.72254cm</Top>
+                          <Left>18.6496cm</Left>
+                          <Height>0.67408cm</Height>
+                          <Width>0.79587cm</Width>
+                          <ZIndex>21</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SUM_SAL_ROUND2">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!SUM_SAL_WORD.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SUM_SAL_ROUND</rd:DefaultName>
+                          <Top>7.47317cm</Top>
+                          <Left>3.92113cm</Left>
+                          <Height>0.40949cm</Height>
+                          <Width>12.00997cm</Width>
+                          <ZIndex>22</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Bottom</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox13">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>руб.</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
+                          <Top>7.41073cm</Top>
+                          <Left>16.33891cm</Left>
+                          <Height>0.6cm</Height>
+                          <Width>0.89958cm</Width>
+                          <ZIndex>23</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line9">
+                          <Top>7.98497cm</Top>
+                          <Left>3.80936cm</Left>
+                          <Height>0cm</Height>
+                          <Width>12.46569cm</Width>
+                          <ZIndex>24</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox14">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!SUM_CENT.Value*100</Value>
+                                  <Style>
+                                    <Format>00</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Top>7.44996cm</Top>
+                          <Left>17.32492cm</Left>
+                          <Height>0.53501cm</Height>
+                          <Width>1.27705cm</Width>
+                          <ZIndex>25</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Bottom</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line11">
+                          <Top>8.02879cm</Top>
+                          <Left>18.60021cm</Left>
+                          <Height>0cm</Height>
+                          <Width>-1.24354cm</Width>
+                          <ZIndex>26</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox15">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>коп.</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Top>7.37545cm</Top>
+                          <Left>18.66547cm</Left>
+                          <Height>0.70936cm</Height>
+                          <Width>0.79587cm</Width>
+                          <ZIndex>27</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox17">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Куда:</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Top>8.27193cm</Top>
+                          <Left>3.78883cm</Left>
+                          <Height>0.57354cm</Height>
+                          <Width>1.04952cm</Width>
+                          <ZIndex>28</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line15">
+                          <Top>8.77464cm</Top>
+                          <Left>6.80508cm</Left>
+                          <Height>0cm</Height>
+                          <Width>-1.93146cm</Width>
+                          <ZIndex>29</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox19">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>(индекс)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Top>8.2612cm</Top>
+                          <Left>6.86817cm</Left>
+                          <Height>0.57354cm</Height>
+                          <Width>1.6373cm</Width>
+                          <ZIndex>30</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line16">
+                          <Top>12.10592cm</Top>
+                          <Left>3.92113cm</Left>
+                          <Height>0cm</Height>
+                          <Width>11.66601cm</Width>
+                          <ZIndex>31</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Line Name="Line17">
+                          <Top>11.64801cm</Top>
+                          <Left>5.9055cm</Left>
+                          <Height>0cm</Height>
+                          <Width>13.55584cm</Width>
+                          <ZIndex>32</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Line Name="Line18">
+                          <Top>11.16118cm</Top>
+                          <Left>10.28383cm</Left>
+                          <Height>0cm</Height>
+                          <Width>9.17752cm</Width>
+                          <ZIndex>33</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Line Name="Line19">
+                          <Top>10.65847cm</Top>
+                          <Left>5.32342cm</Left>
+                          <Height>0cm</Height>
+                          <Width>14.13793cm</Width>
+                          <ZIndex>34</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox23">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Ф.112э</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox23</rd:DefaultName>
+                          <Top>2.71039cm</Top>
+                          <Left>18.01813cm</Left>
+                          <Height>0.6cm</Height>
+                          <Width>1.55434cm</Width>
+                          <ZIndex>35</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line24">
+                          <Top>11.13472cm</Top>
+                          <Left>5.32342cm</Left>
+                          <Height>0cm</Height>
+                          <Width>3.04753cm</Width>
+                          <ZIndex>36</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox24">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>(индекс)</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Top>10.66957cm</Top>
+                          <Left>8.54734cm</Left>
+                          <Height>0.57354cm</Height>
+                          <Width>1.60203cm</Width>
+                          <ZIndex>37</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox25">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>прописью</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox25</rd:DefaultName>
+                          <Top>7.9121cm</Top>
+                          <Left>8.71537cm</Left>
+                          <Height>0.43392cm</Height>
+                          <Width>2.64049cm</Width>
+                          <ZIndex>38</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line25">
+                          <Top>12.10839cm</Top>
+                          <Left>16.62113cm</Left>
+                          <Height>0cm</Height>
+                          <Width>2.84022cm</Width>
+                          <ZIndex>39</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox26">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Подпись оператора</Value>
+                                  <Style>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox26</rd:DefaultName>
+                          <Top>12.11544cm</Top>
+                          <Left>16.62113cm</Left>
+                          <Height>0.31044cm</Height>
+                          <Width>2.83104cm</Width>
+                          <ZIndex>40</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="PLF_ADDRESS">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PLF_ADDRESS.Value</Value>
+                                  <Style>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                                <LineHeight>20pt</LineHeight>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>PLF_ADDRESS</rd:DefaultName>
+                          <Top>8.31904cm</Top>
+                          <Left>8.84237cm</Left>
+                          <Height>1.34055cm</Height>
+                          <Width>9.97803cm</Width>
+                          <ZIndex>41</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="INDEX2">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!INDEX2.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>INDEX2</rd:DefaultName>
+                          <Top>8.31427cm</Top>
+                          <Left>4.87363cm</Left>
+                          <Height>0.45698cm</Height>
+                          <Width>1.93146cm</Width>
+                          <ZIndex>42</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox29">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>АО "Улан-Удэнский Авиационный завод"</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Top>10.21397cm</Top>
+                          <Left>5.40279cm</Left>
+                          <Height>0.44501cm</Height>
+                          <Width>9.05793cm</Width>
+                          <ZIndex>43</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox30">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>670009</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Top>10.68971cm</Top>
+                          <Left>5.32342cm</Left>
+                          <Height>0.44501cm</Height>
+                          <Width>3.04753cm</Width>
+                          <ZIndex>44</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox31">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>г. Улан-Удэ ул. Хоринская 1</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Top>10.66604cm</Top>
+                          <Left>10.14936cm</Left>
+                          <Height>0.44501cm</Height>
+                          <Width>9.2961cm</Width>
+                          <ZIndex>45</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Bottom</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox32">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PAY_DATE.Value</Value>
+                                  <Style>
+                                    <Format>="Алименты за "&amp;Month(Fields!PAY_DATE.Value)&amp;" месяц "&amp;Year(Fields!PAY_DATE.Value)&amp;" год"</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Top>11.14531cm</Top>
+                          <Left>6.29703cm</Left>
+                          <Height>0.44501cm</Height>
+                          <Width>13.14843cm</Width>
+                          <ZIndex>46</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Bottom</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox33">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!FIO1.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Top>11.63265cm</Top>
+                          <Left>4.081cm</Left>
+                          <Height>0.44501cm</Height>
+                          <Width>11.24155cm</Width>
+                          <ZIndex>47</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Bottom</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox34">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!FIO2.Value</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Top>9.69488cm</Top>
+                          <Left>5.56614cm</Left>
+                          <Height>0.44501cm</Height>
+                          <Width>13.25427cm</Width>
+                          <ZIndex>48</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line20">
+                          <Top>10.13989cm</Top>
+                          <Left>5.32342cm</Left>
+                          <Height>0cm</Height>
+                          <Width>14.13793cm</Width>
+                          <ZIndex>49</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Textbox Name="Textbox27">
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>цифрами</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox25</rd:DefaultName>
+                          <Top>7.98497cm</Top>
+                          <Left>17.30904cm</Left>
+                          <Height>0.36104cm</Height>
+                          <Width>1.43085cm</Width>
+                          <ZIndex>50</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </ReportItems>
+                      <KeepTogether>true</KeepTogether>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <TopBorder>
+                          <Color>Black</Color>
+                          <Style>Dotted</Style>
+                        </TopBorder>
+                      </Style>
+                    </Rectangle>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember>
+              <Group Name="Details" />
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=Fields!CODE_SUBDIV.Value</Value>
+                </SortExpression>
+                <SortExpression>
+                  <Value>=Fields!PER_NUM.Value</Value>
+                </SortExpression>
+              </SortExpressions>
+            </TablixMember>
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>DataSet1</DataSetName>
+        <Height>13.57528cm</Height>
+        <Width>19.65008cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Tablix>
+    </ReportItems>
+    <Height>5.3446in</Height>
+    <Style />
+  </Body>
+  <Width>7.73625in</Width>
+  <Page>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
+    <LeftMargin>0.5cm</LeftMargin>
+    <RightMargin>0.5cm</RightMargin>
+    <TopMargin>0.5cm</TopMargin>
+    <BottomMargin>0.5cm</BottomMargin>
+    <ColumnSpacing>0.13cm</ColumnSpacing>
+    <Style />
+  </Page>
+  <EmbeddedImages>
+    <EmbeddedImage Name="gerb">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <rd:ReportID>70b756b7-7e41-4997-9820-077b267db3f5</rd:ReportID>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+</Report>

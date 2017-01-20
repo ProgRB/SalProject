@@ -1,0 +1,156 @@
+﻿<UserControl x:Class="Salary.View.PayTypeTable"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Salary.ViewModel"
+             xmlns:l="clr-namespace:Salary.View"
+             xmlns:ar ="clr-namespace:Salary"
+             mc:Ignorable="d" 
+             d:DesignHeight="395" d:DesignWidth="1001" Language="ru-RU">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:AppCommands.AddPayType" CanExecute="AddCommand_CanExecute" Executed="AddPayType_Executed"/>
+        <CommandBinding Command="local:AppCommands.EditPayType" CanExecute="EditCommand_CanExecute" Executed="EditPayType_Executed"/>
+        <CommandBinding Command="local:AppCommands.DeletePayType" CanExecute="EditCommand_CanExecute" Executed="DeletePayType_Executed"/>
+        <CommandBinding Command="local:AppCommands.IncPayTypePriority" CanExecute="IncPriotityPayTypeCommand_CanExecute" Executed="InctPayType_Executed"/>
+        <CommandBinding Command="l:PayTypeTable.DecPayTypePriority" CanExecute="IncPriotityPayTypeCommand_CanExecute" Executed="DectPayType_Executed"/>
+
+        <CommandBinding Command="local:AppCommands.AddCalcRelation" CanExecute="EditCommand_CanExecute" Executed="AddCalcRelation_Executed"/>
+        <CommandBinding Command="local:AppCommands.EditCalcRelation" CanExecute="EditCalcRelation_CanExecute" Executed="EditCalcRelation_Executed"/>
+        <CommandBinding Command="local:AppCommands.DeleteCalcRelation" CanExecute="EditCalcRelation_CanExecute" Executed="DeleteCalcRelation_Executed"/>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <l:NumberToBoolConverter x:Key="NumToBoolConv"/>
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="5,4"/>
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0">
+                <Button Command="local:AppCommands.AddPayType" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                </Button>
+                <Button Command="local:AppCommands.EditPayType" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                </Button>
+                <Button Command="local:AppCommands.DeletePayType" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                </Button>
+                <Separator/>
+            <Button Command="local:AppCommands.IncPayTypePriority" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}">
+                <Button.Content>
+                    <TextBlock Background="{StaticResource UpImage}" Width="20" Height="20"/>
+                </Button.Content>
+            </Button>
+            <Button Command="l:PayTypeTable.DecPayTypePriority" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}">
+                <Button.Content>
+                    <TextBlock Background="{StaticResource DownImage}" Width="20" Height="20"/>
+                </Button.Content>
+            </Button>
+        </ToolBar>
+
+            <DataGrid x:Name="dgPaymentType" AutoGenerateColumns="False" IsReadOnly="True" Grid.Row="1" IsSynchronizedWithCurrentItem="True"
+                      ar:DataGridAddition.DoubleClickCommand="local:AppCommands.EditPayType" SelectedValue="{Binding CurrentPaymentType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding PaymentSource}"
+                      Style="{StaticResource DataGridSalaryStyle}">
+                <DataGrid.CommandBindings>
+                    <CommandBinding Command="Print" CanExecute="Print_CanExecute" Executed="Print_Executed"/>
+                </DataGrid.CommandBindings>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="Print" Header="Печать"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=CODE_PAYMENT}"  Width="100">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Шифр оплат" TextWrapping="Wrap"></TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=NAME_PAYMENT}" Header="Наименование" Width="200" />
+                <DataGridTextColumn x:Name="dgclTypePay" Binding="{Binding TYPE_PAYMENT_TYPE_NAME}" Header="Тип" Width="120"/>
+                <DataGridTextColumn Binding="{Binding Path=CALC_PRIORITY}" Width="90">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Приоритет расчета" TextWrapping="Wrap"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridCheckBoxColumn Binding="{Binding Path=SIGN_FORM_REPORT, Converter={StaticResource NumToBoolConv}}" Width="80">
+                    <DataGridCheckBoxColumn.Header>
+                        <TextBlock Text="В протокол расчета" TextWrapping="Wrap"/>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        </Grid>
+        <GridSplitter Grid.Row="1" Height="8" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+        <ToolBar Grid.Row="0" Grid.ColumnSpan="3">
+                <Button Command="local:AppCommands.AddCalcRelation" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                </Button>
+                <Button Command="local:AppCommands.EditCalcRelation" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                </Button>
+                <Button Command="local:AppCommands.DeleteCalcRelation" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                </Button>
+                <Separator/>
+                <Button Command="local:AppCommands.EditCalcRelation" CommandParameter="1" Style="{StaticResource ToolBoxBtStyle}" ToolTip="Добавить на основе выбранного">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/copydoc_3232.png"/>
+                </Button>
+            </ToolBar>
+            <DataGrid x:Name="dgPaymentRelation" AutoGenerateColumns="False" IsReadOnly="True" Grid.Row="1" IsSynchronizedWithCurrentItem="True"
+                      ar:DataGridAddition.DoubleClickCommand="local:AppCommands.EditCalcRelation"
+                      SelectedValue="{Binding CurrentRelation, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      ItemsSource="{Binding RelationSource}"
+                      Style="{StaticResource DataGridSalaryStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=METHOD_NAME}" Width="200">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Метод расчета удержания" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=DATE_START_CALC, StringFormat=d}" Header="Начало действия"/>
+                <DataGridTextColumn Binding="{Binding Path=DATE_END_CALC, StringFormat=d}" Header="Окончание действия"/>
+                <DataGridCheckBoxColumn Binding="{Binding Path=IS_ALLOW_PAST_EDIT}" Header="Редактировать&#13;в прошедших периодах"/>
+                <DataGridTextColumn Binding="{Binding Path=ORDER_NAME}" Header="Заказ по умолчанию"/>
+            </DataGrid.Columns>
+        </DataGrid>
+            <GridSplitter Width="5" Grid.Row="1" Grid.Column="1" Grid.RowSpan="1" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+            <DataGrid Grid.Column="2" Grid.Row="1" IsReadOnly="True" Style="{StaticResource DataGridSalaryStyle}" ItemsSource="{Binding PropertySource}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding PROPERTY_NAME}" Header="Наименование" Width="200"/>
+                    <DataGridTextColumn Binding="{Binding PROPERTY_VALUE}" Header="Значение" Width="250" />
+                    <DataGridTextColumn Binding="{Binding PROPERTY_COMMENT}" Header="Комментарий" Width="350"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

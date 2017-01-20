@@ -1,0 +1,327 @@
+﻿<Window x:Class="Salary.View.SalaryDocumEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Salary.ViewModel"
+        xmlns:main_clr ="clr-namespace:Salary"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:view ="clr-namespace:Salary.View"
+        Title="Добавление / изменение документа" Height="549" Width="807"
+        Name="_this" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Language="ru-RU">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <CollectionViewSource x:Key="DocumDetailSource" Source="{Binding DocumDetailSource}">
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="CodePayment"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+            <main_clr:DateToYearConverter x:Key="DateToIntConverter"/>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="local:AppCommands.SaveSalaryDocum" CanExecute="Save_CanExected" Executed="Save_Executed"/>
+        <CommandBinding Command="local:AppCommands.EditSalaryDocTransfer" CanExecute="EditTransfer_CanExected" Executed="EditSalaryDocTransfer_Executed"/>
+    </Window.CommandBindings>
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="20,2,10,2"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.ColumnSpan="4" BorderBrush="Gray" BorderThickness="1,0,1,1" CornerRadius="0,0,4,4">
+            <StackPanel  Background="{StaticResource LightBrush}" Orientation="Horizontal">
+                <TextBlock Text="Последняя дата расчета:" Margin="5,7, 5,7"/>
+                <TextBlock Text="{Binding LastCalcDate, StringFormat=G, TargetNullValue='&#60;Нет даты>', FallbackValue='&#60;Нет даты>'}" Margin="0,2,15,0" Foreground="Crimson"/>
+                <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"  />
+                <TextBlock Text="Закрытие:" Margin="5,2, 2,2"/>
+                <TextBlock Text="{Binding DateClose, StringFormat=G, TargetNullValue='&#60;Нет даты>', FallbackValue='&#60;Нет даты>'}" Margin="0,2" Foreground="#FF0013F4"/>
+            </StackPanel>
+        </Border>
+        <GroupBox Grid.Row="1" Header="Сотрудник">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="ColumnA"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition SharedSizeGroup="ColumnB"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Сотрудник"/>
+                <Label Grid.Column="1" Content="{Binding FIO}" Style="{StaticResource DisabledTextBox}" Margin="0,2" ToolTip="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}"></Label>
+                <TextBlock Grid.Column="2" Text="Таб.№"/>
+                <Label Grid.Column="3" Content="{Binding PerNum}" Style="{StaticResource DisabledTextBox}" Margin="0,2" Width="100" HorizontalAlignment="Left"/>
+                <Button Grid.Column="3" Content="..." Margin="110,2, 0,2" Width="23" HorizontalAlignment="Left" Command="local:AppCommands.EditSalaryDocTransfer"
+                            ToolTip="Выбрать сотрудника. Доступно только при добавлении" ToolTipService.ShowOnDisabled="True"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Header="Документы из табеля">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="ColumnA"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Документ-основание в табеле"/>
+                <ComboBox Grid.Column="1" MinHeight="23" Margin="0,2, 35,2" ToolTip="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}"
+                          Style="{StaticResource EnabledTextBox}"
+                          ItemsSource="{Binding RegDocSource}" 
+                          SelectedValue="{Binding RegDocID, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedValuePath="RegDocID" Grid.IsSharedSizeScope="True">
+                    <ComboBox.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFCAE8BE"/>
+                    </ComboBox.Resources>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0,0,0,1" CornerRadius="0" BorderBrush="CornflowerBlue">
+                                <Grid>
+                                    <Grid.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Margin" Value="5,4"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="ColumnE"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnF"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnG"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnH"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnI"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnJ"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding DocList.DocNote, StringFormat='({0})'}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding DocList.DocName}"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding DocBegin, StringFormat='c {0:dd/MM/yyyy}'}" Foreground="Blue"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding DocEnd, StringFormat='по {0:dd/MM/yyyy}'}" Foreground="Blue">
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="4" Text="{Binding DocNumber, StringFormat='№ {0:dd/MM/yyyy}', FallbackValue='нет номера'}"
+                                               ToolTip="Номер документа в табеле"/>
+                                    <Border Grid.Column="5" CornerRadius="3" BorderBrush="Gray" BorderThickness="1" Margin="2">
+                                        <TextBlock  Text="{Binding DocSign}" ToolTip="Признак обработки документа в заработной плате" Margin="3,0" HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Grid.Column="1" HorizontalAlignment="Right" Margin="5,2" Click="ClearDocum_Click"
+                        ToolTip="Убрать привязку к документу табеля">
+                    <Image Source="/Images/break_3232.png" Width="19" Height="19"/>
+                </Button>
+                
+                <TextBlock Grid.Row="1" Text="Первичный документ"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" MinHeight="23" Margin="0,2, 35,2" ToolTip="{Binding Path=Content, RelativeSource={RelativeSource Mode=Self}}"
+                          Style="{StaticResource EnabledTextBox}"
+                          ItemsSource="{Binding RelatedDocSource}" 
+                          SelectedValue="{Binding RelatedDocumID, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedValuePath="SalaryDocumID" Grid.IsSharedSizeScope="True">
+                    <ComboBox.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFBEEDFF"/>
+                    </ComboBox.Resources>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0,0,0,1" CornerRadius="0" BorderBrush="CornflowerBlue">
+                                <Grid>
+                                    <Grid.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Margin" Value="5,4"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="ColumnE1"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnF1"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnG1"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnH1"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnI1"/>
+                                        <ColumnDefinition SharedSizeGroup="ColumnJ1"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding TypeSalDocum.TypeSalDocName}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding DocBegin, StringFormat='c {0:dd/MM/yyyy}'}" Foreground="#FF3F900D" ToolTip="Дата начала документа"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding DocEnd, StringFormat='по {0:dd/MM/yyyy}'}" Foreground="#FF3F900D" ToolTip="Дата окончания документа">
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="3" Text="{Binding CodeDoc, StringFormat='№ {0:dd/MM/yyyy}', FallbackValue='нет номера'}"
+                                               ToolTip="Номер документа"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="5,2" Click="ClearRelatedDocum_Click"
+                        ToolTip="Убрать привязку к первичному документу">
+                    <Image Source="/Images/break_3232.png" Width="19" Height="19"/>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="3" Header="Основные данные документа">
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnA"/>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnB"/>
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,2,5,2"/>
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,2,5,2"/>
+                    </Style>
+                    <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,2,5,2"/>
+                    </Style>
+                    <Style TargetType="CheckBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,2,5,2"/>
+                    </Style>
+                </Grid.Resources>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Тип документа"/>
+                <ComboBox Grid.Column="1" Grid.Row="0" SelectedValuePath="TYPE_SAL_DOCUM_ID" DisplayMemberPath="TYPE_SAL_DOC_NAME" x:Name="cbTypeDocum" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                    ItemsSource="{Binding TypeDocSource}" SelectedValue="{Binding TypeSalDocumID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+
+                </ComboBox>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Дата документа"/>
+                <DatePicker Grid.Column="1" Grid.Row="1" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                    SelectedDate="{Binding DateDoc, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" BorderBrush="#FF9D8542"
+                            ToolTip="Дата документа (дата расчета или дата первого начисления)"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Код/номер документа"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CodeDoc, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                <TextBlock Grid.Column="0" Grid.Row="3" Text="Наименование документа"/>
+                <ComboBox Grid.Column="1" Grid.Row="3" Text="{Binding NameDoc, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                          IsEditable="True" ItemsSource="{Binding DocNameSource}"/>
+                <TextBlock Grid.Column="0" Grid.Row="4" Text="Подразделение"/>
+                <ComboBox Grid.Column="1" Grid.Row="4" SelectedValue="{Binding DocSubdivID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                          ItemsSource="{Binding SubdivSource}" DisplayMemberPath="CODE_SUBDIV" SelectedValuePath="SUBDIV_ID"/>
+                
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="Дата начала периода"/>
+                <DatePicker Grid.Column="3" Grid.Row="0" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                    SelectedDate="{Binding DocBegin, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" BorderBrush="#FF46C354"
+                            ToolTip="Дата начала периода действия документа"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="Дата окончания периода"/>
+                <DatePicker Grid.Column="3" Grid.Row="1" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                    SelectedDate="{Binding DocEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" BorderBrush="#FF46C354"
+                            ToolTip="Дата окончания периода действия документа"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Кол-во дней за счет предприятия"/>
+                <TextBox Grid.Row="2" Grid.Column="3"  Text="{Binding CountRestrictDays, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}"
+                         IsEnabled="{Binding IsCountMeasureRestrEnabled}"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="Первичный документ"/>
+                <CheckBox Grid.Row="3" Grid.Column="3" IsChecked="{Binding BasicDocSign, UpdateSourceTrigger=PropertyChanged}"/>
+                <!--<TextBlock Grid.Row="2" Grid.Column="2" Text="Дата закрытия документа"/>
+                <DatePicker Grid.Column="3" Grid.Row="2" SelectedDate="{Binding DateClose, Mode=OneWay}" IsEnabled="False"/>-->
+
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" IsEnabled="{Binding IsDocumDetailEnabled}" 
+                      Visibility="{Binding ShowAdditionParameters, Converter={StaticResource BoolToVisibilityConverter}}">
+                <GroupBox.Header>
+                    <TextBlock Text="{Binding MeasureName, StringFormat='Величина оплаты за 1 {0}', FallbackValue='Величина оплаты за день', TargetNullValue=День}"/>
+                </GroupBox.Header>
+                <DataGrid ItemsSource="{Binding Source={StaticResource DocumDetailSource}}" Style="{StaticResource DataGridSalaryStyle}"
+                      AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="2,4" x:Name="dgPaymentValue">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding CodePayment}" IsReadOnly="True" Header="Вид оплат" Width="100" SortMemberPath="CodePayment" SortDirection="Ascending"/>
+                        <DataGridTextColumn Binding="{Binding PaymentSum, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}" Header="Размер оплаты" Width="150"/>
+                    </DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="Height" Value="25"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+            </GroupBox>
+            <GroupBox Grid.Column="1" IsEnabled="{Binding IsDocumDetailEnabled}" Margin="2,0"
+                      Visibility="{Binding ShowAdditionParameters, Converter={StaticResource BoolToVisibilityConverter}}">
+                <GroupBox.Header>
+                    <TextBlock Text="Периоды расчета документа"/>
+                </GroupBox.Header>
+                <DataGrid ItemsSource="{Binding DocumPeriodSource}" Style="{StaticResource DataGridSalaryStyle}"
+                      AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="2,4" x:Name="dgPeriodDoc">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding BeginPeriod, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateToIntConverter}}" IsReadOnly="False" 
+                                            Header="Год расчета" Width="150" SortMemberPath="BeginPeriod" SortDirection="Ascending"/>
+                    </DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="Height" Value="25"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+            </GroupBox>
+            <GroupBox Grid.Column="2" IsEnabled="{Binding IsDocumDetailEnabled}" Margin="2,0"
+                      Visibility="{Binding ShowAdditionParameters, Converter={StaticResource BoolToVisibilityConverter}}">
+                <GroupBox.Header>
+                    <TextBlock Text="Процент изменения оплаты" Margin="3,3"/>
+                </GroupBox.Header>
+                <DataGrid ItemsSource="{Binding DocumPayChangeSource}" Style="{StaticResource DataGridSalaryStyle}"
+                      AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="2,4" x:Name="dgPayChange">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding CountDays, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" 
+                                            Width="120" SortMemberPath="CountDays" SortDirection="Ascending" CanUserSort="False">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="С какого дня применить" TextWrapping="Wrap" TextAlignment="Center" Margin="0"
+                                           ToolTip="С какого дня требуется изменить размер оплаты"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding PayValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" 
+                                            Header="% оплаты" Width="100" SortMemberPath="PayValue" CanUserSort="False"/>
+                    </DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="Height" Value="35"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="4" Background="{StaticResource LightBrush}" Orientation="Horizontal">
+            <Button Command="local:AppCommands.SaveSalaryDocum" Content="Сохранить" Margin="10,3" Padding="15,2" IsDefault="True"/>
+            <Button Content="Закрыть" Margin="5,3" Padding="15,0" IsCancel="True"/>
+            <CheckBox IsChecked="{Binding CalcAfterSave, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center" Margin="15,2,0,2">
+                <CheckBox.LayoutTransform>
+                    <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
+                </CheckBox.LayoutTransform>
+            </CheckBox>
+            <TextBlock Text="Пересчитать документ после сохранения" Margin="5,2,5,2"/>
+        </StackPanel>
+    </Grid>
+</Window>

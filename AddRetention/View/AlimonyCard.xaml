@@ -1,0 +1,192 @@
+﻿<Window x:Class="Salary.View.AlimonyCard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Salary"
+        xmlns:xc="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        Title="Карточка алиментов сотрудника" Height="514" Width="788"
+        x:Name="_this" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="10,2,6,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+        <GroupBox Header="Общие данные" DataContext="{Binding ElementName=_this, Path=CurrentEmpData}">
+            <DockPanel>
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="5">
+                    <Image Source="{Binding Path=Photo}" DockPanel.Dock="Left" Width="120" Height="160"/>
+                </Border>
+                <Grid IsSharedSizeScope="True">
+                    <Grid.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource DisabledTextBox}">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                        </Style>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource DisabledTextBox}">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Фамилия" Grid.Row="0" Grid.Column="0"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding EmpLastName}"/>
+                    <TextBlock Text="Имя" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EmpFirstName}"/>
+                    <TextBlock Text="Отчество" Grid.Row="2" Grid.Column="0"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EmpMiddleName}"/>
+                    <TextBlock Text="Подразделение" Grid.Row="3" Grid.Column="0"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CodeSubdiv}"/>
+                    <TextBlock Text="Должность" Grid.Row="4" Grid.Column="0"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PosName}"/>
+                    <TextBlock Text="Дата приема" Grid.Row="5" Grid.Column="0"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding DateTransfer, StringFormat={}{0:dd.MM.yyyy}}" Width="100" HorizontalAlignment="Left"/>
+                    <TextBlock Text="Дата увольнения" Grid.Row="5" Grid.Column="2"/>
+                    <TextBox Grid.Row="5" Grid.Column="3" Text="{Binding EndTransfer, StringFormat={}{0:dd.MM.yyyy}}"/>
+
+                    <TextBlock Text="Таб.№" Grid.Row="0" Grid.Column="2"/>
+                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding PerNum}"/>
+                    <TextBlock Text="Совмещение" Grid.Row="1" Grid.Column="2"/>
+                    <CheckBox Grid.Row="1" Grid.Column="3" IsChecked="{Binding SignComb}"/>
+                    <TextBlock Text="Пол" Grid.Row="2" Grid.Column="2"/>
+                    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding EmpSex}"/>
+                    <TextBlock Text="Дата рождения" Grid.Row="3" Grid.Column="2"/>
+                    <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding EmpBirthDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                    <TextBlock Text="Категория" Grid.Row="4" Grid.Column="2"/>
+                    <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding CodeDegree}"/>
+                </Grid>
+            </DockPanel>
+        </GroupBox>
+        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged" x:Name="tcontrolMain">
+            <TabControl.Resources>
+                <Style TargetType="TextBox" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsReadOnly" Value="True"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="DatePicker" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Все удержания по алиментам">
+                <DockPanel>
+                    <ToolBar DockPanel.Dock="Top">
+                        <TextBlock Text="Фильтр по году:"/>
+                        <local:NumericUpDown Width="100" Value="{Binding ElementName=_this, Path=YearFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <local:NumericUpDown.Resources>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                                </Style>
+                            </local:NumericUpDown.Resources>
+                        </local:NumericUpDown>
+                    </ToolBar>
+                    <DataGrid AutoGenerateColumns="False" IsReadOnly="True" x:Name="dgAlimonySalary" ItemsSource="{Binding ElementName=_this, Path=SalaryAlimony, Mode=OneWay}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding CODE_PAYMENT}" Header="Шифр оплат"/>
+                            <DataGridTextColumn Binding="{Binding PAY_DATE, StringFormat={}{0:dd/MM/yyyy}}" Header="Дата удержания"/>
+                            <DataGridTextColumn Binding="{Binding SUM_SAL, StringFormat=F2}" Header="Сумма" Width="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Margin" Value="4,2"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CODE_DOC}" Header="Документ"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Записи выдачи в кассе" Name="tabItemCashRecord">
+                <DockPanel>
+                    <ToolBar DockPanel.Dock="Top">
+                        <TextBlock Text="Фильтр по году:"/>
+                        <local:NumericUpDown Width="100" Value="{Binding ElementName=_this, Path=YearFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <local:NumericUpDown.Resources>
+                                <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                                </Style>
+                            </local:NumericUpDown.Resources>
+                        </local:NumericUpDown>
+                        <Separator/>
+                        <Button Click="btRefreshAlimonyCash_Click" Height="23" Width="23" Margin="10,0,0,0" ToolTip="Обновить данные из кассы">
+                            <Image Source="/Images/Refresh2424.png" Stretch="Uniform"/>
+                        </Button>
+                    </ToolBar>
+                    <Grid>
+                    <DataGrid IsReadOnly="True" AutoGenerateColumns="False" HorizontalScrollBarVisibility="Visible" ColumnHeaderHeight="40" x:Name="dgCachBox"
+                              ItemsSource="{Binding ElementName=_this, Path=CashAlimony, Mode=OneWay}">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Binding="{Binding p_opl}"  Width="50">
+                                <DataGridCheckBoxColumn.Header>
+                                    <TextBlock Text="Выплатили" TextWrapping="Wrap" Margin="0" HorizontalAlignment="Center" TextAlignment="Center"/>
+                                </DataGridCheckBoxColumn.Header>
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Binding="{Binding nom_kas_d}" Header="Номер докум-та" Width="100"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding nazv}" Header="Взыскатель" Width="200"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding summa, StringFormat=F2}" Header="Сумма" Width="100">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Margin" Value="4,2"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding pm}" Header="Месяц" Width="50"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding bsht}" Header="Бух. счет" Width="100"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding osn_ko}" Header="Основание" Width="150"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding porn}" Header="№ алимента" Width="80"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding dat_kas, StringFormat={}{0:dd/MM/yyyy}}" Header="Дата выдачи" Width="150">
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <xc:BusyIndicator x:Name="xcbusyIndicator">
+                        <xc:BusyIndicator.BusyContent>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="5,0">
+                                    <TextBlock Text="Загрузка данных из кассы..." VerticalAlignment="Center" />
+                                </StackPanel>
+                            </StackPanel>
+                        </xc:BusyIndicator.BusyContent>
+                    </xc:BusyIndicator>
+                    </Grid>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

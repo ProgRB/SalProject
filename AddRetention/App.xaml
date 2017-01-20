@@ -1,0 +1,222 @@
+﻿<Application x:Class="Salary.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Salary"
+             xmlns:locallib ="clr-namespace:Salary;assembly=LibrarySalary"
+             xmlns:l="clr-namespace:Salary.View"
+             xmlns:tb="http://www.hardcodet.net/taskbar"
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppResources.xaml"/>
+                <ResourceDictionary Source="View/ResourceDictionaryEmpRetention.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBlock" x:Key="LabelInFormStyle">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="10,2,4,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="TextBlockEditorStyle">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="10,2,8,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}" x:Key="TextBoxInFormStyle">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="4,2,4,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}" x:Key="ComboBoxInFormStyle">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="4,2,4,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}" x:Key="DatePickerInFormStyle">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="4,2,4,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="HasDropShadow" Value="True" />
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToolTip">
+                            <Border Name="Border" BorderThickness="1" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" AllowDrop="True"
+                                    >
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="/Images/info_3232.png" Width="32" Height="32" Margin="10,6,3,6"/>
+                                    <ContentControl Grid.Column="1" Margin="10,10,20,10" HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="#FFFFC70A"
+                                                    FontSize="12" FontWeight="Bold">
+                                        <ContentPresenter />
+                                    </ContentControl>
+                                </Grid>
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF404040" Offset="0" />
+                                        <GradientStop Color="#FFA2A2A2" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFE0B82F" Offset="0" />
+                                        <GradientStop Color="#FFF9CC02" Offset="1" />
+                                        <GradientStop Color="#FFFBE271" Offset="0.561"/>
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasDropShadow" Value="true">
+                                    <Setter TargetName="Border" Property="CornerRadius" Value="4" />
+                                    <Setter TargetName="Border" Property="SnapsToDevicePixels" Value="true" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--Control colors.-->
+            <Color x:Key="ControlLightColor">White</Color>
+            <Color x:Key="BorderMediumColor">#FF539F24</Color>
+            <LinearGradientBrush x:Key="MenuPopupBrush"
+                     EndPoint="0.5,1"
+                     StartPoint="0.5,0">
+                <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="0" />
+                <GradientStop Color="#FF65F151"
+                Offset="1" />
+                <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="1" />
+                <GradientStop Color="#FFB6EF9D" Offset="0.608"/>
+            </LinearGradientBrush>
+
+            <local:AppDataSet x:Key="AppDataSet"/>
+
+            <Style TargetType="{x:Type DatePickerTextBox}">
+                <Setter Property="Text" Value="Выберите дату"/>
+            </Style>
+            <local:ChildConverter x:Key="ChildConverter"/>
+
+            <Style TargetType="DataGrid" x:Key="DataGridSalaryStyle">
+                <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
+                <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+                <Setter Property="CellStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="5,2"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="DataGridColumnHeader.HorizontalContentAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="DataGridLoanStyle" TargetType="{x:Type DataGrid}">
+                <Setter Property="AutoGenerateColumns" Value="False" />
+                <Setter Property="CanUserAddRows" Value="False" />
+                <Setter Property="CanUserDeleteRows" Value="False"/>
+                <Setter Property="BorderBrush" Value="#FFBEC8C8" />
+                <Setter Property="HorizontalGridLinesBrush" Value="#FFBEC8C8" />
+                <Setter Property="VerticalGridLinesBrush" Value="#FFBEC8C8" />
+                <Setter Property="ColumnHeaderStyle" Value="{DynamicResource LoanColumnHeaderStyle}" />
+                <Setter Property="CellStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="2,1"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+
+            <!-- Loan DataGrid header style -->
+            <Style x:Key="LoanColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="Padding" Value="4" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            </Style>
+
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="PanelGrayBack">
+                <GradientStop Color="#FFFCFCFE" Offset="0" />
+                <GradientStop Color="#FFABAB87" Offset="1" />
+                <GradientStop Color="#FFE7E3DA" Offset="0.512" />
+            </LinearGradientBrush>
+
+            <Style x:Key="ToolBoxLikeStyle" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="Button">
+                <Setter Property="Control.Margin" Value="3,3"/>
+                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+            </Style>
+
+            <tb:TaskbarIcon x:Key="AppMainNotifyIcon"
+                  IconSource="/Images/salary_3232.ico">
+                <tb:TaskbarIcon.TrayToolTip>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Зарплата предприятия" Foreground="#FFFFD100" FontSize="14" FontWeight="Bold" Margin="5,10" HorizontalAlignment="Left"/>
+                        <Rectangle VerticalAlignment="Center" Height="2" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Rectangle.Stroke>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <LinearGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                            <RotateTransform Angle="-90" CenterY="0.5" CenterX="0.5"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </LinearGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#FFFDCF00"/>
+                                    <GradientStop Color="#FF404040" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Stroke>
+                        </Rectangle>
+                        <StackPanel Grid.Row="2">
+                            <Label Foreground="#FFFFD100" Content="{Binding Source={x:Static locallib:Connect.UserFullName}}" FontSize="14"
+                               ContentStringFormat="Пользователь {0}"/>
+                            <Label Foreground="#FFFFD100" Content="{Binding Source={x:Static locallib:Connect.CodeSubdiv}}" FontSize="14"
+                               ContentStringFormat="Подразделение {0}"/>
+                        </StackPanel>
+                    </Grid>
+                </tb:TaskbarIcon.TrayToolTip>
+                <tb:TaskbarIcon.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Показать сообщения Зарплата предприятия"></MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Выход из программы"></MenuItem>
+                    </ContextMenu>
+                </tb:TaskbarIcon.ContextMenu>
+            </tb:TaskbarIcon>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,52 @@
+﻿<Window x:Class="Salary.View.SubdivListSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:Salary.View"
+        xmlns:local="clr-namespace:Salary"
+        Title="Выберите подразделения" Height="392" Width="393" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:DecimalToBoolConverter x:Key="DecimalTOBoolConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="l:SubdivListSelector.SelectSubdivCommand" CanExecute="SelectSubdiv_CanExecute" Executed="SelectSubdiv_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="listSub" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.ToolTip>
+                            <TextBlock FontSize="12">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}Даты действия с {0:D} по {1:D}">
+                                        <Binding Path="SUB_DATE_START"/>
+                                        <Binding Path="SUB_DATE_END"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel.ToolTip>
+                        <CheckBox IsChecked="{Binding CHECK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalTOBoolConverter}}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding CODE_SUBDIV}" Margin="3,2" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding SUBDIV_NAME}" VerticalAlignment="Center" Margin="5,2"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Command="l:SubdivListSelector.SelectSubdivCommand" Content="Далее" Padding="20,0" Margin="5,3" IsCancel="True"/>
+            <Button Click="Cancel_Click" Content="Закрыть" Padding="20,0" Margin="5,3" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

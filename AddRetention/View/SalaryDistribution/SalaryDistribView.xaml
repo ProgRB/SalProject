@@ -1,0 +1,659 @@
+﻿<UserControl x:Class="Salary.View.SalaryDistribView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cmd="clr-namespace:Salary.ViewModel"
+             xmlns:view="clr-namespace:Salary.View"
+             xmlns:local="clr-namespace:Salary"
+             mc:Ignorable="d" 
+             d:DesignHeight="464" d:DesignWidth="992" x:Name="_this">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.Rep_SalaryDistr1" CanExecute="CommandBinding_CanExecute" Executed="Rep_SalaryDistr1_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_SalaryDistrSecond" CanExecute="CommandBinding_CanExecute" Executed="Rep_SalaryDistrSecond_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_SalaryDistrReceive" CanExecute="CommandBinding_CanExecute" Executed="Rep_SalaryDistrReceive_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_SalaryDistrMainDues" CanExecute="CommandBinding_CanExecute" Executed="Rep_SalaryDistrMainDues_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_DistrControl" CanExecute="CommandBinding_CanExecute" Executed="Rep_DistrControl_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepDuesAvgHeadFundes" CanExecute="CommandBinding_CanExecute" Executed="RepDuesAvgHeadFundes_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.CalcSalaryFullDistribution" CanExecute="CommandBinding_CanExecute" Executed="CalcSalaryFullDistribution_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.CalcBaseDistribution" CanExecute="CommandBinding_CanExecute" Executed="CalcBaseDistribution_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.Rep_QuarterReservDistr" CanExecute="CommandBinding_CanExecute" Executed="Rep_QuarterReservDistr_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_QuarterReservMem" CanExecute="CommandBinding_CanExecute" Executed="Rep_QuarterReservMem_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_VacReservDistr" CanExecute="CommandBinding_CanExecute" Executed="Rep_VacReservDistr_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_VacReservMem" CanExecute="CommandBinding_CanExecute" Executed="Rep_VacReservMem_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.AddDistribReciveSubdiv" CanExecute="CommandBinding_CanExecute" Executed="AddDistribReciveSubdiv_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.EditDistribReciveSubdiv" CanExecute="EditReceive_CanExecute" Executed="EditDistribReciveSubdiv_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteDistribReciveSubdiv" CanExecute="EditReceive_CanExecute" Executed="DeleteDistribReciveSubdiv_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.AddCorrSalaryDistr" CanExecute="CommandBinding_CanExecute" Executed="AddCorrSalaryDistr_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.EditCorrSalaryDistr" CanExecute="EditCorrelation_CanExecute" Executed="EditCorrSalaryDistr_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteCorrSalaryDistr" CanExecute="EditCorrelation_CanExecute" Executed="DeleteCorrSalaryDistr_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.ReplaceDistrBaseOrder" CanExecute="CommandBinding_CanExecute" Executed="ReplaceDistrBaseOrder_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.UploadDopz26" CanExecute="CommandBinding_CanExecute" Executed="UploadDopz26_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadDopz8" CanExecute="CommandBinding_CanExecute" Executed="UploadDopz8_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadDopz8_2" CanExecute="CommandBinding_CanExecute" Executed="UploadDopz8_2_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadMem21" CanExecute="CommandBinding_CanExecute" Executed="UploadMem21_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadDopz" CanExecute="CommandBinding_CanExecute" Executed="UploadDopz_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadDop20" CanExecute="CommandBinding_CanExecute" Executed="UploadDop20_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadDopzPril21" CanExecute="CommandBinding_CanExecute" Executed="UploadDopzPril21_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadMem197" CanExecute="CommandBinding_CanExecute" Executed="UploadMem197_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.UploadMem198" CanExecute="CommandBinding_CanExecute" Executed="UploadMem198_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.PrintACPUDopzMain" CanExecute="CommandBinding_CanExecute" Executed="PrintACPUDopzMain_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.PrintACPUDopzDues" CanExecute="CommandBinding_CanExecute" Executed="PrintACPUDopzDues_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.AddCustomDistribution" CanExecute="CommandBinding_CanExecute" Executed="AddCustomDistribution_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteCustomDistribution" CanExecute="DeleteCustomDistrib_CanExecute" Executed="DeleteCustomDistribution_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.SaveCustomDistribution" CanExecute="SaveCustomDistrib_CanExecute" Executed="SaveCustomDistribution_Executed"/>
+
+        
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <view:CollectionToSumConverter x:Key="CollectionToSumConverter" SumField="SUM_SAL"/>
+        <view:CollectionsToSumsConverter x:Key="CollectionsToSumsConverter" SumField="SUM_SAL, HOURS"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="Фильтр">
+            <GroupBox.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="15,2,8,2"/>
+                </Style>
+                <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="Margin" Value="0,2"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                </Style>
+            </GroupBox.Resources>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Отчетный месяц"/>
+                <DatePicker Grid.Column="1" SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}" local:DatePickerCalendar.IsMonthYear="True" 
+                            local:DatePickerDateFormat.DateFormat="MMMM yyyy" Width="160"/>
+                <local:SubdivSelector Grid.Column="2" SubdivId="{Binding SubdivID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AppRoleName="SALARY,SALARY_DISTR,SALARY_VIEW"
+                                      MinWidth="450" MaxWidth="500"/>
+                <Button Click="ButtonFilterForce_Click" Grid.Column="3" Width="25" Height="23" HorizontalAlignment="Left" Margin="10,1" ToolTip="Обновить данные по фильтру">
+                    <Image Source="/Images/filter_3232.png"/>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <DockPanel Grid.Row="1">
+            <DockPanel.Resources>
+                <xcdg:DataGridCollectionViewSource x:Key="cvsDistrSource" Source="{Binding Path=SalaryDistrSource}">
+                    <xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                        <PropertyGroupDescription PropertyName="Подразделение"/>
+                    </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                </xcdg:DataGridCollectionViewSource>
+                <xcdg:DataGridCollectionViewSource x:Key="cvsSalaryAdditionSource" Source="{Binding Path=SalaryAdditionSource}" >
+                    <xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                        <PropertyGroupDescription PropertyName="CODE_SUBDIV"/>
+                    </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                </xcdg:DataGridCollectionViewSource>
+                <xcdg:DataGridCollectionViewSource x:Key="cvsSalaryAddCorrSource" Source="{Binding Path=SalaryAddCorrSource}">
+                    <xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                        <PropertyGroupDescription PropertyName="CODE_SUBDIV"/>
+                    </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                </xcdg:DataGridCollectionViewSource>
+                <xcdg:DataGridCollectionViewSource x:Key="cvsSalaryDistCustomSource" Source="{Binding Path=SalaryDistCustomSource}">
+                    <xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                        <PropertyGroupDescription PropertyName="CODE_SUBDIV"/>
+                    </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                </xcdg:DataGridCollectionViewSource>
+                <xcdg:DataGridCollectionViewSource x:Key="cvsSalaryReceiveSource" Source="{Binding Path=SalaryReceiveSource}">
+                    <xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                        <PropertyGroupDescription PropertyName="CODE_SUBDIV"/>
+                    </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                </xcdg:DataGridCollectionViewSource>
+                <xcdg:DataGridCollectionViewSource x:Key="cvsDetailSource" Source="{Binding Path=DetailSource}">
+                    <xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                        <PropertyGroupDescription PropertyName="CODE_SUBDIV"/>
+                    </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                </xcdg:DataGridCollectionViewSource>
+            </DockPanel.Resources>
+            <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True" FocusManager.IsFocusScope="False" FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Mode=Self}}" >
+                <Menu Background="Transparent" VerticalAlignment="Center">
+                    <MenuItem Header="Расчет" VerticalAlignment="Center">
+                        <MenuItem Command="cmd:AppCommands.CalcBaseDistribution" Header="Рассчитать базу для распределения"/>
+                        <Separator/>
+                        <MenuItem Command="cmd:AppCommands.CalcSalaryFullDistribution" Header="Рассчитать распределение затрат"/>
+                    </MenuItem>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <MenuItem Header="Отчеты" VerticalAlignment="Center">
+                        <MenuItem Command="cmd:AppCommands.RepDuesAvgHeadFundes"/>
+                        <Separator/>
+                        <MenuItem Command="cmd:AppCommands.Rep_SalaryDistr1"/>
+                        <MenuItem Command="cmd:AppCommands.Rep_SalaryDistrMainDues"/>
+                        <Separator/>
+                        <MenuItem Command="cmd:AppCommands.Rep_SalaryDistrSecond"/>
+                        <MenuItem Command="cmd:AppCommands.Rep_SalaryDistrReceive"/>
+                        <Separator/>
+                        <MenuItem Header="Распределение резервов">
+                            <MenuItem Command="cmd:AppCommands.Rep_QuarterReservDistr"/>
+                            <MenuItem Command="cmd:AppCommands.Rep_QuarterReservMem"/>
+                            <Separator/>
+                            <MenuItem Command="cmd:AppCommands.Rep_VacReservDistr"/>
+                            <MenuItem Command="cmd:AppCommands.Rep_VacReservMem"/>
+                        </MenuItem>
+                    </MenuItem>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <MenuItem Header="Контроль" VerticalAlignment="Center">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/application_error_3232.png" Height="20"/>
+                        </MenuItem.Icon>
+                        <MenuItem Command="cmd:AppCommands.Rep_DistrControl"/>
+                    </MenuItem>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <MenuItem Header="Печать через АЦПУ" VerticalAlignment="Center">
+                        <MenuItem Command="cmd:AppCommands.PrintACPUDopzMain"/>
+                        <MenuItem Command="cmd:AppCommands.PrintACPUDopzDues"/>
+                    </MenuItem>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <MenuItem Header="Выгрузка данных" VerticalAlignment="Center">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/download_1616.png" Width="16"/>
+                        </MenuItem.Icon>
+                        <MenuItem Command="cmd:AppCommands.UploadDopz26" CommandParameter="\\fs02\PrgEcon\Otd_3\BTN\Dop26{0:MM}.txt"/>
+                        <MenuItem Command="cmd:AppCommands.UploadDopz8" CommandParameter="\\fs02\PrgEcon\Otd_3\BTN\DopZ8{0:MMyy}.txt"/>
+                        <Separator/>
+                        <!--<MenuItem Command="cmd:AppCommands.UploadDop20" CommandParameter="H:\ZAKAZ\EC\TXT\Dopz20.txt"/>
+                        <Separator/> -->
+                        <MenuItem Command="cmd:AppCommands.UploadMem21" Header="Выгрузка мем. ордер (21 проводка) для ЭВМ" CommandParameter="\\fs02\PrgEcon\Base\EC1036\Mem21{0:MM}_new.txt"/>
+                        <MenuItem Command="cmd:AppCommands.UploadDopz" Header="Выгрузка Допз для ЭВМ" CommandParameter="\\fs02\PrgEcon\Base\EC1036\DopZ{0:MM}_new.txt"/>
+                        <MenuItem Command="cmd:AppCommands.UploadDopz8_2" Header="Выгрузка Допз8 для ЭВМ"  CommandParameter="\\fs02\PrgEcon\Base\EC1036\DopZ8{0:MM}_new.txt"/>
+                        <MenuItem Command="cmd:AppCommands.UploadDopzPril21" Header="Выгрузка приложения к 21 проводке для ЭВМ"  CommandParameter="\\fs02\PrgEcon\Base\EC1036\PRIL21{0:MM}_new.txt"/>
+                        <Separator/>
+                        <MenuItem Command="cmd:AppCommands.UploadMem197" Header="Выгрузка мем. ордер (197 проводка) для ЭВМ" CommandParameter="\\fs02\PrgEcon\Base\EC1036\Mem197{0:MM}.txt"/>
+                        <MenuItem Command="cmd:AppCommands.UploadMem198" Header="Выгрузка мем. ордер (198 проводка-рез.кв. прем.) для ЭВМ" CommandParameter="\\fs02\PrgEcon\Base\EC1036\Mem198{0:MM}.txt"/>
+                    </MenuItem>
+                </Menu>
+                <Separator/>
+                <Label Content="Фильтр заказа:"/>
+                <TextBox Text="{Binding OrderFilter, Mode=TwoWay, UpdateSourceTrigger=Explicit}" Style="{StaticResource EnabledTextBox}" Width="130" KeyDown="TextBox_KeyDown">
+                    <TextBox.BindingGroup>
+                        <BindingGroup x:Name="bgFilterGroup"/>
+                    </TextBox.BindingGroup>
+                </TextBox>
+                <Button Click="ButtonFilter_Click">
+                    <Image Source="/Images/Filter_3232.png" Style="{StaticResource ToolBoxImageStyle}" />
+                </Button>
+            </ToolBar>
+            <StatusBar DockPanel.Dock="Bottom">
+                <TextBlock Text="Данные по распределению до Марта 2016 года могут не совпадать с общей суммой распределения в связи с расчетом на старой системе"
+                           Foreground="Red"/>
+            </StatusBar>
+            <TabControl SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TabControl.CommandBindings>
+                    <CommandBinding Command="Print" CanExecute="Print_CanExecute" Executed="PrintDistrib_Executed"/>
+                </TabControl.CommandBindings>
+                <TabItem Header="Распределение">
+                    <xcdg:DataGridControl Grid.Row="1" ItemsSource="{Binding Source={StaticResource cvsDistrSource}}" AutoCreateColumns="True"
+                                      ReadOnly="True" DataContext="{Binding Path=SalaryDistrSource}"
+                                      Grid.IsSharedSizeScope="True">
+                        <xcdg:DataGridControl.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="Print" Header="Печать"/>
+                            </ContextMenu>
+                        </xcdg:DataGridControl.ContextMenu>
+                        <xcdg:DataGridControl.View>
+                            <xcdg:TableflowView FixedColumnCount="2">
+                            </xcdg:TableflowView>
+                        </xcdg:DataGridControl.View>
+                    </xcdg:DataGridControl>
+                </TabItem>
+                <TabItem Header="База распределения (основные заказы)">
+                    <TabItem.Resources>
+                        <DataTemplate DataType="{x:Type xcdg:Group}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="dgheader1"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader2"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader3"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Level}" Value="1">
+                                                <Setter Property="Margin" Value="10,0,0,0"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <xcdg:GroupNavigationControl Group="{Binding }">
+                                    <xcdg:GroupNavigationControl.MainItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.MainItemTemplate>
+                                    <xcdg:GroupNavigationControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center">
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.ItemTemplate>
+                                </xcdg:GroupNavigationControl>
+                                <Label Grid.Column="1" Content="{Binding ItemCount}" ContentStringFormat="В группе {0} запись(-ей)" Margin="15,0,15,0" Padding="10,2"/>
+                                <Label Grid.Column="2" Language="ru-RU" Content="{Binding Items, Converter={StaticResource CollectionToSumConverter}}" ContentStringFormat="Сумма по группе: {0:0,0.00} р." Foreground="SeaShell"
+                                   Padding="10,2">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF576DAA" Offset="0" />
+                                            <GradientStop Color="#FF0D2B5F" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                            </Grid>
+                        </DataTemplate>
+                    </TabItem.Resources>
+                    <DockPanel>
+                        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                            <Button Command="cmd:AppCommands.ReplaceDistrBaseOrder" Style="{StaticResource ToolBoxBtStyle}">
+                                <Image Source="/Images/replace_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Separator/>
+                            <TextBlock Text="Источник данныx" VerticalAlignment="Center" Margin="10,1,5,1"/>
+                            <ComboBox ItemsSource="{Binding TypeDistBaseSource}" Width="150" DisplayMemberPath="Name" 
+                                      SelectedItem="{Binding SelectedTypeDistBase, UpdateSourceTrigger=PropertyChanged}"/>
+                        </ToolBar>
+                        <xcdg:DataGridControl Grid.Row="1" ItemsSource="{Binding Source={StaticResource cvsSalaryAdditionSource}}" AutoCreateColumns="False"
+                                      ReadOnly="True" Grid.IsSharedSizeScope="True" x:Name="dgSalAddition"
+                                              SelectedItem="{Binding CurrentSalaryAddition, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <xcdg:DataGridControl.Columns>
+                                <xcdg:Column FieldName="CODE_SUBDIV" Title="Подразделение" Width="80"/>
+                                <xcdg:Column FieldName="ORDER_NAME" Title="Заказ" Width="100"/>
+                                <xcdg:Column FieldName="TYPE_OPERATION_ID" Title="Опция" Width="50"/>
+                                <xcdg:Column FieldName="CODE_DEGREE" Title="Категория" Width="50"/>
+                                <xcdg:Column FieldName="CODE_PAYMENT" Title="Вид оплат" Width="80"/>
+                                <xcdg:Column FieldName="HOURS" Title="Часы" Width="100" CellHorizontalContentAlignment="Right"/>
+                                <xcdg:Column FieldName="SUM_SAL" Title="Сумма" Width="150" CellHorizontalContentAlignment="Right"/>
+                            </xcdg:DataGridControl.Columns>
+                            <xcdg:DataGridControl.View>
+                                <xcdg:TableflowView FixedColumnCount="2">
+                                    <xcdg:TableflowView.Footers>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel.DataContext>
+                                                    <MultiBinding Converter="{StaticResource CollectionsToSumsConverter}">
+                                                        <Binding Path="SalaryAdditionSource"/>
+                                                        <Binding Path="FilterChanged"/>
+                                                    </MultiBinding>
+                                                </StackPanel.DataContext>
+                                                <Label Content="{Binding Path=[0]}" ContentStringFormat="Общая сумма зарплаты : {0:0,0.00}" Language="ru-RU" Background="LightGray" FontWeight="Bold"/>
+                                                <Label Content="{Binding Path=[1]}" ContentStringFormat="сумма часов : {0:0,0.00}" Language="ru-RU" Background="LightGray" FontWeight="Bold"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </xcdg:TableflowView.Footers>
+                                </xcdg:TableflowView>
+                            </xcdg:DataGridControl.View>
+                        </xcdg:DataGridControl>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Корректировки по заказам">
+                    <TabItem.Resources>
+                        <DataTemplate DataType="{x:Type xcdg:Group}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="dgheader1"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader2"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader3"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Level}" Value="1">
+                                                <Setter Property="Margin" Value="10,0,0,0"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <xcdg:GroupNavigationControl Group="{Binding }">
+                                    <xcdg:GroupNavigationControl.MainItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.MainItemTemplate>
+                                    <xcdg:GroupNavigationControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center">
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.ItemTemplate>
+                                </xcdg:GroupNavigationControl>
+                                <Label Grid.Column="1" Content="{Binding ItemCount}" ContentStringFormat="В группе {0} запись(-ей)" Margin="15,0,15,0" Padding="10,2"/>
+                                <Label Grid.Column="2" Language="ru-RU" Content="{Binding Items, Converter={StaticResource CollectionToSumConverter}}" ContentStringFormat="Сумма по группе: {0:0,0.00} р." Foreground="SeaShell"
+                                   Padding="10,2">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF576DAA" Offset="0" />
+                                            <GradientStop Color="#FF0D2B5F" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                            </Grid>
+                        </DataTemplate>
+                    </TabItem.Resources>
+                    <DockPanel>
+                        <WrapPanel DockPanel.Dock="Top" Background="{StaticResource PanelGrayBack}">
+                        <WrapPanel.Resources>
+                            <Style TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
+                            </Style>
+                        </WrapPanel.Resources>
+                            <Button Command="cmd:AppCommands.AddCorrSalaryDistr" Style="{StaticResource ToolBoxLikeStyle}">
+                                <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Button Command="cmd:AppCommands.EditCorrSalaryDistr" Style="{StaticResource ToolBoxLikeStyle}">
+                                <Image Source="/Images/edit_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Button Command="cmd:AppCommands.DeleteCorrSalaryDistr" Style="{StaticResource ToolBoxLikeStyle}">
+                                <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                           <!-- <Separator/>
+                                
+                                <Button Style="{StaticResource ToolBoxLikeStyle}" Command="Paste" ToolTip="Вставить из буфера обмена (Excel формат)">
+                                    <Image Source="/Images/excel_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                                </Button>
+                                <Separator/>
+                                <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.AddCustomDistribution">
+                                <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.DeleteCustomDistribution">
+                                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                            </Button>
+                            <Separator />
+                                <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.SaveCustomDistribution" Name="btSaveSalaryAddition">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/save_2222.png"/>
+                                </Button>
+                                <Separator />
+                                <Button  Style="{StaticResource ToolBoxLikeStyle}" ToolTip="Обновление данных ручного распределения из базы данных" Click="RefreshCustomDistr_Click">
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/refresh2424.png"/>
+                                </Button>-->
+                            </WrapPanel>
+                            <xcdg:DataGridControl ItemsSource="{Binding Source={StaticResource cvsSalaryAddCorrSource}}" ReadOnly="True" AutoCreateColumns="False"
+                                              SelectedItem="{Binding CurrentSalCorrAddition, UpdateSourceTrigger=PropertyChanged}">
+                            <xcdg:DataGridControl.Columns>
+                                <xcdg:Column Title="Подразделение" FieldName="CODE_SUBDIV" Width="60"/>
+                                <xcdg:Column Title="Опция" FieldName=" TYPE_OPERATION_ID" Width="60"/>
+                                <xcdg:Column Title="Вид оплат" FieldName="CODE_PAYMENT" Width="60"/>
+                                <xcdg:Column Title="Заказ" FieldName="ORDER_NAME" Width="120"/>
+                                <xcdg:Column Title="Часы" FieldName="HOURS" Width="100"/>
+                                <xcdg:Column Title="Сумма" FieldName="SUM_SAL" Width="120" />
+                                <xcdg:Column Title="Категория" FieldName="CODE_DEGREE" Width="70"/>
+                            </xcdg:DataGridControl.Columns>
+                        </xcdg:DataGridControl>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Разноска по заказам (11, 12) цеха">
+                    <TabItem.CommandBindings>
+                        <CommandBinding Command="Paste" CanExecute="PasteCustomDistr_CanExecute" Executed="PasteCustomDist_Executed"/>
+                    </TabItem.CommandBindings>
+                    <TabItem.Resources>
+                        <DataTemplate DataType="{x:Type xcdg:Group}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="dgheader1"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader2"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader3"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Level}" Value="1">
+                                                <Setter Property="Margin" Value="10,0,0,0"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <xcdg:GroupNavigationControl Group="{Binding }">
+                                    <xcdg:GroupNavigationControl.MainItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.MainItemTemplate>
+                                    <xcdg:GroupNavigationControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center">
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.ItemTemplate>
+                                </xcdg:GroupNavigationControl>
+                                <Label Grid.Column="1" Content="{Binding ItemCount}" ContentStringFormat="В группе {0} запись(-ей)" Margin="15,0,15,0" Padding="10,2"/>
+                                <Label Grid.Column="2" Language="ru-RU" Content="{Binding Items, Converter={StaticResource CollectionToSumConverter}}" ContentStringFormat="Сумма по группе: {0:0,0.00} р." Foreground="SeaShell"
+                                   Padding="10,2">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF576DAA" Offset="0" />
+                                            <GradientStop Color="#FF0D2B5F" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                            </Grid>
+                        </DataTemplate>
+                    </TabItem.Resources>
+                    <DockPanel>
+                        <WrapPanel DockPanel.Dock="Top" Background="{StaticResource PanelGrayBack}">
+                            <WrapPanel.Resources>
+                                <Style TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
+                                </Style>
+                            </WrapPanel.Resources>
+                            <Button Style="{StaticResource ToolBoxLikeStyle}" Command="Paste" ToolTip="Вставить из буфера обмена (Excel формат)">
+                                <Image Source="/Images/excel_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Separator/>
+                            <!--<Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.AddCustomDistribution">
+                                <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.DeleteCustomDistribution">
+                                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                            </Button>
+                            <Separator />-->
+                            <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.SaveCustomDistribution" Name="btSaveTableBrigage">
+                                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/save_2222.png"/>
+                            </Button>
+                            <Separator />
+                            <Button  Style="{StaticResource ToolBoxLikeStyle}" ToolTip="Обновление данных ручного распределения из базы данных" Click="RefreshCustomDistr_Click">
+                                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/refresh2424.png"/>
+                            </Button>
+                        </WrapPanel>
+                        <xcdg:DataGridControl ItemsSource="{Binding Source={StaticResource cvsSalaryDistCustomSource}}" ReadOnly="True" AutoCreateColumns="False"
+                                             IsDeleteCommandEnabled="True">
+                            <xcdg:DataGridControl.Columns>
+                                <xcdg:Column Title="Подразделение" FieldName="CODE_SUBDIV" Width="60"/>
+                                <xcdg:Column Title="Порядок" FieldName="ORDER_NUMBER" Width="100"/>
+                                <xcdg:Column Title="Заказ" FieldName="ORDER_NAME" Width="120">
+                                    
+                                </xcdg:Column>
+                                <xcdg:Column Title="Часы" FieldName="HOURS" Width="100"/>
+                                <xcdg:Column Title="Сумма" FieldName="SUM_SAL" Width="120" />
+                                <xcdg:Column Title="Категория" FieldName="CODE_DEGREE" Width="70"/>
+                            </xcdg:DataGridControl.Columns>
+                        </xcdg:DataGridControl>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Принятые/переданные затраты">
+                    <TabItem.Resources>
+                        <DataTemplate DataType="{x:Type xcdg:Group}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="dgheader1"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader2"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader3"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Level}" Value="1">
+                                                <Setter Property="Margin" Value="10,0,0,0"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <xcdg:GroupNavigationControl Group="{Binding }">
+                                    <xcdg:GroupNavigationControl.MainItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.MainItemTemplate>
+                                    <xcdg:GroupNavigationControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center">
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.ItemTemplate>
+                                </xcdg:GroupNavigationControl>
+                                <Label Grid.Column="1" Content="{Binding ItemCount}" ContentStringFormat="В группе {0} запись(-ей)" Margin="15,0,15,0" Padding="10,2"/>
+                                <Label Grid.Column="2" Language="ru-RU" Content="{Binding Items, Converter={StaticResource CollectionToSumConverter}}" ContentStringFormat="Сумма по группе: {0:0,0.00} р." Foreground="SeaShell"
+                                   Padding="10,2">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF576DAA" Offset="0" />
+                                            <GradientStop Color="#FF0D2B5F" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                            </Grid>
+                        </DataTemplate>
+                    </TabItem.Resources>
+                    <DockPanel>
+                        <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                            <Button Command="cmd:AppCommands.AddDistribReciveSubdiv" Style="{StaticResource ToolBoxBtStyle}">
+                                <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Button Command="cmd:AppCommands.EditDistribReciveSubdiv" Style="{StaticResource ToolBoxBtStyle}">
+                                <Image Source="/Images/edit_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                            <Button Command="cmd:AppCommands.DeleteDistribReciveSubdiv" Style="{StaticResource ToolBoxBtStyle}">
+                                <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </Button>
+                        </ToolBar>
+                        <xcdg:DataGridControl ItemsSource="{Binding Source={StaticResource cvsSalaryReceiveSource}}" ReadOnly="True" AutoCreateColumns="False"
+                                              SelectedItem="{Binding CurrentSalReceiveSubdiv, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <xcdg:DataGridControl.Columns>
+                                <xcdg:Column Title="Подразделение кому" FieldName="CODE_SUBDIV" Width="120"/>
+                                <xcdg:Column Title="Заказ" FieldName="ORDER_NAME" Width="120"/>
+                                <xcdg:Column Title="Часы" FieldName="HOURS" Width="100"/>
+                                <xcdg:Column Title="Сумма" FieldName="SUM_SAL" Width="120" CellHorizontalContentAlignment="Right" />
+                                <xcdg:Column Title="Сумма поясные" FieldName="SUBDIV_SAL" Width="120" CellHorizontalContentAlignment="Right" />
+                                <xcdg:Column Title="Подразделение от кого" FieldName="RECEIVE_CODE_SUBDIV" Width="120"/>
+                            </xcdg:DataGridControl.Columns>
+                        </xcdg:DataGridControl>
+                    </DockPanel>
+                </TabItem>
+                <TabItem Header="Сдельная оплата">
+                    <TabItem.Resources>
+                        <DataTemplate DataType="{x:Type xcdg:Group}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="dgheader1"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader2"/>
+                                    <ColumnDefinition SharedSizeGroup="dgheader3"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Level}" Value="1">
+                                                <Setter Property="Margin" Value="15,0,0,0"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <xcdg:GroupNavigationControl Group="{Binding }">
+                                    <xcdg:GroupNavigationControl.MainItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.MainItemTemplate>
+                                    <xcdg:GroupNavigationControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center">
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </xcdg:GroupNavigationControl.ItemTemplate>
+                                </xcdg:GroupNavigationControl>
+                                <Label Grid.Column="1" Content="{Binding ItemCount}" ContentStringFormat="В группе {0} запись(-ей)" Margin="15,0,15,0" Padding="10,2"/>
+                                <Label Grid.Column="2" Language="ru-RU" Content="{Binding Items, Converter={StaticResource CollectionToSumConverter}}" ContentStringFormat="Сумма по группе: {0:0,0.00} р." Foreground="SeaShell"
+                                   Padding="10,2">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF576DAA" Offset="0" />
+                                            <GradientStop Color="#FF0D2B5F" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                            </Grid>
+                        </DataTemplate>
+                    </TabItem.Resources>
+                    <DockPanel>
+                        <xcdg:DataGridControl Grid.Row="1" ItemsSource="{Binding Source={StaticResource cvsDetailSource}}" AutoCreateColumns="True"
+                                      ReadOnly="True" Grid.IsSharedSizeScope="True" >
+                            <xcdg:DataGridControl.Columns>
+                                <xcdg:Column FieldName="CODE_SUBDIV" Title="Подразделение" Width="80"/>
+                                <xcdg:Column FieldName="ORDER_NAME" Title="Заказ" Width="100"/>
+                                <xcdg:Column FieldName="TYPE_OPERATION_ID" Title="Опция" Width="50"/>
+                                <xcdg:Column FieldName="CODE_DEGREE" Title="Категория" Width="50"/>
+                                <xcdg:Column FieldName="HOURS" Title="Часы" Width="100" CellHorizontalContentAlignment="Right"/>
+                                <xcdg:Column FieldName="SUM_SAL" Title="Сумма" Width="150" CellHorizontalContentAlignment="Right"/>
+                            </xcdg:DataGridControl.Columns>
+                            <xcdg:DataGridControl.View>
+                                <xcdg:TableflowView FixedColumnCount="2">
+                                    <xcdg:TableflowView.Footers>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel.DataContext>
+                                                    <MultiBinding Converter="{StaticResource CollectionsToSumsConverter}">
+                                                        <Binding Path="DetailSource"/>
+                                                        <Binding Path="FilterChanged"/>
+                                                    </MultiBinding>
+                                                </StackPanel.DataContext>
+                                                <Label Content="{Binding Path=[0]}" ContentStringFormat="Общая сумма зарплаты : {0:0,0.00}" Language="ru-RU" Background="LightGray" FontWeight="Bold"/>
+                                                <Label Content="{Binding Path=[1]}" ContentStringFormat="сумма часов : {0:0,0.00}" Language="ru-RU" Background="LightGray" FontWeight="Bold"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </xcdg:TableflowView.Footers>
+                                </xcdg:TableflowView>
+                            </xcdg:DataGridControl.View>
+                        </xcdg:DataGridControl>
+                    </DockPanel>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+        <!--<xctk:BusyIndicator Grid.Row="1" IsBusy="{Binding IsLoading}">
+            <xctk:BusyIndicator.BusyContent>
+                <TextBlock Text="Получение данных"/>
+            </xctk:BusyIndicator.BusyContent>
+        </xctk:BusyIndicator>-->
+    </Grid>
+</UserControl>

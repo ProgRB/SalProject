@@ -1,0 +1,46 @@
+﻿<Window x:Class="Salary.Loan.Find_Emp"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lcl="clr-namespace:Salary.Loan"
+        SizeToContent="WidthAndHeight" Name="_this"
+        WindowStartupLocation="CenterScreen"
+        Title="Список работников" MinHeight="300" MinWidth="300" MaxHeight="600" MaxWidth="800">
+    <Window.CommandBindings>
+        <CommandBinding Command="lcl:Find_Emp.SelectEmp" CanExecute="SelectEmp_CanExecute" Executed="SelectEmp_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="1" Name="dgEmp" ItemsSource="{Binding}" Style="{StaticResource DataGridLoanStyle}" SelectionUnit="FullRow"
+                  SelectionMode="Single" MouseDoubleClick="dgEmp_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Подр." Binding="{Binding Path=CODE_SUBDIV}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Таб.№" Binding="{Binding Path=PER_NUM}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=LAST_NAME}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Path=FIRST_NAME}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Path=MIDDLE_NAME}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="С." Binding="{Binding Path=COMB}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Должность" Binding="{Binding Path=POS_NAME}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Grid.Row="2" LastChildFill="False" Margin="0,5,0,5">
+            <TextBlock Margin="7" Text="Фамилия"/>
+            <TextBox Margin="4,4,10,4" TextChanged="Find_TextChanged" MinWidth="100" Name="tbLast_Name" CharacterCasing="Upper"/>
+            <TextBlock Margin="7" Text="Имя"/>
+            <TextBox Margin="4,4,10,4" TextChanged="Find_TextChanged" MinWidth="80" Name="tbFirst_Name" CharacterCasing="Upper"/>
+            <TextBlock Margin="7" Text="Отчество"/>
+            <TextBox Margin="4,4,10,4" TextChanged="Find_TextChanged" MinWidth="100" Name="tbMiddle_Name" CharacterCasing="Upper"/>
+            <TextBlock Margin="7" Text="Таб.№" />
+            <TextBox Margin="4,4,10,4" TextChanged="Find_TextChanged" MaxLength="5" MinWidth="50" MaxWidth="50" Name="tbPer_Num"/>
+        </DockPanel>
+        <DockPanel Grid.Row="3" LastChildFill="False">
+            <Button TabIndex="1" Name="btExit" Margin="4,4,20,4" Click="btExit_Click" Content="Выход" DockPanel.Dock="Right" IsCancel="True"/>
+            <Button TabIndex="1" Margin="4,4,20,4" Command="lcl:Find_Emp.SelectEmp"
+                    Content="{ Binding RelativeSource={RelativeSource Self},Path=Command.Text }" DockPanel.Dock="Right" IsCancel="True"/>
+        </DockPanel>
+    </Grid>
+</Window>

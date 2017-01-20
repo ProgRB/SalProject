@@ -1,0 +1,392 @@
+﻿<Window x:Class="Salary.View.EmpAccountCard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Карточка сотрудника" Height="571.797" Width="740.658" x:Name="_this" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        SizeToContent="Height">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="10,2,6,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+        <GroupBox Header="Общие данные" DataContext="{Binding Path=CurrentEmpData}">
+            <DockPanel>
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="5">
+                    <Image Source="{Binding Path=Photo}" DockPanel.Dock="Left" Width="120" Height="160"/>
+                </Border>
+                <Grid IsSharedSizeScope="True">
+                    <Grid.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource DisabledTextBox}">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                        </Style>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource DisabledTextBox}">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Фамилия" Grid.Row="0" Grid.Column="0"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding EmpLastName}"/>
+                    <TextBlock Text="Имя" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EmpFirstName}"/>
+                    <TextBlock Text="Отчество" Grid.Row="2" Grid.Column="0"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding EmpMiddleName}"/>
+                    <TextBlock Text="Подразделение" Grid.Row="3" Grid.Column="0"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CodeSubdiv}"/>
+                    <TextBlock Text="Должность" Grid.Row="4" Grid.Column="0"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PosName}"/>
+                    <TextBlock Text="Дата приема" Grid.Row="5" Grid.Column="0"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding DateTransfer, StringFormat={}{0:dd.MM.yyyy}}" Width="100" HorizontalAlignment="Left"/>
+                    <TextBlock Text="Дата увольнения" Grid.Row="5" Grid.Column="2"/>
+                    <TextBox Grid.Row="5" Grid.Column="3" Text="{Binding EndTransfer, StringFormat={}{0:dd.MM.yyyy}}"/>
+
+                    <TextBlock Text="Таб.№" Grid.Row="0" Grid.Column="2"/>
+                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding PerNum}"/>
+                    <TextBlock Text="Совмещение" Grid.Row="1" Grid.Column="2"/>
+                    <CheckBox Grid.Row="1" Grid.Column="3" IsChecked="{Binding SignComb}"/>
+                    <TextBlock Text="Пол" Grid.Row="2" Grid.Column="2"/>
+                    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding EmpSex}"/>
+                    <TextBlock Text="Дата рождения" Grid.Row="3" Grid.Column="2"/>
+                    <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding EmpBirthDate, StringFormat={}{0:dd.MM.yyyy}}"/>
+                    <TextBlock Text="Категория" Grid.Row="4" Grid.Column="2"/>
+                    <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding CodeDegree}"/>
+                </Grid>
+            </DockPanel>
+        </GroupBox>
+        <TabControl Grid.Row="1" >
+            <TabControl.Resources>
+                <Style TargetType="TextBox" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsReadOnly" Value="True"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="DatePicker" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource DisabledTextBox}">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Margin" Value="0,2"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Основные данные" DataContext="{Binding CurrentAccountData}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Тарифн. коэффициент"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Salary}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Тарифная сетка"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding TariffGridID}" SelectedValuePath="TARIFF_GRID_ID" 
+                              DisplayMemberPath="CODE_TARIFF_GRID" x:Name="cbTariffGrid"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Разряд"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Classific}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Тарифн. коэффициент&#13;при коммандировках"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SalaryMission}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата надбавки за стаж"/>
+                    <DatePicker Grid.Row="0" Grid.Column="3" SelectedDate="{Binding DateAdd}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Дата на выслугу"/>
+                    <DatePicker Grid.Row="1" Grid.Column="3" SelectedDate="{Binding DateServant}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="Шифр налога"/>
+                    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding TaxCode}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="Профсоюз"/>
+                    <CheckBox Grid.Row="3" Grid.Column="3" IsChecked="{Binding Path=CurrentPerData.SignProfunion}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Процент 13-ой з/п"/>
+                    <TextBox Grid.Row="0" Grid.Column="5" Text="{Binding Percent13}"/>
+                </Grid>
+            </TabItem>
+            <TabItem DataContext="{Binding HomeAddress}">
+                <TabItem.Header>
+                    <TextBlock Text="Адресные данные" Margin="15,3"/>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Место прописки" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Регион"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NameRegion}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Район"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NameDistrict}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Город"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NameCity}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Пункт"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NameLocality}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Улица"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NameStreet}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Дом"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding House}" IsReadOnly="True"/>
+                            <TextBlock Grid.Row="5" Grid.Column="2" Text="Корпус"/>
+                            <TextBox Grid.Row="5" Grid.Column="3" Text="{Binding Bulk}" IsReadOnly="True"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Квартира"/>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Flat}" IsReadOnly="True"/>
+                            <TextBlock Grid.Row="6" Grid.Column="2" Text="Индекс"/>
+                            <TextBox Grid.Row="6" Grid.Column="3" Text="{Binding PostCode}" IsReadOnly="True"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Место прописки (отсутствует в КЛАДР)" Grid.Column="1" DataContext="{Binding AddressNoneKladr}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Регион"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NameRegion}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Район"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NameDisctrict}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Город"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NameCity}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Пункт"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding NameLocality}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Улица"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NameStreet}" IsReadOnly="True" Grid.ColumnSpan="4"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Дом"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding House}" IsReadOnly="True"/>
+                            <TextBlock Grid.Row="5" Grid.Column="2" Text="Корпус"/>
+                            <TextBox Grid.Row="5" Grid.Column="3" Text="{Binding Bulk}" IsReadOnly="True"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Квартира"/>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Flat}" IsReadOnly="True"/>
+                            <TextBlock Grid.Row="6" Grid.Column="2" Text="Индекс"/>
+                            <TextBox Grid.Row="6" Grid.Column="3" Text="{Binding PostCode}" IsReadOnly="True"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Прочие надбавки" Name="tabItemOthersAdd" DataContext="{Binding CurrentAccountData}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="За совмещение" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CombAddition}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="За секретность"  />
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SecretAddition}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="За вредность (устарело)"  />
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HarmfulAddition}" ToolTip="Данный вид процента устарел и показывает исключительно для информации"
+                             Background="#FFFCF2E8"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="За вредные условия труда"  />
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding HarmfulAdditionAdd}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Признак надбавки за стаж"  />
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SignAdd}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="За профмастерство"  />
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ProfAddition}"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="За классность"  />
+                    <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding ClassAddition}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="Бригадирство"  />
+                    <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding ChiefAddition}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="3" Text="За разъездной характер работы"  />
+                    <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding TripAddition}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="3" Text="Признак надбавки за выслугу лет"  />
+                    <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding ServiceAdd}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="3" Text="За стаж работы по защите гос. тайны"  />
+                    <TextBox Grid.Row="4" Grid.Column="4" Text="{Binding GovsecretAddition}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="3" Text="За стаж работы с шифрами"  />
+                    <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding EncodingAddition}"/>
+
+                    <TextBlock Grid.Column="2" Grid.Row="0" Text="кф. (в/о 153)"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Text="% (в/о 142) "/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Text="%            "/>
+                    <TextBlock Grid.Column="2" Grid.Row="3" Text="%   (в/о 110)"/>
+                    <TextBlock Grid.Column="2" Grid.Row="5" Text="%. (в/о 130)"/>
+
+                    <TextBlock Grid.Column="5" Grid.Row="0" Text="% (в/о 118)"/>
+                    <TextBlock Grid.Column="5" Grid.Row="1" Text="% (в/о 120)"/>
+                    <TextBlock Grid.Column="5" Grid.Row="2" Text="% (в/о 230)"/>
+                    <TextBlock Grid.Column="5" Grid.Row="4" Text="% (в/о 143)"/>
+                    <TextBlock Grid.Column="5" Grid.Row="5" Text="% (в/о 141)"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Таблица налоговых вычетов">
+                <DockPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Background="{StaticResource LightBrush}">
+                        <TextBlock Text="Год"/>
+                        <ComboBox SelectedValue="{Binding Path=SelectedYear, UpdateSourceTrigger=PropertyChanged}" Width="100" IsReadOnly="False"
+                                  ItemsSource="{Binding Path=YearsItems}" IsEnabled="True">
+                        </ComboBox>
+                    </StackPanel>
+                    <DataGrid IsReadOnly="True" AutoGenerateColumns="True" ItemsSource="{Binding Path=EmpDependents}" 
+                              ColumnHeaderHeight="50" Style="{StaticResource DataGridSalaryStyle}">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Предыдущие переводы">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid ItemsSource="{Binding PrevTrasferSource}" IsReadOnly="True" AutoGenerateColumns="False" Style="{StaticResource DataGridSalaryStyle}"
+                              SelectedItem="{Binding SelectedPrevTransfer, UpdateSourceTrigger=PropertyChanged}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата перевода" Binding="{Binding DateTransfer, StringFormat={}{0:dd.MM.yyyy HH:mm:ss}}" Width="130"/>
+                            <DataGridTextColumn Header="Подр." Binding="{Binding CodeSubdiv}" Width="50"/>
+                            <DataGridTextColumn Header="Тип" Binding="{Binding TypeTransfer}" Width="75"/>
+                            <DataGridTextColumn Header="Категория" Binding="{Binding DegreeID}" Width="70"/>
+                            <DataGridTextColumn Header="Тар.кф" Binding="{Binding AccountData.Salary}" Width="60"/>
+                            <DataGridTextColumn Header="Разряд" Binding="{Binding AccountData.Classific}" Width="60"/>
+                            <DataGridTextColumn Header="Сетка" Binding="{Binding AccountData.CodeTariffGrid}" Width="50"/>
+                            <DataGridTextColumn Header="Должность" Binding="{Binding PosName}" Width="200"/>
+                            <DataGridTextColumn Header="Комментарий" Binding="{Binding PosNote}" Width="200"/>
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="Height" Value="26"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                    <GridSplitter Grid.Row="1" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    <Grid Grid.Row="2" DataContext="{Binding SelectedPrevTransfer.AccountData}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="За совмещение" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CombAddition}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="За секретность"  />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SecretAddition}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="За вредность"  />
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HarmfulAddition}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Признак надбавки за стаж"  />
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SignAdd}"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="За профмастерство"  />
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ProfAddition}"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Список вредности"  />
+                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SpecialConditions, Mode=OneWay}"/>
+
+                        <TextBlock Grid.Row="0" Grid.Column="3" Text="За классность"  />
+                        <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding ClassAddition}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="3" Text="Бригадирство"  />
+                        <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding ChiefAddition}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="3" Text="За разъездной характер работы"  />
+                        <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding TripAddition}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="3" Text="Признак надбавки за выслугу лет"  />
+                        <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding ServiceAdd}"/>
+                        <TextBlock Grid.Row="4" Grid.Column="3" Text="За стаж работы по защите гос. тайны"  />
+                        <TextBox Grid.Row="4" Grid.Column="4" Text="{Binding GovsecretAddition}"/>
+                        <TextBlock Grid.Row="5" Grid.Column="3" Text="За стаж работы с шифрами"  />
+                        <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding EncodingAddition}"/>
+
+                        <TextBlock Grid.Column="2" Grid.Row="0" Text="кф. (в/о 153)"/>
+                        <TextBlock Grid.Column="2" Grid.Row="1" Text="кф. (в/о 142)"/>
+                        <TextBlock Grid.Column="2" Grid.Row="2" Text="%            "/>
+                        <TextBlock Grid.Column="2" Grid.Row="4" Text="%. (в/о 130)"/>
+
+                        <TextBlock Grid.Column="5" Grid.Row="0" Text="% (в/о 118)"/>
+                        <TextBlock Grid.Column="5" Grid.Row="1" Text="% (в/о 120)"/>
+                        <TextBlock Grid.Column="5" Grid.Row="2" Text="% (в/о 230)"/>
+                        <TextBlock Grid.Column="5" Grid.Row="4" Text="% (в/о 143)"/>
+                        <TextBlock Grid.Column="5" Grid.Row="5" Text="% (в/о 141)"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

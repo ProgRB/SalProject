@@ -1,0 +1,148 @@
+﻿<Window x:Class="Salary.View.PayTypeEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewmodel="clr-namespace:Salary.ViewModel"
+        xmlns:local="clr-namespace:Salary"
+        xmlns:l ="clr-namespace:Salary.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Шифр оплат" Height="319" Width="584" WindowStartupLocation="CenterScreen" x:Name="ptForm" ShowInTaskbar="False">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:DecimalToBoolConverter x:Key="DecimalToBoolConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="viewmodel:AppCommands.SavePayType" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Код оплат" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" Text="{Binding CODE_PAYMENT}" Margin="1,3"/>
+            <Label Grid.Column="2" Content="Наименование оплат" Margin="5,1,1,1"/>
+            <TextBox Grid.Column="3" Text="{Binding NAME_PAYMENT}" MinWidth="300" Margin="1,3"/>
+            <Label Grid.Row="1" Grid.Column="2" Content="Тип" HorizontalAlignment="Right" Margin="3,1"/>
+            <ComboBox x:Name="cbTypePayType" Grid.Column="3" Grid.Row="1" SelectedValue="{Binding TYPE_PAYMENT_TYPE_ID, UpdateSourceTrigger=PropertyChanged}" Margin="2,3" DisplayMemberPath="TYPE_PAYMENT_TYPE_NAME" SelectedValuePath="TYPE_PAYMENT_TYPE_ID"/>
+        </Grid>
+        <ToolBar DockPanel.Dock="Bottom" ToolBarTray.IsLocked="True">
+            <Button x:Name="btSave" Command="viewmodel:AppCommands.SavePayType" Content="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"/>
+            <Separator/>
+            <Button Content="Закрыть" ToolTip="Отменить редактирование и закрыть" Click="btCancel_Click"/>
+        </ToolBar>
+        <TabControl Grid.Row="1">
+            <TabControl.Items>
+                <TabItem Header="Основные настройки">
+                    <Grid x:Name="gridMainSet">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="150"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="Label">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="0,0,6,0"/>
+                            </Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="0,0,6,0"/>
+                            </Style>
+                            <Style TargetType="CheckBox">
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="5,0,0,0"/>
+                            </Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="5,0,5,0"/>
+                            </Style>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="5,0,5,0"/>
+                            </Style>
+                        </Grid.Resources>
+                        <TextBlock Grid.Row="0" Text="Шифр оплат в старой системе" TextAlignment="Center" TextWrapping="Wrap" ToolTip="Приоритет расчета шифра оплат относительно других шифров"/>
+                        <ComboBox x:Name="cbPayTypeId" Grid.Row="0" Grid.Column="1" SelectedValue="{Binding Path=PAY_TYPE_ID, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValuePath="PAY_TYPE_ID" DisplayMemberPath="DISP_EXP"/>
+                        <TextBlock Grid.Row="1" Text="Приоритет расчета" TextAlignment="Center" TextWrapping="Wrap" ToolTip="Приоритет расчета шифра оплат относительно других шифров"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=CALC_PRIORITY, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty} }"/>
+                        <TextBlock Grid.Row="2" Text="Формировать в протокол" TextAlignment="Center" TextWrapping="Wrap" ToolTip="Формировать запись в протоколе расчета при недостатке суммы удержания"/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=SIGN_FORM_REPORT, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Grid.Row="3" Text="Тип измерения шифра" TextAlignment="Center" TextWrapping="Wrap" ToolTip="Тип измерения шифра оплат"/>
+                        <ComboBox x:Name="cbCosiderType" Grid.Row="3" Grid.Column="1" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}" SelectedValuePath="CONSIDER_TYPE_ID" DisplayMemberPath="CONSIDER_NAME">
+                            <ComboBox.SelectedValue>
+                                <Binding Path="CONSIDER_TYPE_ID" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <l:NotNullValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </ComboBox.SelectedValue>
+                        </ComboBox>
+                        <TextBlock Grid.Row="4" Text="Допускать&#13;отрицательные суммы" TextAlignment="Right" TextWrapping="Wrap" ToolTip="Допускать возникновение отрицательной суммы при расчете"/>
+                        <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Path=IS_NEGATIV_ALOWED, UpdateSourceTrigger=PropertyChanged}" ToolTip="Допускать возникновение отрицательной суммы при расчете"/>
+                    </Grid>
+                </TabItem>
+                <!--<TabItem Header="Настройки расчета">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="145*"/>
+                            <ColumnDefinition Width="406*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="Label">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="0,0,5,0"/>
+                            </Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="6,0,6,0"/>
+                            </Style>
+                            <Style TargetType="CheckBox">
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="5,0,0,0"/>
+                            </Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Margin" Value="5,0,5,0"/>
+                            </Style>
+                        </Grid.Resources>
+                        <TextBlock Text="Метод расчета удержания"/>
+                        <ComboBox x:Name="cbRetentMethod" Grid.Row="4" Grid.Column="1" SelectedValue="{Binding Path=RETENT_CALC_METHOD_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center"
+                                  ToolTip="Выберите метод расчета удержания для шифра оплат"
+                                  SelectedValuePath="RETENT_CALC_METHOD_ID" DisplayMemberPath="METHOD_NAME"/>
+                    </Grid>
+                </TabItem>-->
+            </TabControl.Items>
+        </TabControl>
+    </DockPanel>
+</Window>

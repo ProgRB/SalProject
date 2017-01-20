@@ -1,0 +1,375 @@
+﻿<Window x:Class="Salary.View.SalaryEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Salary.ViewModel"
+        xmlns:local="clr-namespace:Salary"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:sys2="clr-namespace:System.Windows;assembly=WindowsBase"
+        xmlns:l="clr-namespace:Salary.View"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        Title="Редактор заработной платы" Height="439" Width="729" WindowStartupLocation="CenterScreen" ShowInTaskbar="False"
+        MinHeight="268"
+        Language="ru-RU"
+        x:Name="_this">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+                <ResourceDictionary Source="/View/ResourceDictionaryEmpRetention.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:DecimalToBoolConverter x:Key="DecimalToBoolConv"/>
+            <l:OrderIdConverter x:Key="OrderIdConverter"/>
+            <l:RefSalaryAreaVisible x:Key="RefSalaryAreaVisible"/>
+            <l:RefIdToDataConverter x:Key="RefIdToDataConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="vm:AppCommands.SaveEmpPaySalary" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+        <CommandBinding Command="l:SalaryEditor.RefreshOrders" CanExecute="Refresh_CanExecute" Executed="Refresh_Executed"/>
+        <CommandBinding Command="vm:AppCommands.EditSalaryOrder" CanExecute="EditSalaryOrder_CanExecute" Executed="EditOrders_Executed"/>
+        <CommandBinding Command="vm:AppCommands.EditRefSalaryData" CanExecute="EditSalaryRefData_CanExecute" Executed="EditSalaryRefData_Executed"/>
+    </Window.CommandBindings>
+    
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Bottom" Grid.Row="9" Grid.ColumnSpan="4" Orientation="Horizontal" Background="{StaticResource LightBrush}">
+            <Button Command="vm:AppCommands.SaveEmpPaySalary" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"
+                    VerticalAlignment="Center" Margin="5,2" Content="Cохранить" Padding="10,1">
+            </Button>
+            <Button Content="Закрыть" Click="Close_Click" VerticalAlignment="Center" Margin="5,2" Padding="10,1" IsCancel="True"/>
+            <Label Content="{Binding Error}" ContentStringFormat="Ошибка: {0}" Foreground="Red">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Error}" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="gridMain" Grid.IsSharedSizeScope="True">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="Margin" Value="20,2,10,2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0,2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0,2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+                <GroupBox x:Name="gbEmpData" Header="Сотрудник" BorderThickness="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="column1"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition SharedSizeGroup="column2"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="ФИО"/>
+                        <Label Grid.Column="1" Content="{Binding FIO}" Style="{StaticResource DisabledTextBox}" Margin="3,2" MinHeight="20" />
+                        <TextBlock Grid.Column="2" Text="Таб. №"/>
+                        <Label Grid.Column="3" Content="{Binding PerNum}" Width="100" Style="{StaticResource DisabledTextBox}" Margin="3,2" HorizontalAlignment="Left"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Основные данные" BorderThickness="2">
+                    <Grid x:Name="mainDatagrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="column1" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition SharedSizeGroup="column2" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Дата" ToolTip="Дата начисления или удержания (отчетный месяц)"/>
+                        <DatePicker Grid.Column="1" Grid.Row="0" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}" ToolTip="Дата начисления или удержания (отчетный месяц)"
+                                    SelectedDate="{Binding PayDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Style="{StaticResource EnabledTextBox}"/>
+                        <TextBlock Grid.Column="2" Grid.Row="0" Text="Подразделение"/>
+                        <ComboBox Grid.Column="3" Grid.Row="0" SelectedValuePath="SUBDIV_ID" DisplayMemberPath="CODE_SUBDIV_VALUE" VerticalAlignment="Center" IsEditable="True" 
+                                  Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                                  ItemsSource="{Binding SubdivSource}"
+                                  SelectedValue="{Binding SubdivID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SUB_ACTUAL_SIGN}" Value="0">
+                                            <Setter Property="Background" Value="LightGray"/>
+                                            <Setter Property="ToolTip" Value="Не актуальное подразделение"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Шифр оплат"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                                  SelectedValuePath="PaymentTypeID" 
+                                  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=SelectedItem.NamePayment}" 
+                                  IsEditable="True" IsSynchronizedWithCurrentItem="True"
+                                  SelectedValue="{Binding PaymentTypeID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                  ItemsSource="{Binding PaymentTypeSource}" Grid.IsSharedSizeScope="True"
+                                  TextSearch.TextPath="CodePayment">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="ColumnPT1"/>
+                                            <ColumnDefinition SharedSizeGroup="ColumnPT2"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding CodePayment}" Margin="5,2" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1,0,0,0">
+                                            <TextBlock Text="{Binding NamePayment}" Margin="5,2"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel VirtualizationMode="Recycling" IsVirtualizing="True">
+                                        
+                                    </VirtualizingStackPanel>
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="Кол-во часов"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}" Style="{StaticResource EnabledTextBox}" VerticalAlignment="Center"
+                                 IsEnabled="{Binding IsHourEditEnabled}">
+                        </TextBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Сумма шифра оплат"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                                 Text="{Binding SumSal, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, TargetNullValue={x:Static sys:String.Empty}}"
+                                 IsEnabled="{Binding IsSecondDataEnabled}"/>
+                        <TextBlock Grid.Column="2" Grid.Row="2" Text="Кол-во дней"/>
+                        <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Days, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}, ValidatesOnDataErrors=True}"
+                             Style="{StaticResource EnabledTextBox}" VerticalAlignment="Center" IsEnabled="{Binding IsDaysEditEnabled}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Второстепенные данные" BorderThickness="2">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="column1" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition SharedSizeGroup="column2" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Категория"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding DegreeID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                              ItemsSource="{Binding DegreeSource}" SelectedValuePath="DEGREE_ID"
+                          DisplayMemberPath="CODE_DEGREE" IsEnabled="{Binding IsSecondDataEnabled}" IsEditable="True"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Группа мастера"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroupMaster, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}, ValidatesOnDataErrors=True}"
+                          VerticalAlignment="Center" IsEnabled="{Binding IsSecondDataEnabled}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="Заказ"/>
+                        <TextBox x:Name="tbCodeOrder" Grid.Row="1" Grid.Column="3" Margin="3,2,45,2" Validation.ErrorTemplate="{StaticResource RowNotFoundErrorTemplate}"
+                             IsEnabled="{Binding IsSecondDataEnabled}">
+                            <TextBox.Text>
+                                <Binding Path="OrderID" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True" Converter="{StaticResource OrderIdConverter}">
+                                    <Binding.ValidationRules>
+                                        <l:ValidateOrderRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <Button Grid.Row="1" Grid.Column="3" Margin="3,2,23,2" HorizontalAlignment="Right" Width="22" ToolTipService.ShowOnDisabled="True"
+                            Command="l:SalaryEditor.RefreshOrders" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}">
+                            <Image Source="/Images/refresh2424.png" Stretch="UniformToFill"/>
+                        </Button>
+                        <Button Grid.Row="1" Grid.Column="3" Margin="3,2,1,2" ToolTipService.ShowOnDisabled="True" Width="22"
+                            Command="vm:AppCommands.EditSalaryOrder" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"
+                            HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Image Source="/Images/edit_1616.png" Stretch="UniformToFill"/>
+                        </Button>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Документ удержания"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding RetentionID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" SelectedValuePath="RETENTION_ID"
+                          TextSearch.TextPath="DISP_EXP_RETENT"
+                          ToolTip="Документ(основание) для удержания из ЗП или перечисления" VerticalAlignment="Center"
+                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Items.Count, Converter={StaticResource DecimalToBoolConv}}" Grid.IsSharedSizeScope="True"
+                                  ItemTemplate="{StaticResource RetentTemplate}" 
+                                  ItemsSource="{Binding RetentionSource}" IsSynchronizedWithCurrentItem="False">
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
+                        <!--<TextBlock Grid.Row="3" Text="Документ начисления"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                                  SelectedValue="{Binding SalaryDocumID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" SelectedValuePath="SalaryDocumID"
+                                  ToolTip="Документ(основание) для начисления ЗП или перечисления" VerticalAlignment="Center"
+                                  Grid.IsSharedSizeScope="True" 
+                                  ItemsSource="{Binding SalaryDocumSource}" 
+                                  IsSynchronizedWithCurrentItem="False">
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Items.Count, Converter={StaticResource DecimalToBoolConv}}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="ColumnSalDocum1"/>
+                                            <ColumnDefinition SharedSizeGroup="ColumnSalDocum2"/>
+                                            <ColumnDefinition SharedSizeGroup="ColumnSalDocum3"/>
+                                            <ColumnDefinition SharedSizeGroup="ColumnSalDocum4"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding TypeSalDocName}" ToolTip="Наименование документа" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1,0,1,0" ToolTip="Дата документа" Margin="5,2"
+                                                Padding="5,0">
+                                            <TextBlock Text="{Binding DateDoc, StringFormat='от {0:dd.MM.yyyy}'}"/>
+                                        </Border>
+                                        <TextBlock Grid.Column="2" Text="{Binding DocBegin, StringFormat='c {0:dd.MM.yyyy}'}" VerticalAlignment="Center"/>
+                                        <Border Grid.Column="3" BorderBrush="Gray" BorderThickness="1,0,0,0" Margin="5,2"
+                                                Padding="5,0">
+                                            <TextBlock Text="{Binding DocBegin, StringFormat='по {0:dd.MM.yyyy}'}"/>
+                                        </Border>
+                                        
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>-->
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="Тип выплат"/>
+                        <ComboBox Grid.Row="0" Grid.Column="3" 
+                              SelectedValue="{Binding TypeRowSalaryID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                              ItemsSource="{Binding TypeRowSalarySource}"
+                              SelectedValuePath="TYPE_ROW_SALARY_ID"
+                              DisplayMemberPath="TYPE_ROW_NAME" Margin="3,2" IsEditable="False"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="Отредактировано&#13;бухгалтером"/>
+                        <CheckBox Grid.Row="2" Grid.Column="3" IsChecked="{Binding AccountAddSign, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DecimalToBoolConv}, ValidatesOnDataErrors=True}"
+                              Style="{StaticResource EnabledTextBox}" Margin="3,2" VerticalAlignment="Center" 
+                              ToolTip="Данное начисление сформировано бухгалтером вручную и не подлежит автоматическим изменения"/>
+                    </Grid>
+                </GroupBox>
+                <TabControl>
+                    <TabItem Header="Прочие данные">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="column1"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Перевод сотрудника"/>
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding EmpTransferSource}" SelectedValue="{Binding TransferID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" SelectedValuePath="TRANSFER_ID" Margin="0,3">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.Resources>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Setter Property="Margin" Value="0"/>
+                                                    <Setter Property="BorderBrush" Value="DarkGray"/>
+                                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                                    <Setter Property="Padding" Value="3,1"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                </Style>
+                                            </Grid.Resources>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition SharedSizeGroup="cbcl1"/>
+                                                <ColumnDefinition SharedSizeGroup="cbcl2"/>
+                                                <ColumnDefinition SharedSizeGroup="cbcl3"/>
+                                                <ColumnDefinition SharedSizeGroup="cbcl4"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Content="{Binding DATE_TRANSFER}" ContentStringFormat="c {0:dd.MM.yyyy}" ToolTip="Дата перевода"/>
+                                            <Label Content="{Binding CODE_SUBDIV}" ContentStringFormat="в {0}" ToolTip="Подразделение перевода" Grid.Column="1"/>
+                                            <Label Content="{Binding POS_NAME}" ToolTip="Должность" Grid.Column="2"/>
+                                            <Label Content="{Binding HARM_GROUP}" ToolTip="Группа вредности" BorderThickness="0" Grid.Column="3"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Grid Grid.Row="1" Grid.ColumnSpan="4" Visibility="{Binding ElementName=cbTypePayment, Path=SelectedItem, Converter={StaticResource RefSalaryAreaVisible}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="column1"/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition SharedSizeGroup="column2"/>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Связано с таблицей:" ToolTip="Строка связана с таблицей:"/>
+                                <ComboBox Grid.Column="1" SelectedValue="{Binding TypeRefSalaryID}"
+                                      IsEditable="False" IsEnabled="False" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}" ToolTipService.ShowOnDisabled="True"
+                                      ToolTipService.ShowDuration="100000"
+                                      DisplayMemberPath="REF_COMMENT" SelectedValuePath="TYPE_REF_SALARY_ID"
+                                      ItemsSource="{Binding TypeRefSource}"/>
+                                <TextBlock Grid.Column="2" Text="Данные"/>
+                                <TextBox Grid.Column="3" Margin="2,2,25,2" Style="{StaticResource DisabledTextBox}" HorizontalAlignment="Stretch" 
+                                     IsReadOnly="True" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}" ToolTipService.ShowOnDisabled="True"
+                                     ToolTipService.ShowDuration="100000" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}">
+                                    <TextBox.Text>
+                                        <MultiBinding Mode="OneWay" Converter="{StaticResource RefIdToDataConverter}">
+                                            <Binding Path="TypeRefSalaryID"></Binding>
+                                            <Binding Path="RefID"/>
+                                        </MultiBinding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Button Margin="2" HorizontalAlignment="Right" Grid.Column="3" Width="23" ToolTip="Изменить связанные данные"
+                                    Command="vm:AppCommands.EditRefSalaryData">
+                                    ...
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Реестр перечисления">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Связано с реестром:"/>
+                            <ListBox ItemsSource="{Binding Cartulary}" Grid.Column="1" Margin="0,2" MinHeight="20" BorderBrush="LightSteelBlue" BorderThickness="2"
+                                     Grid.IsSharedSizeScope="True">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition SharedSizeGroup="column1list"/>
+                                                <ColumnDefinition SharedSizeGroup="column2list"/>
+                                                <ColumnDefinition SharedSizeGroup="column3list"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding CartularyComment}" VerticalAlignment="Center" MaxWidth="200" TextWrapping="Wrap" Foreground="Navy" />
+                                            <TextBlock Grid.Column="1" Text="{Binding DateCreate, StringFormat='создан в {0:g}'}" FontWeight="Bold" ToolTip="Дата создания реестра"
+                                                       Language="ru-RU" Margin="5,2" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding DateCloseCart, StringFormat='закрыт в {0:g}'}" FontWeight="Bold" ToolTip="Дата закрытия"
+                                                       Language="ru-RU" Margin="5,2" VerticalAlignment="Center" Foreground="DarkOliveGreen"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

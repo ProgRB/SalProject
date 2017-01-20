@@ -1,0 +1,271 @@
+﻿<UserControl x:Class="RolesViewerLibrary.UserViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RolesViewerLibrary"
+             mc:Ignorable="d" 
+             d:DesignHeight="440" d:DesignWidth="1046" HorizontalAlignment="Stretch">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:UserViewer.AddSubdivCommand" CanExecute="CommandUser_CanExecute" Executed="AddSubdivCommand_Executed"/>
+        <CommandBinding Command="local:UserViewer.DeleteSubdivCommand" CanExecute="CommandSubdiv_CanExecute" Executed="DeleteSubdivCommand_Executed"/>
+        <CommandBinding Command="local:UserViewer.SaveSubdivCommand" CanExecute="CommandSave_CanExecute" Executed="SaveSubdivCommand_Executed"/>
+        <CommandBinding Command="local:UserViewer.LockUser" CanExecute="CommandUser_CanExecute" Executed="LockUser_Executed"/>
+        <CommandBinding Command="local:UserViewer.UnlockUser" CanExecute="CommandUser_CanExecute" Executed="UnlockUser_Executed"/>
+        <CommandBinding Command="local:UserViewer.ResetPassword" CanExecute="CommandUser_CanExecute" Executed="ResetPass_Executed"/>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <Style x:Key="DataGridSalaryStyle">
+            <Setter Property="DataGrid.AutoGenerateColumns" Value="False"/>
+            <Setter Property="DataGrid.ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style>
+                        <Setter Property="DataGridColumnHeader.HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                        <Setter Property="DataGridColumnHeader.Height" Value="25"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="DataGrid.CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="5,2"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <CollectionViewSource Source="{Binding ApplicationAccessSource}" x:Key="ApplicationAccessSource"/>
+        <CollectionViewSource Source="{Binding SubdivAllSource}" x:Key="SubdivAllSource"/>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="PanelGrayBack">
+            <GradientStop Color="#FFFCFCFE" Offset="0" />
+            <GradientStop Color="#FFABAB87" Offset="1" />
+            <GradientStop Color="#FFE7E3DA" Offset="0.512" />
+        </LinearGradientBrush>
+        <Style x:Key="ToolBoxLikeStyle" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="Button">
+            <Setter Property="Control.Margin" Value="3,3"/>
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"/>
+            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"/>
+            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+        </Style>
+        <Style BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" TargetType="Separator">
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource ToolBoxLikeStyle}">
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>  
+        <DockPanel HorizontalAlignment="Stretch">
+            <Grid DockPanel.Dock="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Menu>
+                    <MenuItem Header="Файл"/>
+                </Menu>
+                <WrapPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource PanelGrayBack}">
+                    <Button Click="RefreshUsers_Click" ToolTip="Обновить список">
+                        <Image Source="/Images/refresh2424.png" Width="15"/>
+                    </Button>
+                    <Separator/>
+                    <TextBlock Text="Пользователь:" Margin="5,5" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding UserFilter.UserName, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="0,2"/>
+                    <Separator/>
+                    <TextBlock Text="Подр. доступа" VerticalAlignment="Center" Margin="10,2,5,2"/>
+                    <TextBox Text="{Binding UserFilter.AccessCodeSubdiv}" Width="50" VerticalAlignment="Center"/>
+                    <ComboBox Width="130" SelectedValue="{Binding UserFilter.ApplicationName}" ItemsSource="{Binding Source={StaticResource ApplicationAccessSource}}"
+                                              DisplayMemberPath="ApplicationAlias" SelectedValuePath="AppName" IsSynchronizedWithCurrentItem="False"
+                              IsEditable="True" VerticalAlignment="Center" Margin="5,2"/>
+                </WrapPanel>
+            </Grid>
+            <DataGrid ItemsSource="{Binding UserSource}"  
+                      Style="{StaticResource DataGridSalaryStyle}" SelectedItem="{Binding CurrentUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      IsReadOnly="True">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="local:UserViewer.LockUser"/>
+                        <MenuItem Command="local:UserViewer.UnlockUser"/>
+                        <MenuItem Command="local:UserViewer.ResetPassword"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding UserName}" Header="Пользователь" Width="80" SortMemberPath="UserName"/>
+                    <DataGridTextColumn Binding="{Binding SignFired}" Header="Уволен" Width="40" SortMemberPath="SignFired"/>
+                    <DataGridTemplateColumn Header="Блок" Width="35" SortMemberPath="IsLocked">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Name="MyImage"/>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsLocked}" Value="True">
+                                        <Setter TargetName="MyImage" Property="Source" Value="/Images/locked_3232.png"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Пароль истек" Width="35" SortMemberPath="IsExpired">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Name="MyImage1"/>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsExpired}" Value="True">
+                                        <Setter TargetName="MyImage1" Property="Source" Value="pack://application:,,,/RolesViewerLibrary;component/Images/key3232.png"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding FIO}" Header="Работник" Width="140" SortMemberPath="FIO"/>
+                    <DataGridTemplateColumn Header="Фото" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Photo}"  Stretch="UniformToFill">
+                                    <Image.ToolTip>
+                                        <Image Source="{Binding Photo}"/>
+                                    </Image.ToolTip>
+                                </Image>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding CodeSubdiv}" Header="Подразделение" Width="50" SortMemberPath="CodeSubdiv"/>
+                    <DataGridTextColumn Binding="{Binding PosName}" Header="Должность" Width="200" SortMemberPath="PosName"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="6"/>
+        </DockPanel>
+        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="Подразделения">
+                <DockPanel>
+                    <WrapPanel DockPanel.Dock="Top" Background="{StaticResource PanelGrayBack}">
+                        <Button Command="local:UserViewer.AddSubdivCommand" Style="{StaticResource ToolBoxLikeStyle}"/>
+                        <Button Command="local:UserViewer.DeleteSubdivCommand" Style="{StaticResource ToolBoxLikeStyle}"/>
+                        <Separator/>
+                        <Button Command="local:UserViewer.SaveSubdivCommand" Style="{StaticResource ToolBoxLikeStyle}"/>
+                        <Separator/>
+                        <Button Click="RefreshAccess_Click" Content="Обновить" Style="{StaticResource ToolBoxLikeStyle}"/>
+                    </WrapPanel>
+                    <DataGrid Style="{StaticResource DataGridSalaryStyle}" ItemsSource="{Binding CurrentUser.AccessSubdiv}"
+                              SelectedItem="{Binding CurrentAccessSubdiv, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="dgAccessSubdiv">
+                        <DataGrid.Columns>
+                            <DataGridComboBoxColumn SelectedValueBinding="{Binding SubdivID}" SelectedValuePath="SubdivID" Header="Подразделение"
+                                                Width="100" ItemsSource="{Binding Source={StaticResource SubdivAllSource}}">
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="ComboBox.IsSynchronizedWithCurrentItem" Value="False"/>
+                                        <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+                                        <Setter Property="ItemTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition SharedSizeGroup="Column111"></ColumnDefinition>
+                                                            <ColumnDefinition></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding CodeSubdiv}" VerticalAlignment="Center" Margin="0, 2"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding SubdivName}" VerticalAlignment="Center" Margin="5, 2"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
+                                        <Setter Property="IsEditable" Value="True"></Setter>
+                                        <Setter Property="TextSearch.TextPath" Value="CodeSubdiv"/>
+                                        <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+                                        <Setter Property="ItemTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition SharedSizeGroup="Column111"></ColumnDefinition>
+                                                            <ColumnDefinition></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding CodeSubdiv}" VerticalAlignment="Center" Margin="0, 2"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding SubdivName}" VerticalAlignment="Center" Margin="5, 2"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
+                            <DataGridComboBoxColumn Header="Приложение" Width="200"
+                                                SelectedValueBinding="{Binding AppName}" ItemsSource="{Binding Source={StaticResource ApplicationAccessSource}}"
+                                              DisplayMemberPath="ApplicationAlias" SelectedValuePath="AppName">
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
+                            </DataGridComboBoxColumn>
+                            <DataGridTemplateColumn Header="Дата начала действия" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DateStartAccess, StringFormat={}{0:dd.MM.yyyy HH:mm:ss}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding DateStartAccess}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Дата окончания действия" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DateEndAccess, StringFormat={}{0:dd.MM.yyyy HH:mm:ss}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding DateEndAccess}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </GroupBox>
+            <GridSplitter Grid.Row="1" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            <GroupBox Grid.Row="2" Header="Роли">
+                <TreeView ItemsSource="{Binding CurrentUser.RolesTree}">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding ChildRoles}">
+                            <GroupBox BorderThickness="0,0,0,1" Margin="0,3">
+                                <TextBlock Text="{Binding DescriptionRole}" ToolTip="{Binding DBRoleName}" />
+                            </GroupBox>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="Salary.SubdivSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local_main="clr-namespace:Salary"
+             mc:Ignorable="d" 
+             Height="Auto" d:DesignHeight="24" d:DesignWidth="361" x:Name="_this">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition SharedSizeGroup="ColumnA" Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label HorizontalAlignment="Right" Margin="0,0,3,0" VerticalAlignment="Center" Visibility="{Binding ElementName=_this, Path=ShowPromt, Converter={StaticResource BoolToVisibilityConverter}}">Подразделение</Label>
+        <ComboBox Grid.Column="1" x:Name="CODE_SUBDIV" MinWidth="60" IsEditable="True" DisplayMemberPath="CodeSubdiv" SelectedValuePath="SubdivID"
+                   SelectedValue="{Binding ElementName=_this, Path=SubdivId}"
+                  ItemsSource="{Binding ElementName=_this, Path=SubdivView}" Margin="0,0,0,0" VerticalAlignment="Center" IsSynchronizedWithCurrentItem="True">
+            <ComboBox.Style>
+                <Style TargetType="ComboBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding  RelativeSource={RelativeSource Mode=Self}, Path=SelectedItem.SubActualSign}" Value="0">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SubActualSign}" Value="0">
+                            <Setter Property="Background" Value="LightGray"/>
+                            <Setter Property="ToolTip" Value="Неактуальное подразделение"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
+        <ComboBox Grid.Column="2" x:Name="SUBDIV_NAME" MinWidth="100" IsEditable="False" DisplayMemberPath="SubdivName" SelectedValuePath="SubdivID" 
+                  SelectedValue="{Binding ElementName=_this, Path=SubdivId }"
+                  ItemsSource="{Binding ElementName=_this, Path=SubdivView}" Margin="5,0,0,0" VerticalAlignment="Center" IsSynchronizedWithCurrentItem="True">
+            <ComboBox.Style>
+                <Style TargetType="ComboBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding  RelativeSource={RelativeSource Mode=Self}, Path=SelectedItem.SubActualSign}" Value="0">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SubActualSign}" Value="0">
+                            <Setter Property="Background" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
+    </Grid>
+</UserControl>

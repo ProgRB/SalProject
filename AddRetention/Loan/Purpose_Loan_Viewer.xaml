@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Salary.Loan.Purpose_Loan_Viewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+          xmlns:lcl="clr-namespace:Salary.Loan.Classes"             
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="lcl:LoanCommands.AddPurpose_Loan" CanExecute="AddPurpose_Loan_CanExecute" Executed="AddPurpose_Loan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.DeletePurpose_Loan" CanExecute="DeletePurpose_Loan_CanExecute" Executed="DeletePurpose_Loan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.SavePurpose_Loan" CanExecute="SavePurpose_Loan_CanExecute" Executed="SavePurpose_Loan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.CancelPurpose_Loan" CanExecute="CancelPurpose_Loan_CanExecute" Executed="CancelPurpose_Loan_Executed"/>
+    </UserControl.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0" ToolBarTray.IsLocked="True">
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.AddPurpose_Loan">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+            </Button>
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.DeletePurpose_Loan">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+            </Button>
+            <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.SavePurpose_Loan">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/save_2222.png"/>
+            </Button>
+            <Button  Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.CancelPurpose_Loan">
+                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/undo_2424.png"/>
+            </Button>
+        </ToolBar>
+        <DataGrid Grid.Row="1" Name="dgPurpose_Loan" ItemsSource="{Binding}" Style="{StaticResource DataGridSalaryStyle}"
+                  SelectionUnit="CellOrRowHeader" SelectionMode="Single"
+                  SelectedCellsChanged="dg_SelectedCellsChanged" CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Наименование цели получения ссуды" Binding="{Binding Path=PURPOSE_LOAN_NAME, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Код цели получения ссуды" Binding="{Binding Path=PURPOSE_LOAN_CODE, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

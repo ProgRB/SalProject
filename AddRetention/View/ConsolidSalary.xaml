@@ -1,0 +1,178 @@
+﻿<UserControl x:Class="Salary.View.ConsolidSalary"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Salary"
+             xmlns:cmd="clr-namespace:Salary.ViewModel"
+             xmlns:view="clr-namespace:Salary.View"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        x:Name="_this" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="364" d:DesignWidth="996">
+    <UserControl.Resources>
+        <local:ChildConverter x:Key="ChildConverter"/>
+        <XmlDataProvider x:Key="RepTypeData" XPath="TypeData/RepType">
+            <x:XData>
+                <TypeData xmlns="">
+                    <RepType Name="Дебет" Id="38"/>
+                    <RepType Name="Кредит" Id="37"/>
+                </TypeData>
+            </x:XData>
+        </XmlDataProvider>
+        <AlternationConverter x:Key="BackConverter">
+            <SolidColorBrush>White</SolidColorBrush>
+            <SolidColorBrush Color="#FFDCE9F5"></SolidColorBrush>
+        </AlternationConverter>
+
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.DeleteConsolidItem" CanExecute="DeleteConsolid_CanExecuted" Executed="Delete_executed"/>
+        <CommandBinding Command="cmd:AppCommands.AddConsolidItem" CanExecute="AddConsolid_CanExecuted" Executed="Add_executed"/>
+        <CommandBinding Command="cmd:AppCommands.SaveColsolidReport" CanExecute="Save_CanExecuted" Executed="Save_executed"/>
+    </UserControl.CommandBindings>
+    <DockPanel>
+        <GroupBox Header="Фильтр" DockPanel.Dock="Top" PreviewKeyDown="GroupBox_KeyDown">
+            <GroupBox.BindingGroup>
+                <BindingGroup  x:Name="filterBindingGroup"/>
+            </GroupBox.BindingGroup>
+            <WrapPanel>
+                <WrapPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="10,2"/>
+                    </Style>
+                    <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="Margin" Value="2,2"/>
+                        <Setter Property="MinWidth" Value="150"/>
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="Margin" Value="2,2"/>
+                        <Setter Property="MinWidth" Value="150"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </WrapPanel.Resources>
+                <TextBlock Text="Месяц формирования отчета"/>
+                <DatePicker Grid.Column="1" SelectedDate="{Binding CurrentDate, Mode=TwoWay, UpdateSourceTrigger=Explicit}" local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyyy"/>
+                <local:SubdivSelector Grid.Column="2" x:Name="subdivSelector" AppRoleName="SALARY" SubdivId="{Binding SubdivID, UpdateSourceTrigger=Explicit, Mode=TwoWay}" MinWidth="400"/>
+                <TextBlock Grid.Column="3" Text="Тип затрат"/>
+                <ComboBox Grid.Column="4" ItemsSource="{Binding Source={StaticResource RepTypeData}}" DisplayMemberPath="@Name" SelectedValuePath="@Id" SelectedValue="{Binding TypeCostID, Mode=TwoWay, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Column="5"  Margin="4" ToolTip="Применить фильтр" Click="Filter_Click">
+                    <Image Source="/Images/filter_3232.png" Height="18"/>
+                </Button>
+            </WrapPanel>
+        </GroupBox>
+        <StackPanel DockPanel.Dock="Bottom"  Orientation="Horizontal" Background="{StaticResource LightBrush}" >
+            <Button Command="cmd:AppCommands.SaveColsolidReport" Content="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}" Width="Auto" HorizontalAlignment="Center" Margin="10,3" Padding="10,1"/>
+            <Label Content="{Binding ElementName=lvGroups, Mode=OneWay, Path=(Validation.Errors)[0].ErrorContent}" ContentStringFormat="Ошибка заполнения данных: {0}" Margin="45,2"
+                   Foreground="Red"/>
+        </StackPanel>
+        <ListView ItemsSource="{Binding ReportGroup}" AlternationCount="2" x:Name="lvGroups">
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex), 
+                        Converter={StaticResource BackConverter}}"/>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Сформированная статья затрат" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding GROUP_NAME}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" FontWeight="Bold" 
+                                           FontSize="12"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Сумма по статье затрат" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SUM_SAL, StringFormat=F2}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"
+                                           TextAlignment="Right" Padding="10,2" FontWeight="Bold" FontSize="12"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Остаток" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding REM_SUM_SAL, StringFormat=F2}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"
+                                           TextAlignment="Right" Padding="10,2" FontWeight="Bold" FontSize="12"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Разнесено на статьи затрат" Width="500">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical" IsLocked="True">
+                                        <ToolBar>
+                                            <Button Style="{StaticResource ToolBoxBtStyle}" Width="23" Command="cmd:AppCommands.AddConsolidItem" CommandParameter="{Binding Path=.}">
+                                                <Image Source="/Images/new_1616.png" Width="16"/>
+                                            </Button>
+                                            <Button  Style="{StaticResource ToolBoxBtStyle}" Width="23" Command="cmd:AppCommands.DeleteConsolidItem" CommandParameter="{Binding ElementName=listInnerRelation, Path=SelectedItem}">
+                                                <Image Source="/Images/delete_1616.png" Width="16"/>
+                                            </Button>
+                                        </ToolBar>
+                                    </ToolBarTray>
+                                    <ListView x:Name="listInnerRelation" ItemsSource="{Binding Path=., Converter={StaticResource ChildConverter}, ConverterParameter=group_id_fk}"
+                                              Language="ru-RU" Grid.IsSharedSizeScope="True" PreviewMouseDown="listInnerRelation_PreviewMouseDown">
+                                        <ListView.Resources>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            </Style>
+                                        </ListView.Resources>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Width="250">
+                                                    <GridViewColumn.Header>
+                                                        <TextBlock Text="Статья затрат" ToolTip="Статья затрат на которую требуется разнести сумму"/>
+                                                    </GridViewColumn.Header>
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <ComboBox ItemsSource="{Binding Source={x:Reference _this}, Path=GroupItemsSource}"  IsEditable="False"
+                                                                      SelectedValuePath="ReportGroupID"
+                                                                      Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}">
+                                                                <ComboBox.Resources>
+                                                                    <Style TargetType="ComboBoxItem">
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding Level}" Value="2">
+                                                                                <Setter Property="IsHitTestVisible" Value="False" />
+                                                                                <Setter Property="Background" Value="LightYellow"/>
+                                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </ComboBox.Resources>
+                                                                <ComboBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock Text="{Binding GroupName}" Padding="{Binding PaddingLevel}"/>
+                                                                    </DataTemplate>
+                                                                </ComboBox.ItemTemplate>
+                                                                <ComboBox.SelectedValue>
+                                                                    <Binding Path="REPORT_GROUP_ID" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                                                        <Binding.ValidationRules>
+                                                                            <view:NotNullValidationRule ValidatesOnTargetUpdated="True"/>
+                                                                        </Binding.ValidationRules>
+                                                                    </Binding>
+                                                                </ComboBox.SelectedValue>
+                                                            </ComboBox>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Сумма" Width="150">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding CONSOLID_SUM, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, TargetNullValue={x:Static sys:String.Empty}}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </DockPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            
+        </ListView>
+    </DockPanel>
+</UserControl>

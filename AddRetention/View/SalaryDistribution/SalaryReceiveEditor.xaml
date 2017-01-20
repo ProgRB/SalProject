@@ -1,0 +1,99 @@
+﻿<Window x:Class="Salary.View.SalaryReceiveEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        xmlns:local="clr-namespace:Salary"
+        xmlns:view="clr-namespace:Salary.View"
+        Title="Редактор принятых/переданных затрат" Height="222" Width="727" WindowStartupLocation="CenterScreen" ShowInTaskbar="False"
+        Language="ru-RU">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.SaveReciveSubdiv" Executed="Save_Executed" CanExecute="Save_CanExecute"/>
+    </Window.CommandBindings>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Background="{StaticResource LightBrush}">
+            <Button Command="cmd:AppCommands.SaveReciveSubdiv" ToolTip="Сохранить принятные/переданные" Content="Сохранить" Margin="15,2" Padding="10,1" IsDefault="True" />
+            <Button Content="Закрыть" VerticalAlignment="Center" Padding="10,1" Click="Button_Click" IsCancel="True" />
+        </StackPanel>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="TextBlock" >
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="20,2,15,2"/>
+                    <Setter Property="FontWeight" Value="Medium"/>
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,2,0,2"/>
+                    <Setter Property="MinWidth" Value="50"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,2,0,2"/>
+                    <Setter Property="MinWidth" Value="50"/>
+                </Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,1,0,2"/>
+                    <Setter Property="MinWidth" Value="50"/>
+                </Style>
+                <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,2,0,2"/>
+                    <Setter Property="MinWidth" Value="100"/>
+                </Style>
+                <Style TargetType="local:SubdivSelector" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,2,0,2"/>
+                    <Setter Property="MinWidth" Value="100"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="47*" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Подраздeление от кого переданы"/>
+            <local:SubdivSelector Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" SubdivId="{Binding ReceiveSubdivID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Mode=TwoWay}" 
+                                  ShowPromt="false" AppRoleName="APSTAFF.SUBDIV"  Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Подразделение кому переданы затраты"/>
+            <local:SubdivSelector Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" SubdivId="{Binding SubdivID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Mode=TwoWay}" 
+                                  ShowPromt="False" AppRoleName="APSTAFF.SUBDIV" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="Заказ" />
+            <ComboBox Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Source={StaticResource AppDataSet}, Path=[ORDER].DefaultView}" DisplayMemberPath="ORDER_NAME" 
+                      SelectedValue="{Binding OrderID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsSynchronizedWithCurrentItem="False"
+                      SelectedValuePath="ORDER_ID" IsEditable="True" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Отчетный месяц"/>
+            <DatePicker Grid.Column="1" Grid.Row="2" SelectedDate="{Binding RecDate, UpdateSourceTrigger=PropertyChanged}" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Часы"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Сумма зп"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SumSal, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            
+            
+
+            <TextBlock Grid.Row="4" Grid.Column="2" Text="Сумма поясных"/>
+            <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding SubdivSal, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        </Grid>
+    </DockPanel>
+</Window>

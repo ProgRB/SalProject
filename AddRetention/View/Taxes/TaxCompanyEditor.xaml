@@ -1,0 +1,75 @@
+﻿<Window x:Class="Salary.View.Taxes.TaxCompanyEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Редактор организации" Height="288" Width="696" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.SaveTaxCompany" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockEditorStyle}">
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,2"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,2"/>
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="Наименование"/>
+        <TextBox Text="{Binding CompanyName}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" ToolTip="Полное наименование организации для ФНС"/>
+        <TextBlock Grid.Row="1" Text="Сокращ. наименование"/>
+        <TextBox Text="{Binding ShortCompanyName}" Grid.Row="1" Grid.Column="1" ToolTip="Сокращенное наименование организации для организации"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="ОКТМО"/>
+        <TextBox Text="{Binding Oktmo}" Grid.Row="1" Grid.Column="3" ToolTip="ОКТМО для ФНС"/>
+        <TextBlock Grid.Row="2" Text="ИНН"/>
+        <TextBox Text="{Binding Inn}" Grid.Row="2" Grid.Column="1" ToolTip="ИНН организации"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="КПП"/>
+        <TextBox Text="{Binding Kpp}" Grid.Row="2" Grid.Column="3" ToolTip="КПП организации"/>
+        <TextBlock Grid.Row="3" Text="Комментарий"/>
+        <TextBox Text="{Binding Comments}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" ToolTip="Комментарий"/>
+        <TextBlock Grid.Row="4" Text="Дата начала действия"/>
+        <DatePicker SelectedDate="{Binding DateBegin}" Grid.Row="4" Grid.Column="1" ToolTip="Дата начала действия организации"/>
+        <TextBlock Grid.Row="4" Grid.Column="2" Text="Дата окончания действия"/>
+        <DatePicker SelectedDate="{Binding DateEnd}" Grid.Row="4" Grid.Column="3" ToolTip="Дата окончания действия организации"/>
+        <TextBlock Text="Налоговый агент" Grid.Column="0" Grid.Row="5"/>
+        <ComboBox Grid.Row="5" Grid.Column="1" SelectedItem="{Binding AgentStatus}">
+            <ComboBox.Items>
+                <sys:String>1</sys:String>
+                <sys:String>2</sys:String>
+            </ComboBox.Items>
+        </ComboBox>
+        <TextBlock Grid.Row="5" Grid.Column="2" TextAlignment="Left" HorizontalAlignment="Left" Text="1-налоговый агент, 2 - уполномоченный представитель" Grid.ColumnSpan="2"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="ФИО агента"/>
+        <TextBox Text="{Binding AgentName}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" ToolTip="ФИО полное налогового агента"/>
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Документ полномочий"/>
+        <TextBox Text="{Binding AgentDocument}" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" ToolTip="Документ подтверждающий полномочия представителя налогового агента"/>
+        <StackPanel Grid.Row="9" Orientation="Horizontal" Background="{StaticResource LightBrush}" Grid.ColumnSpan="4">
+            <Button Command="cmd:AppCommands.SaveTaxCompany" ToolTip="Сохранить организацию" Content="Сохранить" Margin="15,2" Padding="10,1" IsDefault="True" />
+            <Button Content="Закрыть" VerticalAlignment="Center" Padding="10,1" Click="Button_Click" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

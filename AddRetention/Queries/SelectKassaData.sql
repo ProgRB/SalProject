@@ -1,0 +1,1 @@
+select * from kassa where TNOM=? and P_RAB=? and SKPOLZ='ALIM'

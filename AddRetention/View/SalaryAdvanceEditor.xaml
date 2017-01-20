@@ -1,0 +1,135 @@
+﻿<Window x:Class="Salary.View.SalaryAdvanceEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:vm="clr-namespace:Salary.ViewModel"
+        Title="Редактор начисления для аванса" Height="297" Width="686" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+    <Window.CommandBindings>
+        <CommandBinding Command="vm:AppCommands.SaveEmpPaySalary" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="20,2,10,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="0,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="0,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="Margin" Value="0,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+        <GroupBox x:Name="gbEmpData" Header="Сотрудник" BorderThickness="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="column1"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition SharedSizeGroup="column2"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="ФИО"/>
+                <Label Grid.Column="1" Content="{Binding FIO}" Style="{StaticResource DisabledTextBox}" Margin="0,2" MinHeight="23" />
+                <TextBlock Grid.Column="2" Text="Таб. №"/>
+                <Label Grid.Column="3" Content="{Binding PerNum}" Width="100" Style="{StaticResource DisabledTextBox}" Margin="0,2" HorizontalAlignment="Left"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Header="Основные данные" BorderThickness="2">
+            <Grid x:Name="mainDatagrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="column1" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition SharedSizeGroup="column2" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Дата начисления" ToolTip="Дата начисления суммы для аванса"/>
+                <DatePicker Grid.Column="1" Grid.Row="0" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                        x:Name="dpPayDate" ToolTip="Дата начисления или удержания (отчетный месяц)">
+                    <DatePicker.SelectedDate>
+                        <Binding Path="PayDate" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True"/>
+                    </DatePicker.SelectedDate>
+                </DatePicker>
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="Подразделение"/>
+                <ComboBox Grid.Column="3" Grid.Row="0" SelectedValuePath="SUBDIV_ID" DisplayMemberPath="CODE_SUBDIV" VerticalAlignment="Center" IsEditable="True" x:Name="cbSubdiv"
+                                  Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}"
+                          ItemsSource="{Binding SubdivSource}">
+                    <ComboBox.SelectedValue>
+                        <Binding Path="SubdivID" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" ValidatesOnDataErrors="True"/>
+                    </ComboBox.SelectedValue>
+                </ComboBox>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Шифр оплат"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}" x:Name="cbTypePayment" SelectedValuePath="PAYMENT_TYPE_ID" DisplayMemberPath="CODE_PAYMENT" 
+                          ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=SelectedItem[NAME_PAYMENT]}" IsEditable="True" IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding PaymentTypeSource}">
+                    <ComboBox.SelectedValue>
+                        <Binding Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" Path="PaymentTypeID" ValidatesOnExceptions="True" ValidatesOnDataErrors="True">
+                        </Binding>
+                    </ComboBox.SelectedValue>
+                </ComboBox>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Кол-во часов"/>
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}, ValidatesOnDataErrors=True}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Сумма шифра оплат"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}" 
+                         Text="{Binding SumSal, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}, ValidatesOnDataErrors=True}" Language="ru-RU"/>
+                <TextBlock Grid.Column="2" Grid.Row="2" Text="Кол-во дней"/>
+                <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Days, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}, ValidatesOnDataErrors=True}" VerticalAlignment="Center">
+                </TextBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Header="Второстепенные данные" BorderThickness="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="column1" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition SharedSizeGroup="column2" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Категория"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding DegreeID, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="DEGREE_ID"
+                          DisplayMemberPath="CODE_DEGREE" IsEditable="True" ItemsSource="{Binding DegreeSource}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Группа мастера"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroupMaster, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}, ValidatesOnDataErrors=True}"
+                         VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Отредактировано&#13;бухгалтером"/>
+                <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding AccountAddSign, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="3,2" VerticalAlignment="Center" ToolTip="Данное начисление сформировано бухгалтером вручную и не подлежит автоматическим изменениям"/>
+
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="4" Orientation="Horizontal" Background="{StaticResource LightBrush}">
+            <Button Command="vm:AppCommands.SaveEmpPaySalary" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"
+                    VerticalAlignment="Center" Margin="15,4" Content="Cохранить" Padding="10,1">
+            </Button>
+            <Button Content="Закрыть" Click="Close_Click" VerticalAlignment="Center" Margin="5,4" Padding="10,1" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,21 @@
+﻿<Window x:Class="Salary.View.WaitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        Title="Выполнение операции" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True"
+        x:Name="_this" SizeToContent="Height" Width="200" MouseDown="OnMouseDown" Topmost="False" ShowInTaskbar="False">
+    <Window.Background>
+        <SolidColorBrush />
+    </Window.Background>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <xctk:BusyIndicator IsBusy="True">
+        <xctk:BusyIndicator.BusyContent>
+            <StackPanel Margin="5,0">
+                <TextBlock Text="{Binding ElementName=_this, Path=ContentText}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                <Button Content="Отменить" Padding="7,2" HorizontalAlignment="Center" Margin="0,5" Click="Button_Click" Visibility="{Binding ElementName=_this, Path=IsAbortable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
+        </xctk:BusyIndicator.BusyContent>
+    </xctk:BusyIndicator>
+</Window>

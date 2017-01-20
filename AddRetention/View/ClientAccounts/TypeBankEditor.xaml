@@ -1,0 +1,95 @@
+﻿<Window x:Class="Salary.View.TypeBankEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="Редактор банка" Height="287" Width="724" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" x:Name="_this">
+    <Window.Resources>
+        <CollectionViewSource x:Key="DistinctBankNameSource" Source="{Binding Path=DistinctBankNameSource}"/>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.SaveTypeBank" CanExecute="save_canExecute" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="10,2"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="ControlInnerStyle" TargetType="Control" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="Control.Margin" Value="0,4"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource ControlInnerStyle}">
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource ControlInnerStyle}">
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource ControlInnerStyle}">
+            </Style>
+            <Style TargetType="CheckBox" BasedOn="{StaticResource ControlInnerStyle}">
+            </Style>
+        </Grid.Resources>
+        <TextBlock Text="Наименование банка" Grid.Row="0" Grid.Column="0"/>
+        <ComboBox Text="{Binding BankName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                  Grid.Row="0" Grid.Column="1" IsEditable="True" x:Name="cbBankName"/>
+        <TextBlock Text="Расчетный счет" Grid.Row="1" Grid.Column="0"/>
+        <TextBox Text="{Binding CurrentAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+        <TextBlock Text="Корр.счет" Grid.Row="2" Grid.Column="0"/>
+        <TextBox Text="{Binding CorrespondentAccount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
+        <TextBlock Text="ИНН" Grid.Row="3" Grid.Column="0"/>
+        <TextBox Text="{Binding Trn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
+        <TextBlock Text="Филиал" Grid.Row="4" Grid.Column="0"/>
+        <TextBox Text="{Binding BranchBank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Width="100" HorizontalAlignment="Left"/>
+        <TextBlock Text="Офис" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="115,4,0,4"/>
+        <TextBox Text="{Binding BankOffice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" Margin="150,4,0,4" Width="Auto"/>
+        <TextBlock Text="Отдельным реестром" Grid.Row="5" Grid.Column="0"/>
+        <CheckBox IsChecked="{Binding CustomSign, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1">
+            <CheckBox.LayoutTransform>
+                <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+            </CheckBox.LayoutTransform>
+        </CheckBox>
+        <TextBlock Text="Типы счетов" Grid.Row="6" Grid.Column="0" ToolTip="В каких типах счетов допустимо использовать данный банк"/>
+        <xctk:CheckComboBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="6" Style="{StaticResource EnabledTextBox}" VerticalAlignment="Center" Margin="0,2"
+                            ItemsSource="{Binding BankForTypeAccountSource}"
+                            DisplayMemberPath="NameTypeAccount"
+                            ValueMemberPath="TypeAccountID"
+                            SelectedMemberPath="IsChecked"
+                            Delimiter=",">
+            
+        </xctk:CheckComboBox>
+        <TextBlock Text="БИК" Grid.Row="0" Grid.Column="2"/>
+        <TextBox Text="{Binding BankIdentCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="3"/>
+        <TextBlock Text="КПП" Grid.Row="1" Grid.Column="2"/>
+        <TextBox Text="{Binding Ppc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3"/>
+        <TextBlock Text="Дата договора" Grid.Row="2" Grid.Column="2"/>
+        <DatePicker SelectedDate="{Binding ContractDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3"/>
+        <TextBlock Text="№договора" Grid.Row="3" Grid.Column="2"/>
+        <TextBox Text="{Binding ContractCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="3"/>
+        <TextBlock Text="Адрес" Grid.Row="4" Grid.Column="2"/>
+        <TextBox Text="{Binding BankAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="3"/>
+        
+        <!-- BANK_OFFICE, BRANCH_BANK, TRN, BANK_IDENT_CODE, CUSTOM_SIGN, PPC, CONTRACT_CODE, CONTRACT_DATE, BANK_ADDRESS -->
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="4" Orientation="Horizontal" Background="{StaticResource LightBrush}">
+            <Button Command="cmd:AppCommands.SaveTypeBank" ToolTip="Сохранить Банк" Content="Сохранить" Margin="15,2" Padding="10,1" IsDefault="True" />
+            <Button Content="Закрыть" VerticalAlignment="Center" Padding="10,1" Click="Button_Click" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

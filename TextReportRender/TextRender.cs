@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace TextReportRender
+{
+    class TextRender: Element
+    {
+        public override void Render()
+        {
+ 
+        }
+
+        public string Text
+        {
+            get;
+            set;
+        }
+        public char LeftBorder
+        { 
+
+        }
+    }
+}

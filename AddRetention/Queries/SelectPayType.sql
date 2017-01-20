@@ -1,0 +1,5 @@
+select payment_type_id, CODE_PAYMENT, NAME_PAYMENT, TYPE_PAYMENT_TYPE_NAME,
+	CALC_PRIORITY, 
+	SIGN_FORM_REPORT
+from {1}.payment_type pt
+left join {1}.TYPE_PAYMENT_TYPE tpt on (pt.TYPE_PAYMENT_TYPE_ID=tpt.TYPE_PAYMENT_TYPE_ID)

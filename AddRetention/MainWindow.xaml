@@ -1,0 +1,402 @@
+﻿<Window x:Class="Salary.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Salary.ViewModel"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:hlp="clr-namespace:Salary.Helpers"
+        xmlns:hvm="clr-namespace:LibrarySalary.ViewModel;assembly=LibrarySalary"
+        xmlns:lnc="clr-namespace:Salary.Loan.Classes"
+        xmlns:AddRet="clr-namespace:Salary"        
+        Title="Зарплата предприятия" Height="610" Width="1010" Closed="Window_Closed" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <Window.CommandBindings>
+        <!--<CommandBinding Command="vm:AppCommands.OpenViewAddRetention" CanExecute="MenuCommand_CanExecute" Executed="OpenViewCommand_Executed"/>-->
+        <CommandBinding Command="vm:AppCommands.OpenViewSalary" CanExecute="MenuCommand_CanExecute" Executed="OpenSalary_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewTaxes" CanExecute="MenuCommand_CanExecute" Executed="OpenViewTaxes_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewAlimony" CanExecute="MenuCommand_CanExecute" Executed="OpenViewAlimony_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewPayType" CanExecute="MenuCommand_CanExecute" Executed="OpenPayType_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewMethodRetCalc" CanExecute="MenuCommand_CanExecute" Executed="OpenViewMethodCalc_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewSalarySubdivClose" CanExecute="MenuCommand_CanExecute" Executed="OpenViewSubdivClose_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewSalaryVac" CanExecute="MenuCommand_CanExecute" Executed="OpenViewSalaryVac_Executed"/>
+        <CommandBinding Command="vm:AppCommands.UpdateControlRoles" CanExecute="ServiceItem_CanExecute" Executed="UpdateControlRoles_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewCartulary" CanExecute="MenuCommand_CanExecute" Executed="OpenViewCartulary_CanExecute"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewDocumTransfer" CanExecute="MenuCommand_CanExecute" Executed="OpenViewDocumTransfer_CanExecute"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewPaymentProperty" CanExecute="MenuCommand_CanExecute" Executed="OpenViewPaymentProperty_CanExecute"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewExceptCalcAvg" CanExecute="MenuCommand_CanExecute" Executed="OpenViewExceptCalcAvg_CanExecute"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewReportGroup" CanExecute="MenuCommand_CanExecute" Executed="OpenViewReportGroup_CanExecute"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewEmpAccounts" CanExecute="MenuCommand_CanExecute" Executed="OpenViewEmpAccounts_Executed"/>
+        <CommandBinding Command="vm:AppCommands.ViewEditMessage" CanExecute="MenuCommand_CanExecute" Executed="ViewEditMessage_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewCosolidReport" CanExecute="MenuCommand_CanExecute" Executed="OpenViewCosolidReport_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewTypeBank" CanExecute="MenuCommand_CanExecute" Executed="OpenViewTypeBank_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewCompanyAccount" CanExecute="MenuCommand_CanExecute" Executed="OpenViewCompanyAccount_Executed"/>
+
+        <CommandBinding Command="vm:AppCommands.OpenViewDistribution" CanExecute="MenuCommand_CanExecute" Executed="OpenViewDistribution_Executed"/>
+
+
+        <CommandBinding Command="vm:AppCommands.OpenViewEconView" CanExecute="MenuCommand_CanExecute" Executed="OpenViewEconView_Executed"/>
+
+        <CommandBinding Command="vm:AppCommands.OpenViewCheckXML" CanExecute="ServiceItem_CanExecute" Executed="OpenViewCheckXML_Executed"/>
+
+        <CommandBinding Command="vm:AppCommands.ViewUsersControl" CanExecute="MenuCommand_CanExecute" Executed="ViewUsersControl_Executed"/>
+        <CommandBinding Command="vm:AppCommands.OpenViewPrintTabs" CanExecute="MenuCommand_CanExecute" Executed="OpenViewPrintTabs_Executed"/>
+
+
+        <CommandBinding Command="vm:AppCommands.OpenViewBrigage" CanExecute="MenuCommand_CanExecute" Executed="OpenViewTabeBrigage_Executed"/>
+        <CommandBinding Command="vm:AppCommands.BrigageDictionary" CanExecute="MenuCommand_CanExecute" Executed="OpenViewBrigage_Executed"/>
+
+
+        <CommandBinding Command="lnc:LoanCommands.ViewPurpose_Loan" CanExecute="MenuCommand_CanExecute" Executed="ViewPurpose_Loan_Executed"/>
+        <CommandBinding Command="lnc:LoanCommands.ViewType_Loan" CanExecute="MenuCommand_CanExecute" Executed="ViewType_Loan_Executed"/>
+        <CommandBinding Command="lnc:LoanCommands.ViewRef_Rate" CanExecute="MenuCommand_CanExecute" Executed="ViewRef_Rate_Executed"/>
+        <CommandBinding Command="lnc:LoanCommands.ViewLoan_Cost_Item" CanExecute="MenuCommand_CanExecute" Executed="ViewLoan_Cost_Item_Executed"/>
+        <CommandBinding Command="lnc:LoanCommands.ViewLoan_To_Registration" CanExecute="MenuCommand_CanExecute" Executed="ViewLoan_To_Registration_Executed"/>
+        <CommandBinding Command="lnc:LoanCommands.ViewLoan" CanExecute="MenuCommand_CanExecute" Executed="ViewLoan_Executed"/>
+        
+    </Window.CommandBindings>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        	<Style x:Key="MainMenuTextBlockStyle" TargetType="{x:Type TextBlock}">
+        		<Setter Property="Foreground" Value="White"/>
+        		<Setter Property="FontSize" Value="13.333"/>
+        		<Setter Property="FontWeight" Value="Bold"/>
+        	</Style>
+            <hvm:ViewTabCollection x:Key="OpenTabs"/>
+
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+            <LinearGradientBrush x:Key="HightlightBorderColor" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            	<GradientStop Color="#FFE5E5E5"/>
+            	<GradientStop Color="#FFE2E2E2" Offset="0.996"/>
+            	<GradientStop Color="#FFEEF5FB" Offset="0.16"/>
+            	<GradientStop Color="#FFF4F9FF" Offset="0.816"/>
+            </LinearGradientBrush>
+
+            <RadialGradientBrush x:Key="HighlightTextColor">
+            	<GradientStop Color="#FFFFBB23" Offset="0.504"/>
+            	<GradientStop Color="#FFDAA240"/>
+            	<GradientStop Color="#FFE29B00" Offset="1"/>
+            </RadialGradientBrush>            
+            
+            <PathGeometry x:Key="TreeArrow">
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure IsFilled="True"
+                              StartPoint="0 0"
+                              IsClosed="True">
+                            <PathFigure.Segments>
+                                <PathSegmentCollection>
+                                    <LineSegment Point="8 4" />
+                                    <LineSegment Point="0 8" />
+                                </PathSegmentCollection>
+                            </PathFigure.Segments>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+
+            <ControlTemplate x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
+                <Border Height="Auto" Background="Transparent" Padding="5,6,3,3">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Path x:Name="ExpandPath" Fill="#FFEFAC27" Stroke="#FFEFAC27" Data="{StaticResource TreeArrow}" VerticalAlignment="Center"/>
+                        <ContentPresenter Grid.Column="1" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="ExpandPath" Property="Stroke" Value="#FFEFAC27" />
+                        <Setter TargetName="ExpandPath" Property="Fill" Value="#FFEFAC27" />
+                    </Trigger>
+
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="ExpandPath" Property="RenderTransform">
+                            <Setter.Value>
+                                <RotateTransform Angle="90" CenterX="4" CenterY="4" />
+                            </Setter.Value>
+                        </Setter>
+                        <Setter TargetName="ExpandPath" Property="Fill" Value="#FFEFAC27" />
+                        <Setter TargetName="ExpandPath" Property="Stroke" Value="#FFEFAC27" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <Style TargetType="{x:Type Expander}" x:Key="ExpanderHeaderStyle">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Expander}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition x:Name="ContentRow" Height="0" />
+                                </Grid.RowDefinitions>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver" />
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledControlDarkColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Border.BorderBrush).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0" Value="{StaticResource DisabledBorderLightColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Border x:Name="Border" Grid.Row="0" BorderThickness="0" CornerRadius="2,2,0,0" Background="Transparent">
+                                    <Border.Style>
+                                        <Style>
+                                            <Setter Property="TextBlock.FontSize" Value="17"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="Control.IsMouseOver" Value="True">
+                                                    <Setter Property="Control.Background" Value="{StaticResource HightlightBorderColor}" />
+                                                    <Setter Property="TextBlock.Foreground" Value="{StaticResource HighlightTextColor}" />
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Grid Cursor="Hand">
+                                        <ToggleButton OverridesDefaultStyle="True" Template="{StaticResource ExpanderToggleButton}" 
+                                                      IsChecked="{Binding IsExpanded, Mode=TwoWay,  RelativeSource={RelativeSource TemplatedParent}}">
+                                            <ToggleButton.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="{DynamicResource ControlLightColor}" Offset="0" />
+                                                    <GradientStop Color="{DynamicResource ControlMediumColor}" Offset="1" />
+                                                </LinearGradientBrush>
+                                            </ToggleButton.Background>
+                                            <ToggleButton.Content>
+                                                <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" />
+                                            </ToggleButton.Content>
+                                        </ToggleButton>
+                                    </Grid>
+                                </Border>
+                                <Border x:Name="Content" Grid.Row="1" BorderThickness="1,0,1,1" CornerRadius="0,0,2,2">
+                                    <Border.Resources>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="FontSize" Value="12"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="{StaticResource HightlightBorderColor}" />
+                                                    <Setter Property="Foreground" Value="{StaticResource HighlightTextColor}" />
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Resources>
+                                    <ContentPresenter Margin="4" />
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="True">
+                                    <Setter TargetName="ContentRow" Property="Height" Value="{Binding DesiredHeight, ElementName=Content}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--<DataTemplate DataType="{x:Type hvm:ViewTabBase}">
+                <ContentPresenter VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding ContentData}"/>
+            </DataTemplate>-->
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource LightBrush}">
+            <MenuItem Header="Сервис">
+                <MenuItem Header="Обновить настройки доступа" Command="vm:AppCommands.UpdateControlRoles"/>
+                <MenuItem Header="Системные сообщения" Command="vm:AppCommands.ViewEditMessage"/>
+                <MenuItem Header="Пользователи системы" Command="vm:AppCommands.ViewUsersControl"/>
+            </MenuItem>
+            <MenuItem Header="Помощь">
+                <MenuItem Header="Справочник пользователя" Click="UserManual_Click"/>
+                <MenuItem Header="О программе" Click="About_Click"/>
+            </MenuItem>
+        </Menu>
+        <!--<TabControl x:Name="tabsContent" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Source={StaticResource OpenTabs}, Path=OpenTabs}" ItemContainerStyle="{StaticResource ClosedTabItemStyle}" 
+                    Grid.RowSpan="2"  SelectedItem ="{Binding Source={StaticResource OpenTabs}, Path=SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        </TabControl>-->
+
+        <xcad:DockingManager Grid.Row="1" Grid.Column="1"
+                            AllowMixedOrientation="True"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            DocumentsSource="{Binding Source={StaticResource OpenTabs}, Path=OpenTabs}"
+                            ActiveContent="{Binding Source={StaticResource OpenTabs}, Path=SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             >
+            <xcad:DockingManager.Resources>
+                <DataTemplate  DataType="{x:Type hvm:ViewTabBase}">
+                    <ContentPresenter VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding ContentData}"/>
+                </DataTemplate>
+            </xcad:DockingManager.Resources>
+            <xcad:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Content.HeaderIcon}" Margin="3,3,6,3" Width="18"/>
+                        <TextBlock Text="{Binding Content.HeaderText}"  VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </xcad:DockingManager.DocumentHeaderTemplate>
+            <xcad:DockingManager.DocumentPaneMenuItemHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Content.HeaderIcon}" Margin="3,3,6,3" Width="18"/>
+                        <TextBlock Text="{Binding Content.HeaderText}"  VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </xcad:DockingManager.DocumentPaneMenuItemHeaderTemplate>
+            <xcad:LayoutRoot x:Name="_layoutRoot">
+                <xcad:LayoutPanel Orientation="Horizontal">
+                    <xcad:LayoutDocumentPaneGroup>
+                        <xcad:LayoutDocumentPane>
+                        </xcad:LayoutDocumentPane>
+                    </xcad:LayoutDocumentPaneGroup >
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+
+        <Expander ExpandDirection="Right" IsExpanded="True" Grid.Row="1" Grid.IsSharedSizeScope="True" BorderThickness="0,1,1,0">
+        	<Expander.BorderBrush>
+        		<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+        			<GradientStop Color="#FF87A6E5" Offset="0"/>
+        			<GradientStop Color="#FF69748B" Offset="0.996"/>
+        		</LinearGradientBrush>
+        	</Expander.BorderBrush>
+        	<Expander.Background>
+        		<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+        			<GradientStop Color="#FFF9F9F9" Offset="0"/>
+        			<GradientStop Color="#FFD0D2D2" Offset="0.557"/>
+        			<GradientStop Color="#FFC3C8CE" Offset="0.992"/>
+        		</LinearGradientBrush>
+        	</Expander.Background>
+            <Expander.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="TextBlock.Foreground" Value="Gray"/>
+                                                </Trigger>                                                        
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="{StaticResource HightlightBorderColor}" />
+                                                    <Setter Property="TextBlock.Foreground" Value="{StaticResource HighlightTextColor}" />
+                                                    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                </Trigger>
+                                                <DataTrigger Binding="{Binding IsPressed}" Value="True">
+                                                    <Setter Property="TextBlock.Foreground" Value="Gray"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Image Source="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(hlp:SomeClass.Tag)}" Margin="10,5,5,5"
+                                           Width="18"/>
+                                    <ContentPresenter Grid.Column="1" Margin="10,5" VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    
+                </Style>
+            </Expander.Resources>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Expander Header="Зарплата" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Content="Просмотр и расчет" Command="vm:AppCommands.OpenViewSalary"  hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/sallary_3232.png"/>
+                            <Button Command="vm:AppCommands.OpenViewSalaryVac" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/holiday.png"/>
+                            <Button Command="vm:AppCommands.OpenViewSalarySubdivClose" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/locked2_3232.png"/>
+                            <Button Command="vm:AppCommands.OpenViewCosolidReport" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/balance_1616.png"/>
+                            <Button Command="vm:AppCommands.OpenViewTaxes" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/money_bag_128_128.png"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Распределение затрат" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="vm:AppCommands.OpenViewDistribution"  hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/table_1616.png"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Исполнительные листы" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="vm:AppCommands.OpenViewAlimony"  hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/hammer_2424.png"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Учет сдельной оплаты" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="vm:AppCommands.OpenViewBrigage" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/group_3232.png"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Реестры и перечисления" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="vm:AppCommands.OpenViewEmpAccounts" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/contact_card_3232.png"/>
+                            <Button Command="vm:AppCommands.OpenViewCartulary" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/credit_card_4848.png"/>
+                            <Button Command="vm:AppCommands.OpenViewDocumTransfer" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/vcard_3232.png"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Справочники" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="vm:AppCommands.OpenViewPayType"/>
+                            <Button Command="vm:AppCommands.OpenViewPaymentProperty"/>
+                            <Button Command="vm:AppCommands.OpenViewMethodRetCalc" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/setting_3232.png"/>
+                            <Button Command="vm:AppCommands.OpenViewExceptCalcAvg"/>
+                            <Button Command="vm:AppCommands.OpenViewReportGroup"/>
+                            <Button Command="vm:AppCommands.OpenViewTypeBank"/>
+                            <Button Command="vm:AppCommands.OpenViewCompanyAccount"/>
+                            <Button Command="vm:AppCommands.BrigageDictionary" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/group_3232.png"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Отчетность экономиста" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="vm:AppCommands.OpenViewEconView" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/document_3232.png"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Ссуды" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="lnc:LoanCommands.ViewLoan" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/kwallet_3232.png"/>
+                            <Button Command="lnc:LoanCommands.ViewLoan_To_Registration" hlp:SomeClass.Tag="pack://application:,,,/Salary;component/Images/money_calculator_3232.png"/>
+                            <Expander Header="Справочники" Style="{StaticResource ExpanderHeaderStyle}">
+                                <StackPanel>
+                                    <Button Command="lnc:LoanCommands.ViewPurpose_Loan"/>
+                                    <Button Command="lnc:LoanCommands.ViewType_Loan"/>
+                                    <Button Command="lnc:LoanCommands.ViewRef_Rate"/>
+                                    <Button Command="lnc:LoanCommands.ViewLoan_Cost_Item"/>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Header="Дополнительно" Style="{StaticResource ExpanderHeaderStyle}">
+                        <StackPanel>
+                            <Button Command="vm:AppCommands.OpenViewCheckXML"/>
+                            <Button Command="vm:AppCommands.OpenViewPrintTabs"/>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+        </Expander>
+    </Grid>
+</Window>

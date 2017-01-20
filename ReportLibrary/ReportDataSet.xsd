@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportDataSet" targetNamespace="http://tempuri.org/ReportDataSet.xsd" xmlns:mstns="http://tempuri.org/ReportDataSet.xsd" xmlns="http://tempuri.org/ReportDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportDataSet" msprop:Generator_UserDSName="ReportDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTableSource" msprop:Generator_TableClassName="DataTableSourceDataTable" msprop:Generator_TableVarName="tableDataTableSource" msprop:Generator_TablePropName="DataTableSource" msprop:Generator_RowDeletingName="DataTableSourceRowDeleting" msprop:Generator_UserTableName="DataTableSource" msprop:Generator_RowChangingName="DataTableSourceRowChanging" msprop:Generator_RowEvHandlerName="DataTableSourceRowChangeEventHandler" msprop:Generator_RowDeletedName="DataTableSourceRowDeleted" msprop:Generator_RowEvArgName="DataTableSourceRowChangeEvent" msprop:Generator_RowChangedName="DataTableSourceRowChanged" msprop:Generator_RowClassName="DataTableSourceRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="PER_NUM" msprop:Generator_ColumnVarNameInTable="columnPER_NUM" msprop:Generator_ColumnPropNameInRow="PER_NUM" msprop:Generator_ColumnPropNameInTable="PER_NUMColumn" msprop:Generator_UserColumnName="PER_NUM" type="xs:string" minOccurs="0" />
+              <xs:element name="SUM_SAL" msprop:Generator_ColumnVarNameInTable="columnSUM_SAL" msprop:Generator_ColumnPropNameInRow="SUM_SAL" msprop:Generator_ColumnPropNameInTable="SUM_SALColumn" msprop:Generator_UserColumnName="SUM_SAL" type="xs:decimal" minOccurs="0" />
+              <xs:element name="FIO" msprop:Generator_ColumnVarNameInTable="columnFIO" msprop:Generator_ColumnPropNameInRow="FIO" msprop:Generator_ColumnPropNameInTable="FIOColumn" msprop:Generator_UserColumnName="FIO" type="xs:string" minOccurs="0" />
+              <xs:element name="CODE_DEGREE" msprop:Generator_ColumnVarNameInTable="columnCODE_DEGREE" msprop:Generator_ColumnPropNameInRow="CODE_DEGREE" msprop:Generator_ColumnPropNameInTable="CODE_DEGREEColumn" msprop:Generator_UserColumnName="CODE_DEGREE" type="xs:string" minOccurs="0" />
+              <xs:element name="CODE_ORDER" msprop:Generator_ColumnVarNameInTable="columnCODE_ORDER" msprop:Generator_ColumnPropNameInRow="CODE_ORDER" msprop:Generator_ColumnPropNameInTable="CODE_ORDERColumn" msprop:Generator_UserColumnName="CODE_ORDER" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

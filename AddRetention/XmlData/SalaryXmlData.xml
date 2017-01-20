@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XmlData>
+	<RetentionFilterSource xmlns="">
+		<FilterCriteria>
+			<Title>Только текущий месяц</Title>
+			<FilterValue></FilterValue>
+		</FilterCriteria>
+	</RetentionFilterSource>
+	<CacheVsSalaryFilterSource xmlns="">
+		<FilterCriteria>
+			<Title>Аванс (487)</Title>
+			<FilterValue>487</FilterValue>
+		</FilterCriteria>
+	</CacheVsSalaryFilterSource>
+	<TypePaymentSourceFilter xmlns="">
+		<TypePayment Name="Начисление" ID="1" IsChecked="True"/>
+		<TypePayment Name="Прочие шифры оплат" ID="2" IsChecked="False"/>
+		<TypePayment Name="Прочие доходы" ID="6" IsChecked="True"/>
+	</TypePaymentSourceFilter>
+	<DocumPossibleName>
+		<PossibleDocName Value="Заболевание"/>
+		<PossibleDocName Value="Уход за больным"/>
+		<PossibleDocName Value="Отпуск по беременности и родам"/>
+		<PossibleDocName Value="Производственная травма"/>
+	</DocumPossibleName>
+	<TypeReceiveOrders>
+		<TypeReceiveOrder Name="Алименты" Payments="275,277"/>
+		<TypeReceiveOrder Name="Исполнительные листы" Payments="292"/>
+	</TypeReceiveOrders>
+  <TypeCheckXMLFiles>
+    <TypeFileCheckXML Name="Файл отчета 2-НДФЛ">
+      <FileVersion Code="5.04" VersionName="Версия файла 2015-2016 (5.04)" FileXSDPath="23-fns20151030_mmv-7-11_485@-2ndfl.xsd"/>
+      <FileVersion Code="5.03" VersionName="Версия файла 2013-2014 (5.03)" FileXSDPath="NO_NDFL2_1_399_00_05_03_01.xsd"/>
+    </TypeFileCheckXML>
+  </TypeCheckXMLFiles>
+  <NDFL2FileName Name="NO_NDFL2_9978_9978_0323018510997850001_{0:yyyyMMdd}.xml"/>
+  <TypeDistrSources>
+    <TYPE_DISTR_BASE_SOURCE Name="Заработная плата" ID="1" ExcludePayments="315,316" IncludePayments=""/>  
+    <TYPE_DISTR_BASE_SOURCE Name="Резервы выплат" ID="2" IncludePayments="315,316" ExcludePayments=""/>  
+  </TypeDistrSources>
+
+  <ColumnFilterSource>
+    <ListColumns Name="RepEconByPayment">
+      <Columns>
+        <ListColumnFilter ColumnName="to_char(pay_date, 'mm yyyy')" AliasName="Месяц" IsSelected="True"/>
+        <ListColumnFilter ColumnName="code_subdiv" AliasName="Подр." IsSelected="True"/>
+        <ListColumnFilter ColumnName="per_num" AliasName="Таб.№" IsSelected="True"/>
+        <ListColumnFilter ColumnName="sign_comb" AliasName="Совм." IsSelected="True"/>
+        <ListColumnFilter ColumnName="fio" AliasName="ФИО" IsSelected="True"/>
+        <ListColumnFilter ColumnName="code_degree" AliasName="Категория" IsSelected="True"/>
+        <ListColumnFilter ColumnName="code_operation" AliasName="Вид пр-ва" IsSelected="True"/>
+        <ListColumnFilter ColumnName="code_pos" AliasName="Шифр проф." IsSelected="True"/>
+        <ListColumnFilter ColumnName="pos_name" AliasName="Должность" IsSelected="False"/>
+        <ListColumnFilter ColumnName="classific" AliasName="Разряд" IsSelected="True"/>
+        <ListColumnFilter ColumnName="code_tariff_grid" AliasName="Тар. сетка" IsSelected="True"/>
+        <ListColumnFilter ColumnName="salary" AliasName="Кф-т" IsSelected="True"/>
+        <ListColumnFilter ColumnName="group_master" AliasName="Гр. мастера" IsSelected="True"/>
+        <ListColumnFilter ColumnName="code_region" AliasName="Участок" IsSelected="False"/>
+        <ListColumnFilter ColumnName="round(avg_count_emp, 4)" AliasName="ССЧ" IsSelected="True"/>
+      </Columns>
+    </ListColumns>
+  </ColumnFilterSource>
+
+  <ClosingApps>
+    <ClosedApp Name="Salary" Description="Заработная плата" Code="SALARY"/>
+    <ClosedApp Name="PieceWork" Description="Сдельная оплата" Code="PIECE_WORK"/>
+    <ClosedApp Name="Distribution" Description="Распределение затрат" Code="DISTRIBUTION"/>
+    <ClosedApp Name="ShiftTargets" Description="Сменные задания" Code="SHIFT_TARGETS"/>
+  </ClosingApps>
+
+  <AccessSubdivAppsComments>
+    <AppAccessAlias ID="1" AppName="KADR" Alias="Кадры"/>
+    <AppAccessAlias ID="2" AppName="ACCOUNT" Alias="АРМ Бухгалтера просмотр"/>
+    <AppAccessAlias ID="3" AppName="ACCOUNTANT_EDIT" Alias="АРМ бухгалтера редактирование"/>
+    <AppAccessAlias ID="4" AppName="PREMIUM" Alias="Премия"/>
+    <AppAccessAlias ID="5" AppName="TABLE" Alias="Просмотр и редактирование табеля"/>
+    <AppAccessAlias ID="6" AppName="TABLE_EDIT_GR" Alias="Редактирование графиков работы"/>
+    <AppAccessAlias ID="7" AppName="SALARY" Alias="Зарплата расчет"/>
+    <AppAccessAlias ID="8" AppName="SALARY_CLOSING" Alias="Закрытие зарплаты"/>
+    <AppAccessAlias ID="9" AppName="SALARY_VIEW" Alias="Зарплата экономиста отчеты"/>
+    <AppAccessAlias ID="10" AppName="SALARY_DISTR" Alias="Распределение просмотр"/>
+    <AppAccessAlias ID="11" AppName="DISTRIBUTION_CLOSING" Alias="Закрытие распределения"/>
+    <AppAccessAlias ID="12" AppName="SALARY_CARTULARY_VIEW" Alias="Реестры перечисления просмотр"/>
+    <AppAccessAlias ID="13" AppName="ALIMONY_EDIT" Alias="Редактирование алиментов"/>
+    <AppAccessAlias ID="14" AppName="VS_VIEW" Alias="Отпуска просмотр"/>
+    <AppAccessAlias ID="15" AppName="VS_EDIT" Alias="Отпуска редактирование"/>
+    <AppAccessAlias ID="16" AppName="VS_CLOSING" Alias="Отпуска закрытие"/>
+    <AppAccessAlias ID="17" AppName="SHIFT_TARGETS_FOT" Alias="Сменные задания"/>
+    <AppAccessAlias ID="18" AppName="SHIFT_TARGETS_CLOSING" Alias="Закрытия сменных заданий"/>
+    <AppAccessAlias ID="19" AppName="PIECE_WORK" Alias="Наряды просмотр"/>
+    <AppAccessAlias ID="20" AppName="PIECE_WORK_CLOSING" Alias="Закрытие нарядов за месяц"/>
+  </AccessSubdivAppsComments>
+</XmlData>

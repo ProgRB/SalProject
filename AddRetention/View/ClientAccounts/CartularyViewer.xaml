@@ -1,0 +1,409 @@
+﻿<UserControl x:Class="Salary.View.CartularyViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Salary"
+             xmlns:view="clr-namespace:Salary.View"
+             xmlns:cmd="clr-namespace:Salary.ViewModel"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+             mc:Ignorable="d" 
+             d:DesignHeight="448" d:DesignWidth="928"
+             x:Name="_this" FocusManager.FocusedElement="{Binding ElementName=ccMenuItem, Mode=OneTime}">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.AddCartulary" CanExecute="AddCartulary_CanExecute" Executed="AddCartulary_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.EditCartulary" CanExecute="EditCartulary_CanExecute" Executed="EditCartulary_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.CreatePaidCartularyRef" CanExecute="EditCartulary_CanExecute" Executed="CreatePaidCartularyRef_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteCartulary" CanExecute="EditCartulary_CanExecute" Executed="DeleteCartulary_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.CloseCartulary" CanExecute="EditCartulary_CanExecute" Executed="CloseCartulary_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.OpenCartulary" CanExecute="EditCartulary_CanExecute" Executed="OpenCartulary_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.CreateAutoCartulary" CanExecute="FormCartulary_CanExecute" Executed="CreateAutoCart_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.AddCartularyPaid" CanExecute="AddPaid_canExecute" Executed="AddPaid_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.EditCartularyPaid" CanExecute="EditPaid_canExecute" Executed="EditPaid_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteCartularyPaid" CanExecute="EditPaid_canExecute" Executed="DeletePaid_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Unload987ToTxt" CanExecute="ReportWithTypeCartulary_CanExecute" Executed="Unload987ToTxt_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.RepAlimonyTransfers" CanExecute="ReportWithTypeCartulary_CanExecute" Executed="RepAlimonyTransfers_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepPostTransferAlimony" CanExecute="ReportWithTypeCartulary_CanExecute" Executed="RepPostTransferAlimonyCommand_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.FileSumTransfer" CanExecute="ReportRegister_CanExecute" Executed="FileSumTransfer_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepRegisterReports" CanExecute="ReportRegister_CanExecute" Executed="RepRegisterReports_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepSalaryTransferNote" CanExecute="ReportRegister_CanExecute" Executed="RepSalaryTransferNote_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepSalaryTransferNoteAttachment" CanExecute="ReportRegister_CanExecute" Executed="RepSalaryTransferNoteAttachment_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepSalaryPayNote" CanExecute="ReportWithTypeCartulary_CanExecute" Executed="RepSalaryPayNote_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepUploadTxtSalaryPayNote" CanExecute="ReportWithTypeCartulary_CanExecute" Executed="RepUploadTxtSalaryPayNote_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_CartularyConsolidSubdiv" CanExecute="EditCartulary_CanExecute" Executed="RepCartularyConsolidSubdiv_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_CartularyConsolidTypeBank" CanExecute="EditCartulary_CanExecute" Executed="Rep_CartularyConsolidTypeBank_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepTypeBankSumTransfer" CanExecute="Report_CanExecute" Executed="RepTypeBankSumTransfer_Executed"/>
+
+        <CommandBinding Command="cmd:AppCommands.RepSalaryMissionTransferNote" CanExecute="ReportWithTypeCartulary_CanExecute" Executed="RepSalaryMissionTransferNote_Executed"/>
+
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <view:CollectionToSumConverter SumField="PAID_SUM" x:Key="CollectionToSumConverter"/>
+        <local:IsNullConverter x:Key="IsNullConverter"/>
+        <Style TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        
+        <GroupBox Grid.Row="0" Header="Фильтр реестров">
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="Margin" Value="10,2,19,2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="10,2,6,2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0,2,0,2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0,2,0,2"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" MinWidth="250"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Тип реестра"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding TypeCartularySource}" SelectedValue="{Binding ElementName=_this, Path=TypeCartularyID, Mode=TwoWay}" SelectedValuePath="TYPE_CARTULARY_ID"
+                         Width="350" IsSynchronizedWithCurrentItem="True" x:Name="cbTypeCartulary">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TYPE_CARTULARY_NAME}" Margin="10,3" FontWeight="Bold"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Grid.Column="2" Text="Месяц формирования реестра"/>
+                <DatePicker Grid.Column="3" HorizontalAlignment="Left" Width="150" local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyyy" SelectedDate="{Binding Path=SelectedDate, ElementName=_this, Mode=TwoWay}"
+                            x:Name="dpSelectedDate"/>
+                <TextBlock Text="Подразделение" Grid.Row="1"/>
+                <local:SubdivSelector Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" AppRoleName="SALARY_CARTULARY_VIEW" SubdivId="{Binding SubdivID, ElementName=_this, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      x:Name="cbSubSelector" ShowPromt="False"/>
+                <Button Margin="5,2" Grid.Column="4" Width="29" HorizontalAlignment="Left" ToolTip="Применить фильтр" Click="btFilter_Click">
+                    <Image Source="/Images/filter_3232.png" Height="18"/>
+                </Button>
+
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Header="Реестры">
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Top" Background="{StaticResource PanelGrayBack}">
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.AddCartulary">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                    </Button>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.EditCartulary">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                    </Button>
+                    <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.DeleteCartulary">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                    </Button>
+                    <Separator/>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.CloseCartulary">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/locked_3232.png"/>
+                    </Button>
+                    <Separator/>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.OpenCartulary">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/unlocked_3232.png"/>
+                    </Button>
+                    <Menu VerticalAlignment="Center" Background="Transparent" FocusManager.IsFocusScope="False">
+                        <MenuItem Header="Формирование реестров" >
+                            <MenuItem.Icon>
+                                <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/map_create_2424.png"/>
+                            </MenuItem.Icon>
+                            <MenuItem Command="cmd:AppCommands.CreateAutoCartulary" Header="Сформировать новый реестр" ToolTip="Сформировать реестр новый реестр">
+                                <MenuItem.Icon>
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/map_create_2424.png" Margin="10,4"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Command="cmd:AppCommands.CreateAutoCartulary" Header="Доформировать реестр" ToolTip="Добавить в текущий реестр записи, не попавшие ни в один из реестров" CommandParameter="1">
+                                <MenuItem.Icon>
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/copydoc_3232.png" Margin="10,4"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Command="cmd:AppCommands.CreatePaidCartularyRef" Header="Связать данные реестра с зарплатой" ToolTip="Безобидная процедура просто свяжет записи реестра с зарплатой, если они не связаны и только">
+                                <MenuItem.Icon>
+                                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/break_3232.png" Margin="10,4"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
+                    <Separator/>
+                    <Menu Background="Transparent" VerticalAlignment="Center" FocusManager.IsFocusScope="False">
+                        <MenuItem ItemsSource="{Binding ElementName=_this, Path=FileImportItemsSource}" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                            <MenuItem.Header>
+                                <TextBlock Text="Формирование файлов для банков" Margin="0,2"/>
+                            </MenuItem.Header>
+                            <MenuItem.Icon>
+                                <Image Source="/Images/credit_card_4848.png" Width="23" VerticalAlignment="Center"/>
+                            </MenuItem.Icon>
+                            <MenuItem.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Command" Value="{x:Static cmd:AppCommands.FileSumTransfer}"/>
+                                    <Setter Property="CommandParameter" Value="{Binding FORMAT_FILE_BANK_ID}"/>
+                                    <Setter Property="Header" Value="{Binding Path=ITEM_CAPTION}"/>
+                                </Style>
+                            </MenuItem.ItemContainerStyle>
+                        </MenuItem>
+                    </Menu>
+                    <Separator/>
+                    <Menu Background="Transparent" VerticalAlignment="Center" FocusManager.IsFocusScope="False">
+                        <Menu.CommandBindings>
+                            <CommandBinding Command="cmd:AppCommands.RepTypeBankEmpTransfer" CanExecute="AddCartulary_CanExecute" Executed="RepTypeBankEmpTransfer_Executed"/>
+                            <CommandBinding Command="cmd:AppCommands.RepCartularyVsSalary" CanExecute="AddCartulary_CanExecute" Executed="RepCartularyVsSalary_Executed"/>
+
+                        </Menu.CommandBindings>
+                        <MenuItem Header="Отчеты">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/print2424.png" Stretch="Uniform" Width="17"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="Алименты">
+                                <MenuItem Command="cmd:AppCommands.RepAlimonyTransfers" CommandParameter="1"/>
+                                <MenuItem Header="Почтовые переводы" Command="cmd:AppCommands.RepPostTransferAlimony" CommandParameter="1">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Images/mail_3232.png" Stretch="Uniform" Width="20"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Реестры перечисления" ItemsSource="{Binding ElementName=_this, Path=FileImportItemsSource}">
+                                <MenuItem.ItemContainerStyle>
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Command" Value="{x:Static cmd:AppCommands.RepRegisterReports}"/>
+                                        <Setter Property="CommandParameter" Value="{Binding FORMAT_FILE_BANK_ID}"/>
+                                        <Setter Property="Header" Value="{Binding Path=ITEM_CAPTION}"/>
+                                    </Style>
+                                </MenuItem.ItemContainerStyle>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Служебные записки" Command="cmd:AppCommands.RepSalaryTransferNote"/>
+                            <MenuItem Header="Служебные записки для командировочных" Command="cmd:AppCommands.RepSalaryMissionTransferNote" CommandParameter="13"/>
+                            <MenuItem Header="Приложение к служебным запискам" Command="cmd:AppCommands.RepSalaryTransferNoteAttachment" CommandParameter="7"/>
+                            <Separator/>
+                            <MenuItem Header="Для кассы">
+                                <MenuItem Header="Платежная ведомость" Command="cmd:AppCommands.RepSalaryPayNote" CommandParameter="5,6"/>
+                            </MenuItem>
+                            <MenuItem Header="По реестру">
+                                <MenuItem Header="Сводный по подразделениям" Command="cmd:AppCommands.Rep_CartularyConsolidSubdiv"/>
+                                <MenuItem Header="Сводный по банкам" Command="cmd:AppCommands.Rep_CartularyConsolidTypeBank"/>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Сводная ведомость по подразделениям (По типу реестра)" Command="cmd:AppCommands.RepCartularyVsSalary"/>
+                            <Separator/>
+                            <MenuItem x:Name="ccMenuItem" Header="Кол-во сотрудников перечисляющих ЗП (по банкам)" Command="cmd:AppCommands.RepTypeBankEmpTransfer" 
+                                      ToolTip="Сводный отчет по банкам о количестве сотрудников перечисляющих зарплату"/>
+                            <MenuItem Header="Перечисления в банки за период" Command="cmd:AppCommands.RepTypeBankSumTransfer" 
+                                      ToolTip="Сводный отчет по суммам перечисленным в банки за период"/>
+                        </MenuItem>
+                    </Menu>
+                    <Separator/>
+                    <Menu Background="Transparent" VerticalAlignment="Center" FocusManager.IsFocusScope="False">
+                        <MenuItem Header="Выгрузка данных">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/txt_3232.png" Stretch="Uniform" Width="19"/>
+                            </MenuItem.Icon>
+                            <MenuItem Command="cmd:AppCommands.RepUploadTxtSalaryPayNote" Header="Платежная ведомость в текстовый файл" CommandParameter="5,6"/>
+                            <Separator/>
+                            <MenuItem Command="cmd:AppCommands.Unload987ToTxt" Header="Формирование 987 в.о. в текстовый файл" CommandParameter="2"/>
+                        </MenuItem>
+                    </Menu>
+                </WrapPanel>
+                <Grid>
+                    <DataGrid IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=_this, Path=CartularySource}"
+                              x:Name="dgCartulary" SelectedItem="{Binding CurrentCartulary, Mode=TwoWay}"
+                              local:DataGridAddition.DoubleClickCommand="cmd:AppCommands.EditCartulary" IsSynchronizedWithCurrentItem="True"
+                              Style="{StaticResource DataGridSalaryStyle}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="45">
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Text="Статус" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock.LayoutTransform>
+                                            <RotateTransform Angle="-90"/>
+                                        </TextBlock.LayoutTransform>
+                                    </TextBlock>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" Height="20">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Setter Property="Source" Value="/Images/locked_3232.png"/>
+                                                    <Setter Property="ToolTip" Value="Статус: Закрыт"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DATE_CLOSE_CART, Converter={StaticResource IsNullConverter}}" Value="True">
+                                                            <Setter Property="Source" Value="/Images/unlocked_3232.png"/>
+                                                            <Setter Property="ToolTip" Value="Статус: Открыт"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Binding="{Binding DATE_CREATE, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}" Width="140">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="Дата формирования реестра" TextWrapping="Wrap"/>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding DATE_CLOSE_CART, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}"  Width="140">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="Дата закрытия реестра" TextWrapping="Wrap"/>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding ROW_COUNT}" Header="Кол-во" Width="70"/>
+                            <DataGridTextColumn Binding="{Binding CARTULARY_COMMENT}" Header="Комментарий" Width="350"/>
+                            <DataGridTextColumn Binding="{Binding CARTULARY_NUM}" Header="№" Width="70"/>
+                            <DataGridTextColumn Binding="{Binding CARTULARY_HEADER}" Header="Основание ведомости" Width="170"/>
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                    <xctk:BusyIndicator IsBusy="{Binding ElementName=_this, Path=IsBusy}">
+                        <xctk:BusyIndicator.BusyContent>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="5,0">
+                                    <TextBlock Text="Формирование реестра..." VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </xctk:BusyIndicator.BusyContent>
+                    </xctk:BusyIndicator>
+                </Grid>
+            </DockPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Header="Данные по реестру" DataContext="{Binding ElementName=_this, Path=.}">
+            <Grid x:Name="dpPaidData">
+                <Grid.Resources>
+                    <xcdg:DataGridCollectionViewSource x:Key="cvsPaidCartulary" Source="{Binding ElementName=_this, Path=CartularyPaidSource}">
+                        <xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                            <PropertyGroupDescription PropertyName="CODE_SUBDIV"/>
+                        </xcdg:DataGridCollectionViewSource.GroupDescriptions>
+                    </xcdg:DataGridCollectionViewSource>
+                    <DataTemplate DataType="{x:Type xcdg:Group}">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="dgheader1"/>
+                                <ColumnDefinition SharedSizeGroup="dgheader2"/>
+                                <ColumnDefinition SharedSizeGroup="dgheader3"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Level}" Value="1">
+                                            <Setter Property="Margin" Value="10,0,0,0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                            <xcdg:GroupNavigationControl Group="{Binding }">
+                                <xcdg:GroupNavigationControl.MainItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </xcdg:GroupNavigationControl.MainItemTemplate>
+                                <xcdg:GroupNavigationControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value}" VerticalAlignment="Center">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </xcdg:GroupNavigationControl.ItemTemplate>
+                            </xcdg:GroupNavigationControl>
+                            <Label Grid.Column="1" Content="{Binding ItemCount}" ContentStringFormat="В группе {0} запись(-ей)" Margin="15,0,15,0" Padding="10,2"/>
+                            <Label Grid.Column="2" Language="ru-RU" Content="{Binding Items, Converter={StaticResource CollectionToSumConverter}}" ContentStringFormat="Сумма по группе: {0:0,0.00} р." Foreground="SeaShell"
+                                   Padding="10,2">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF576DAA" Offset="0" />
+                                        <GradientStop Color="#FF0D2B5F" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <WrapPanel DockPanel.Dock="Top" Background="{StaticResource PanelGrayBack}">
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.AddCartularyPaid">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                    </Button>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.EditCartularyPaid">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                    </Button>
+                    <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.DeleteCartularyPaid">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                    </Button>
+                    <Separator/>
+                    <Button  Style="{StaticResource ToolBoxLikeStyle}" Click="RefreshPaid_Click">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/refresh2424.png"/>
+                    </Button>
+                </WrapPanel>
+                <xcdg:DataGridControl Grid.Row="1" ItemsSource="{Binding Source={StaticResource cvsPaidCartulary}}" AutoCreateColumns="False"
+                                      IsTextSearchEnabled="True" ReadOnly="True" local:DataGridAddition.DoubleClickCommand="cmd:AppCommands.EditCartularyPaid"
+                                      SynchronizeCurrent="True" DataContext="{Binding ElementName=_this, Path=CartularyPaidSource}"
+                                      Grid.IsSharedSizeScope="True" x:Name="dgxcPaid">
+                    <xcdg:DataGridControl.View>
+                        <xcdg:TableflowView FixedColumnCount="1">
+                            <xcdg:TableflowView.Footers>
+                                <DataTemplate>
+                                    <Label Content="{Binding  RelativeSource={RelativeSource Mode=FindAncestor,  AncestorType=GroupBox}, Path=DataContext.CartularyPaidSource, Converter={StaticResource CollectionToSumConverter}}"
+                                           ContentStringFormat="Общая сумма по реестру: {0:0,0.00}" Language="ru-RU" Background="LightGray" FontWeight="Bold"/>
+                                </DataTemplate>
+                            </xcdg:TableflowView.Footers>
+                        </xcdg:TableflowView>
+                    </xcdg:DataGridControl.View>
+                    <xcdg:DataGridControl.Columns>
+                        <xcdg:Column FieldName="CODE_SUBDIV" Title="Подр." Width="50"/>
+                        <xcdg:Column FieldName="PER_NUM" Title="Таб.№" Width="50"/>
+                        <xcdg:Column FieldName="FIO" Title="ФИО" Width="200"/>
+                        <xcdg:Column FieldName="SIGN_COMB" Title="Совм." Width="50"/>
+                        <xcdg:Column FieldName="CODE_PAYMENT" Title="Шифр оплат" Width="50"/>
+                        <xcdg:Column FieldName="SHOW_SUM" Title="Сумма" Width="100"/>
+                        <xcdg:Column FieldName="DESTINATION" Title="Назначение" Width="350"/>
+                        <xcdg:Column FieldName="BANK_NAME" Title="Банк" Width="350"/>
+                    </xcdg:DataGridControl.Columns>
+                </xcdg:DataGridControl>
+                <xctk:BusyIndicator Grid.Row="1" x:Name="xcbusyIndicator" IsBusy="{Binding ElementName=_this, Path=IsLoadCartularyData}">
+                    <xctk:BusyIndicator.BusyContent>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Margin="5,0">
+                                <TextBlock Text="Загрузка данных по реестру..." VerticalAlignment="Center" />
+                            </StackPanel>
+                        </StackPanel>
+                    </xctk:BusyIndicator.BusyContent>
+                </xctk:BusyIndicator>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

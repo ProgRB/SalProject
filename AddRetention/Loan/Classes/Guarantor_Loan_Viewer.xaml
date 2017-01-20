@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Salary.Loan.Classes.Guarantor_Loan_Viewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Salary.Loan.Classes"
+             mc:Ignorable="d">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:Guarantor_Loan_Viewer.AddGuarantor_Loan" CanExecute="AddGuarantor_Loan_CanExecute" Executed="AddGuarantor_Loan_Executed"/>
+        <CommandBinding Command="local:Guarantor_Loan_Viewer.DeleteGuarantor_Loan" CanExecute="DeleteGuarantor_Loan_CanExecute" Executed="DeleteGuarantor_Loan_Executed"/>
+        <CommandBinding Command="local:Guarantor_Loan_Viewer.EditGuarantor_Loan" CanExecute="DeleteGuarantor_Loan_CanExecute" Executed="EditGuarantor_Loan_Executed"/>
+    </UserControl.CommandBindings>
+    <DockPanel>
+        <ToolBarTray Orientation="Vertical" Name="tbtButton">
+            <ToolBar ToolBarTray.IsLocked="True">
+                <Button Style="{StaticResource ToolBoxBtStyle}" Command="local:Guarantor_Loan_Viewer.AddGuarantor_Loan">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                </Button>
+                <Button Style="{StaticResource ToolBoxBtStyle}" Command="local:Guarantor_Loan_Viewer.EditGuarantor_Loan">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                </Button>
+                <Button Style="{StaticResource ToolBoxBtStyle}" Command="local:Guarantor_Loan_Viewer.DeleteGuarantor_Loan">
+                    <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <DataGrid Grid.Row="1" Grid.Column="1" Name="dgGuarantor_Loan" ItemsSource="{Binding}" Style="{StaticResource DataGridLoanStyle}"
+                          SelectionUnit="CellOrRowHeader" SelectionMode="Extended" IsReadOnly="True" Grid.RowSpan="2" MinHeight="150">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№ договора&#13;поручительства" Binding="{Binding Path=GUARANTOR_CONTRACT_NUMBER}"/>
+                <DataGridTextColumn Header="Подр." Binding="{Binding Path=CODE_SUBDIV}"/>
+                <DataGridTextColumn Header="Текущее&#13;подр." Binding="{Binding Path=REAL_CODE_SUBDIV}"/>
+                <DataGridTextColumn Header="Таб.№" Binding="{Binding Path=PER_NUM}"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=EMP_LAST_NAME}"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Path=EMP_FIRST_NAME}"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Path=EMP_MIDDLE_NAME}"/>
+                <DataGridTextColumn Header="Признак&#13;увольнения" Binding="{Binding Path=SIGN_DISMISS}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

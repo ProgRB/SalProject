@@ -1,0 +1,287 @@
+﻿<Window x:Class="Salary.View.RetentionCalcSetting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewmodel="clr-namespace:Salary.ViewModel"
+        xmlns:l="clr-namespace:Salary"
+        xmlns:lview="clr-namespace:Salary.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Метод расчета" Height="516" Width="1050" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Icon="/Images/setting_3232.png"
+        MinHeight="331">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <l:InvertBoolConverter x:Key="InvertBoolConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="viewmodel:AppCommands.SaveRetentSettings" CanExecute="CommandBinding_CanExecute" Executed="SaveRetent_Executed"/>
+    </Window.CommandBindings>
+    <Grid IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="10,2"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="2,2"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NotNullErrorTemplate}"/>
+                <Setter Property="MinWidth" Value="200"/>
+            </Style>
+            <Style TargetType="CheckBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="2,2"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NotNullErrorTemplate}"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="2,3"/>
+                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                <Setter Property="Validation.ErrorTemplate" Value="{StaticResource NotNullErrorTemplate}"/>
+            </Style>
+        </Grid.Resources>
+        <StackPanel Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Название метода"/>
+                <TextBox  Grid.Row="0"  Grid.Column="1" Text="{Binding METHOD_NAME, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="1" Text="Группа расчета"/>
+                <ComboBox x:Name="cbTypeGroupRetention" Grid.Row="1" Grid.Column="1" ToolTip="Группа расчета метода. Используется для выбора класса расчета"
+                      SelectedValuePath="TYPE_GROUP_RETENTION_ID" DisplayMemberPath="TYPE_GROUP_RET_NAME">
+                    <ComboBox.SelectedValue>
+                        <Binding Path="TYPE_GROUP_RETENTION_ID" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <lview:NotNullValidationRule  ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </ComboBox.SelectedValue>
+                </ComboBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="2" Text="Метод суммирования " TextWrapping="Wrap"/>
+                <ComboBox Grid.Row="2" Grid.Column="1"
+                  SelectedValuePath="TYPE_RETENT_CALC_SUM_ID" DisplayMemberPath="TYPE_SUM_NAME" ToolTip="Метод расчета суммы удержания, используемый при расчете удержаний" x:Name="cbTYPE_RET_CALC_SUM">
+                    <ComboBox.SelectedValue>
+                        <Binding Path="TYPE_RETENT_CALC_SUM_ID" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <lview:NotNullValidationRule  ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </ComboBox.SelectedValue>
+                </ComboBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="3" Text="Индивидуально"/>
+                <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding SIGN_INDIVIDUAL, UpdateSourceTrigger=PropertyChanged}" x:Name="cbIndividSign" ToolTip="Признак указывающий, что для каждого человека настройка расчета индивидуальная"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="4" Text="Расчетный процент"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PERCENT_RETENT, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=cbIndividSign, Path=IsChecked, Converter={StaticResource InvertBoolConverter}}" ToolTip="Процент расчета (если данный метод расчета для всех одинаков)"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="5" Text="Расчетная фиксированная сумма"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SUM_RETENT, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=cbIndividSign, Path=IsChecked, Converter={StaticResource InvertBoolConverter}}" ToolTip="Сумма ежемесячного удержания (если данный метод расчета для всех одинаковый)"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="7" Text="Максимальный % от ЗП" ToolTip="Максимальный процент ЗП, который может быть удержан для данного метода расчета"/>
+                <TextBox  Grid.Row="7" Grid.Column="1" Text="{Binding MAX_SALARY_PERCENT, TargetNullValue={x:Static sys:String.Empty}}" ToolTip="Максимальный процент ЗП, который может быть удержан для данного метода расчета"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="8" Text="Уменшить базу расчета ЗП для &#13;для след. удержаний" ToolTip="Уменьшить базу расчета ЗП для следущий удержаний" TextWrapping="Wrap"/>
+                <CheckBox Grid.Row="8" Grid.Column="1" IsChecked="{Binding DECR_FOR_OTHER_RETENT, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="9" Text="Округлять до знаков" ToolTip="Количество знаков после запятой, для округления расчетов" TextWrapping="Wrap"/>
+                <TextBox Grid.Row="9" Grid.Column="1" ToolTip="Количество знаков после запятой для округления результатов расчетов">
+                    <TextBox.Text>
+                        <Binding Path="ROUND_DECIMAL_PLACES" UpdateSourceTrigger="PropertyChanged" TargetNullValue="{x:Static sys:String.Empty}">
+                            <Binding.ValidationRules>
+                                <lview:NotNullValidationRule ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="10" Text="Использовать налоговые вычеты" ToolTip="Признак указывающий, что для данного расчет удержания требуется применять налоговые вычеты"/>
+                <CheckBox  Grid.Row="10" Grid.Column="1" IsChecked="{Binding USE_TAX_DISC, UpdateSourceTrigger=PropertyChanged}" ToolTip="Признак указывающий, что для данного расчет удержания требуется применять налоговые вычеты"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2" Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="11" Text="Рассчитывать от&#13;полных начислений" ToolTip="Признак указывающий, что расчет удержания  производится от полных начислений"/>
+                <CheckBox  Grid.Row="11" Grid.Column="1" IsChecked="{Binding SIGN_CALC_ORIGINAL_SUM, UpdateSourceTrigger=PropertyChanged}" ToolTip="Признак указывающий, что расчет удержания  производится от полных начислений"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2" Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="12" Text="Группа для расчета макс. ЗП" ToolTip="Группа шифров оплат, в которой будет произодиться вычисления" TextWrapping="Wrap"/>
+                <ComboBox Grid.Row="12" Grid.Column="1" SelectedValuePath="TYPE_REVENUE_ID" DisplayMemberPath="NAME_REVENUE" ToolTip="Группа шифров оплат, в которой будет произодиться вычисления" 
+                  x:Name="cbPAY_GROUP">
+                    <ComboBox.SelectedValue>
+                        <Binding Path="TYPE_REVENUE_ID" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <lview:NotNullValidationRule  ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </ComboBox.SelectedValue>
+                </ComboBox>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="columnGroup1"/>
+                    <ColumnDefinition SharedSizeGroup="columnGroup2"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="9" Text="Формула расчета" ToolTip="Формула для расчета суммы вида оплат" TextWrapping="Wrap"/>
+                <TextBox Grid.Row="9" Grid.Column="1" ToolTip="Формула для расчета суммы вида оплат" TextWrapping="Wrap" Height="60">
+                    <TextBox.Text>
+                        <Binding Path="FORMULA" UpdateSourceTrigger="PropertyChanged" TargetNullValue="{x:Static sys:String.Empty}">
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </Grid>
+        </StackPanel>
+        <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" IsSharedSizeScope="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Margin="5,2,0,2" Text="Группа шифров" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <ComboBox Grid.Column="1" SelectedValuePath="TYPE_PAYMENT_TYPE_ID" DisplayMemberPath="TYPE_PAYMENT_TYPE_NAME" Margin="90,2,3,2" x:Name="cbTypePaymentType" SelectionChanged="cbTypePaymentType_SelectionChanged"/>
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Шифры для расчета" IsEnabled="{Binding ElementName=cbForAllSign, Path=IsChecked, Converter={StaticResource InvertBoolConverter}}" Margin="5,0">
+            <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" x:Name="dgTaxedPayType" SelectionUnit="Cell">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="110">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding USE_FOR_CALC, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.Header>
+                                <StackPanel>
+                                    <StackPanel.CommandBindings>
+                                        <CommandBinding Command="SelectAll" CanExecute="CommandBinding_CanExecute_1" Executed="SelectAll_Executed"/>
+                                    </StackPanel.CommandBindings>
+                                    <TextBlock Text="Использовать в расчете" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" ToolTip="Установить зависимости для авторасчета зависимых шифров оплат"/>
+                                    <CheckBox ToolTip="Отметить все" x:Name="chHeaderAll0" HorizontalAlignment="Center" Command="SelectAll" CommandParameter="USE_FOR_CALC"/>
+                                </StackPanel>
+                            </DataGridTemplateColumn.Header>
+                    </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="105">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding USE_FOR_RELATION, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.Header>
+                                <StackPanel>
+                                    <StackPanel.CommandBindings>
+                                        <CommandBinding Command="SelectAll" CanExecute="CommandBinding_CanExecute_1" Executed="SelectAll_Executed"/>
+                                    </StackPanel.CommandBindings>
+                                    <TextBlock Text="Установить зависимость" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" ToolTip="Установить зависимости для авторасчета зависимых шифров оплат"/>
+                                    <CheckBox ToolTip="Отметить все" x:Name="chHeaderAll1"  Command="SelectAll" CommandParameter="USE_FOR_RELATION" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </DataGridTemplateColumn.Header>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding USE_FOR_OTHER_CALC, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.Header>
+                                <StackPanel>
+                                    <StackPanel.CommandBindings>
+                                        <CommandBinding Command="SelectAll" CanExecute="CommandBinding_CanExecute_1" Executed="SelectAll_Executed"/>
+                                    </StackPanel.CommandBindings>
+                                    <TextBlock Text="Прочие расчеты" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" ToolTip="Данный признак устанавливается для использования метода оплат в прочих расчетах"/>
+                                    <CheckBox ToolTip="Отметить все" x:Name="chHeaderAll2" Command="SelectAll" CommandParameter="USE_FOR_OTHER_CALC" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </DataGridTemplateColumn.Header>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding NOT_RET_SUM, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty }}" Width="94">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Сумма без удержания" ToolTip="Сумма начислений в год по шифру оплат, с которой не производится удержание для данного метода расчета" TextWrapping="Wrap" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding CODE_PAYMENT}" Width="70" IsReadOnly="True">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Шифр" ToolTip="Шифр оплат, с которого производится удержание для данного метода расчета" TextWrapping="Wrap" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding NAME_PAYMENT}" Header="Описание шифра оплат" Width="170" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        </Grid>
+        <ToolBar Grid.Row="13" Grid.ColumnSpan="3" ToolBarTray.IsLocked="True" Margin="0,0,0,1" Grid.RowSpan="2">
+            <Button Command="viewmodel:AppCommands.SaveRetentSettings" Content="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"></Button>
+            <Separator/>
+            <Button x:Name="btClose" Click="btClose_Click" Content="Закрыть"/>
+        </ToolBar>
+    </Grid>
+</Window>

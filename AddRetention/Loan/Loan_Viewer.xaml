@@ -1,0 +1,449 @@
+﻿<UserControl x:Class="Salary.Loan.Loan_Viewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sal="clr-namespace:Salary"
+             xmlns:l="clr-namespace:Salary.View"
+             xmlns:local="clr-namespace:Salary.Loan"
+             xmlns:lcl="clr-namespace:Salary.Loan.Classes"
+             mc:Ignorable="d" Language="RU-ru" Name="_this"
+             d:DesignHeight="741" d:DesignWidth="864" Background="White">
+    <UserControl.Resources>
+        <local:LoanRowColorConverter x:Key="LoanRowColorConverter"/>
+        <local:LoanForegroundColorConverter x:Key="LoanForegroundColorConverter"/>
+        <local:LoanRowVisibleDetailsConverter x:Key="LoanRowVisibleDetailsConverter"/>
+        <Style x:Key="LoanRowStyle" TargetType="{x:Type DataGridRow}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource LoanRowColorConverter}">
+                        <Binding Path="LOAN_DATE_END"/>
+                        <Binding Path="SIGN_EMPTY_RETENT"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter> 
+            <Setter>
+                <Setter.Property>Foreground</Setter.Property>
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource LoanForegroundColorConverter}">
+                        <Binding Path="RETENTION_BY_FACT"/>
+                        <Binding Path="LOAN_REMAINDER"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="DetailsVisibility" Value="{Binding PARENT_LOAN, Converter={StaticResource LoanRowVisibleDetailsConverter}}" />
+        </Style>
+
+        <l:ExpandStateSaver x:Key="ExpandStateSaver"/>
+        <local:DocRetGroupSumConv x:Key="DocRetGroupSumConv"/>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="lcl:LoanCommands.PrintControl_Register" CanExecute="LoanMenuItem_CanExecuted" Executed="PrintControl_Register_Execute"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintCirculating_Register" CanExecute="LoanMenuItem_CanExecuted" Executed="PrintCirculating_Register_Execute"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintIssued_Loan" CanExecute="LoanMenuItem_CanExecuted" Executed="PrintIssued_Loan_Execute"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintRepaid_Loan" CanExecute="LoanMenuItem_CanExecuted" Executed="PrintRepaid_Loan_Execute"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintMaterial_Benefit" CanExecute="LoanMenuItem_CanExecuted" Executed="PrintMaterial_Benefit_Execute"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintMaterial_Benefit_Dismiss" CanExecute="LoanMenuItem_CanExecuted" Executed="PrintMaterial_Benefit_Dismiss_Execute"/>
+        <CommandBinding Command="lcl:LoanCommands.Report_With_Choice_Requisites" CanExecute="LoanMenuItem_CanExecuted" Executed="Report_With_Choice_Requisites_Execute"/>
+        <CommandBinding Command="lcl:LoanCommands.AddLoan" CanExecute="AddLoan_CanExecute" Executed="AddLoan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.EditLoan" CanExecute="EditLoan_CanExecute" Executed="EditLoan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.DeleteLoan" CanExecute="EditLoan_CanExecute" Executed="DeleteLoan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.Account_Cash_Order" CanExecute="EditLoan_CanExecute" Executed="Account_Cash_Order_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintLoan_Contract" CanExecute="EditLoan_CanExecute" Executed="PrintLoan_Contract_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintGuarantor_Contract" CanExecute="EditLoan_CanExecute" Executed="PrintGuarantor_Contract_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintSchedule_Of_Payments" CanExecute="EditLoan_CanExecute" Executed="PrintSchedule_Of_Payments_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintStatement" CanExecute="EditLoan_CanExecute" Executed="PrintStatement_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintStatement_Transfer" CanExecute="EditLoan_CanExecute" Executed="PrintStatement_Transfer_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.PrintAllDocuments" CanExecute="EditLoan_CanExecute" Executed="PrintAllDocuments_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.AddGuarantor_Loan" CanExecute="AddGuarantor_Loan_CanExecute" Executed="AddGuarantor_Loan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.DeleteGuarantor_Loan" CanExecute="DeleteGuarantor_Loan_CanExecute" Executed="DeleteGuarantor_Loan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.EditGuarantor_Loan" CanExecute="DeleteGuarantor_Loan_CanExecute" Executed="EditGuarantor_Loan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.Transfer_Loan_To_Guarantor" CanExecute="DeleteGuarantor_Loan_CanExecute" Executed="Transfer_Loan_To_Guarantor_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.Transfer_Loan_To_Third_Person" CanExecute="AddGuarantor_Loan_CanExecute" Executed="Transfer_Loan_To_Third_Person_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.Receipt_Cash_Order" CanExecute="AddGuarantor_Loan_CanExecute" Executed="Receipt_Cash_Order_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.RepRetention_By_Loan" CanExecute="EditLoan_CanExecute" Executed="RepRetention_By_Loan_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.RepLoan_Holder" CanExecute="LoanMenuItem_CanExecuted" Executed="RepLoan_Holder_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.DumpMaterial_Benefit" CanExecute="LoanMenuItem_CanExecuted" Executed="DumpMaterial_Benefit_Executed"/>
+        <CommandBinding Command="lcl:LoanCommands.Approve_Loan" CanExecute="EditLoan_CanExecute" Executed="Approve_Loan_Executed"/>
+    </UserControl.CommandBindings>
+    <Grid>        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu DockPanel.Dock="Top" FontSize="12" FocusManager.IsFocusScope="False" Padding="5,3"
+              Visibility="{Binding ElementName=_this, Path=Sign_reg_dog, Converter={StaticResource BoolToVisConverter}}">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Header="Материальная выгода" Margin="10,1" ToolTip="Формирование данных по удержанию материальной выгоды из зарплаты"
+                      Command="lcl:LoanCommands.DumpMaterial_Benefit" >
+                <MenuItem.Icon>
+                    <Image Source="/Images/download_1616.png" Stretch="Uniform" Width="17"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <MenuItem Header="Печать" Margin="10,1">
+                <MenuItem.Icon>
+                    <Image Source="/Images/print2424.png" Stretch="Uniform" Width="17"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Контрольная ведомость" Command="lcl:LoanCommands.PrintControl_Register" Visibility="Collapsed"/>
+                <MenuItem Header="Оборотная ведомость по ссудам" Command="lcl:LoanCommands.PrintCirculating_Register"/>
+                <MenuItem Header="Выданные ссуды" Command="lcl:LoanCommands.PrintIssued_Loan"/>
+                <MenuItem Header="Отчет по погашенным ссудам" Command="lcl:LoanCommands.PrintRepaid_Loan"/>
+                <MenuItem Header="Справка о мат.выгоде" Command="lcl:LoanCommands.PrintMaterial_Benefit"/>
+                <MenuItem Header="Справка о мат.выгоде по уволенным" Command="lcl:LoanCommands.PrintMaterial_Benefit_Dismiss"/>
+                <MenuItem Header="Отчет с выбором реквизитов" Command="lcl:LoanCommands.Report_With_Choice_Requisites"/>
+                <MenuItem Header="Отчет по должникам ссуды" Command="lcl:LoanCommands.RepLoan_Holder"/>
+            </MenuItem>
+        </Menu>
+        <Expander Grid.Row="1" Header="Фильтр" IsExpanded="True">
+            <Border BorderBrush="#C1D6D4" BorderThickness="2" CornerRadius="3" Padding="3,2,3,5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Margin="0" VerticalAlignment="Center" >Подразделение</Label>
+                    <ComboBox Grid.Column="1" x:Name="cbCodeSubdiv" DisplayMemberPath="CodeSubdiv"
+                                              SelectedValuePath="SubdivID" IsEditable="True" Width="60" Margin="2,0,0,0" IsSynchronizedWithCurrentItem="True"
+                                              KeyUp="Filter_KeyUp" VerticalAlignment="Center" ></ComboBox>
+                    <ComboBox Grid.Column="2" x:Name="cbSubdivName" DisplayMemberPath="SubdivName" Width="232"
+                                              SelectedValuePath="SubdivID" IsEditable="False" VerticalAlignment="Center" Margin="6,0,0,0" IsSynchronizedWithCurrentItem="True"
+                                              KeyUp="Filter_KeyUp"></ComboBox>
+                    <Label Grid.Row="0" Grid.Column="3" Margin="0" VerticalAlignment="Center" >Таб. №</Label>
+                    <TextBox Grid.Row="0" Grid.Column="4" Name="tbPer_num" Margin="2" MinWidth="40" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="0" Grid.Column="5" Name="chView_Archive" Margin="10,4" VerticalAlignment="Center" 
+                              IsThreeState="True">Показывать архив</CheckBox>
+                    <Button Grid.Column="7" Name="btApplyFilterLoan" IsDefault="True" Margin="0" MaxHeight="24" MaxWidth="24" Click="btApplyFilterLoan_Click">
+                        <StackPanel Orientation="Horizontal" >
+                            <Image MaxHeight="20" Source="/Images/filter_add.png" Stretch="Fill"></Image>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="8" Name="btClearFilterLoan" Margin="4, 0, 0, 0" MaxHeight="24" MaxWidth="24" Click="btClearFilterLoan_Click">
+                        <StackPanel Orientation="Horizontal" >
+                            <Image MaxHeight="20" Source="/Images/filter_delete.png" Stretch="Fill"></Image>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="9" Name="btRefreshState" Margin="20,7" ToolTip="Обновить список" MaxHeight="24" MaxWidth="24" Click="btRefreshState_Click">
+                        <Image Source="/Images/refresh2424.png" Stretch="Fill" />
+                    </Button>
+                    <Expander Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="10" Header="Дополнительные параметры фильтрации">
+                        <Border BorderBrush="#C1D6D4" BorderThickness="2" CornerRadius="3" Padding="3,2,3,5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="1" Grid.Column="0" Margin="0">Фамилия</Label>
+                                <TextBox Grid.Row="1" Grid.Column="1" Name="tbEmp_last_name" Margin="2" MinWidth="90"></TextBox>
+                                <Label Grid.Row="1" Grid.Column="2" Margin="0">Имя</Label>
+                                <TextBox Grid.Row="1" Grid.Column="3" Name="tbEmp_first_name" Margin="2" MinWidth="90"></TextBox>
+                                <Label Grid.Row="1" Grid.Column="4" Margin="0">Отчество</Label>
+                                <TextBox Grid.Row="1" Grid.Column="5" Name="tbEmp_middle_name" Margin="2" MinWidth="90"></TextBox>
+                                <Label Grid.Row="1" Grid.Column="6" Margin="0">Срок</Label>
+                                <TextBox Grid.Row="1" Grid.Column="7" Name="tbLOAN_TERM" Margin="2" MinWidth="40"></TextBox>
+                                <Label Grid.Row="2" Margin="0">№ протокола</Label>
+                                <TextBox Grid.Row="2" Grid.Column="1" Name="tbPROTOCOL_NUMBER" Margin="2"/>
+                                <Label Grid.Row="2" Grid.Column="2" Margin="0">№ договора</Label>
+                                <TextBox Grid.Row="2" Grid.Column="3" Name="tbCONTRACT_NUMBER" Margin="2"></TextBox>
+                                <Label Grid.Row="2" Grid.Column="4" Margin="0">Цель ссуды</Label>
+                                <ComboBox Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="3" Name="cbPurpose_Loan" Margin="2"
+                                          DisplayMemberPath="PURPOSE_LOAN_DISP" SelectedValuePath="PURPOSE_LOAN_ID" IsEditable="True"></ComboBox>
+                                <Label Grid.Row="3" Grid.Column="0" Margin="0" VerticalAlignment="Center">Дата ссуды</Label>
+                                <DatePicker Grid.Row="3" Grid.Column="1" Margin="2,0" Name="dpPeriodBegin" VerticalAlignment="Center"/>
+                                <Label Grid.Row="3" Grid.Column="2" Margin="0,4" HorizontalContentAlignment="Center" VerticalAlignment="Center">-</Label>
+                                <Label Grid.Row="3" Grid.Column="4" Margin="0" VerticalAlignment="Center">Тип ссуды</Label>
+                                <ComboBox Grid.Row="3" Grid.Column="5" Grid.ColumnSpan="3" Name="cbType_Loan" Margin="2" VerticalAlignment="Center"
+                                          DisplayMemberPath="TYPE_LOAN_NAME" SelectedValuePath="TYPE_LOAN_ID" IsEditable="True"></ComboBox>
+                                <DatePicker Grid.Row="3" Grid.Column="3" Margin="2,0" Name="dpPeriodEnd" VerticalAlignment="Center"/>
+                                <Label Grid.Row="4" Grid.Column="0" Margin="0" VerticalAlignment="Center">Дата закрытия</Label>
+                                <DatePicker Grid.Row="4" Grid.Column="1" Margin="2,0" Name="dpLoan_Date_End_Begin" VerticalAlignment="Center"/>
+                                <Label Grid.Row="4" Grid.Column="2" Margin="0,4" HorizontalContentAlignment="Center" VerticalAlignment="Center">-</Label>
+                                <DatePicker Grid.Row="4" Grid.Column="3" Margin="2,0" Name="dpLoan_Date_End_End" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" Name="chSIGN_RETENTION" Margin="4" HorizontalAlignment="Left" 
+                                          VerticalAlignment="Center" FlowDirection="RightToLeft" IsChecked="{x:Null}"
+                                          IsThreeState="True" >Ежемесячные удержания</CheckBox>
+                                <CheckBox Grid.Row="4" Grid.Column="6" Grid.ColumnSpan="2" Name="chSIGN_MATERIAL_BENEFIT" Margin="4" HorizontalAlignment="Left" 
+                                          VerticalAlignment="Center" FlowDirection="RightToLeft"
+                                          IsThreeState="True" IsChecked="{x:Null}">Удержание матвыгоды</CheckBox>
+                            </Grid>
+                        </Border>
+                    </Expander>
+                </Grid>
+            </Border>
+        </Expander>
+        <GroupBox Grid.Row="2" Header="Работа с данными ссуды">
+            <StackPanel Orientation="Horizontal" Background="{StaticResource LightBrush}" Grid.ColumnSpan="2" >
+                <Button ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" Margin="10,4,4,4" Padding="2" Command="lcl:LoanCommands.AddLoan"
+                        Visibility="{Binding ElementName=_this, Path=IsVisibleAddLoan}">
+                    <Image Source="/Images/document_new_2424.png"/>
+                </Button>
+                <Button ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" Margin="4" Padding="2" Command="lcl:LoanCommands.EditLoan">
+                    <Image Source="/Images/text_editor_1616.png"/>
+                </Button>
+                <Button ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" Margin="4" Padding="2" Command="lcl:LoanCommands.DeleteLoan"
+                        Visibility="{Binding ElementName=_this, Path=IsVisibleAddLoan}">
+                    <Image  Source="/Images/delete_2424.png"/>
+                </Button>
+                <Button Content="РКО"
+                        ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" Margin="4" Padding="10,1" Command="lcl:LoanCommands.Account_Cash_Order"
+                        Visibility="{Binding ElementName=_this, Path=IsVisibleAddLoan}"/>
+                <Button Content="ПКО" 
+                        ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" Margin="4" Padding="10,1" Command="lcl:LoanCommands.Receipt_Cash_Order"
+                        Visibility="{Binding ElementName=_this, Path=Sign_reg_dog, Converter={StaticResource BoolToVisConverter}}"/>
+                <Button ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" Margin="4" Padding="2" Command="lcl:LoanCommands.Approve_Loan"
+                        Visibility="{Binding ElementName=_this, Path=IsVisibleAddLoan}">
+                    <Image  Source="/Images/tick_2424.png"/>
+                </Button>
+                <Border Margin="4" BorderBrush="#BBCAD8" BorderThickness="1" CornerRadius="2" Padding="3">
+                    <Border BorderBrush="#406097" BorderThickness="1" CornerRadius="2">
+                        <Menu Background="#F7F7F4">
+                            <MenuItem Header="Печать документов по ссуде">
+                                <MenuItem.Icon>
+                                    <Image Source="/Images/print2424.png" Stretch="Uniform" Width="17"/>
+                                </MenuItem.Icon>
+                                <MenuItem Header="Договор займа" Command="lcl:LoanCommands.PrintLoan_Contract"/>
+                                <MenuItem Header="Договор поручительства" Command="lcl:LoanCommands.PrintGuarantor_Contract"/>
+                                <MenuItem Header="График платежей" Command="lcl:LoanCommands.PrintSchedule_Of_Payments"/>
+                                <MenuItem Header="Заявление" Command="lcl:LoanCommands.PrintStatement"/>
+                                <MenuItem Header="Заявление для перечисления" Command="lcl:LoanCommands.PrintStatement_Transfer"/>
+                                <Separator/>
+                                <MenuItem Header="Полный пакет документов" Command="lcl:LoanCommands.PrintAllDocuments"/>
+                                <Separator/>
+                                <MenuItem Header="Отчет по удержаниям" Command="lcl:LoanCommands.RepRetention_By_Loan"/>
+                            </MenuItem>
+                        </Menu>
+                    </Border>
+                </Border>
+            </StackPanel>
+        </GroupBox>
+        <DataGrid Grid.Row="3" Name="dgLoan" ItemsSource="{Binding}" Style="{StaticResource DataGridLoanStyle}"
+                  SelectionUnit="CellOrRowHeader" SelectionMode="Extended" IsReadOnly="True" RowStyle="{StaticResource LoanRowStyle}"
+                  sal:DataGridAddition.DoubleClickCommand="lcl:LoanCommands.EditLoan" SelectedCellsChanged="dgLoan_SelectedCellsChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№ договора" Binding="{Binding Path=CONTRACT_NUMBER}"/>
+                <DataGridTextColumn Header="Подразделение&#13;при оформлении" Binding="{Binding Path=LOAN_CODE_SUBDIV}"/>
+                <DataGridTextColumn Header="Текущее&#13;подр." Binding="{Binding Path=CODE_SUBDIV}"/>
+                <DataGridTextColumn Header="Таб.№" Binding="{Binding Path=PER_NUM}"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=EMP_LAST_NAME}"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Path=EMP_FIRST_NAME}"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Path=EMP_MIDDLE_NAME}"/>
+                <DataGridTextColumn Header="С." Binding="{Binding Path=COMB}"/>
+                <DataGridTextColumn Header="Дата ссуды" Binding="{Binding Path=LOAN_DATE, StringFormat={}{0:d}}"/>
+                <DataGridTextColumn Header="№" Binding="{Binding Path=ORDINAL_NUMBER, StringFormat=F0}"/>
+                <DataGridTextColumn Header="Срок" Binding="{Binding Path=LOAN_TERM, StringFormat=F0}"/>
+                <DataGridTextColumn Header="Сумма" Binding="{Binding Path=LOAN_SUM, StringFormat=F2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Right"></Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Удержание&#13;по договору" Binding="{Binding Path=RETENTION_BY_CONTRACT, StringFormat=F2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Right"></Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Удержание&#13;по факту" Binding="{Binding Path=RETENTION_BY_FACT, StringFormat=F2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Right"></Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Остаток" Binding="{Binding Path=LOAN_REMAINDER, StringFormat=F2}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Right"></Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Признак" Binding="{Binding Path=PURPOSE_LOAN_CODE}"/>
+                <DataGridTextColumn Header="Директорская&#13;ссуда" Binding="{Binding Path=SIGN_CHIEF_LOAN}"/>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding PARENT_LOAN}" Padding="14,4" Background="#E8E8EC"/>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+        <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Header="Поручители">
+            <DockPanel>
+                <ToolBarTray Orientation="Vertical" Name="tbtButton">
+                    <ToolBar ToolBarTray.IsLocked="True">
+                        <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.AddGuarantor_Loan" 
+                                Visibility="{Binding ElementName=_this, Path=Sing_Visible_Button_Guarantor, Converter={StaticResource BoolToVisConverter}}">
+                            <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png" Width="16"/>
+                        </Button>
+                        <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.EditGuarantor_Loan" 
+                                Visibility="{Binding ElementName=_this, Path=Sing_Visible_Button_Guarantor, Converter={StaticResource BoolToVisConverter}}">
+                            <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                        </Button>
+                        <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.DeleteGuarantor_Loan" 
+                                Visibility="{Binding ElementName=_this, Path=Sing_Visible_Button_Guarantor, Converter={StaticResource BoolToVisConverter}}">
+                            <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png" Width="16"/>
+                        </Button>
+                        <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.Transfer_Loan_To_Guarantor"
+                                Visibility="{Binding ElementName=_this, Path=Sign_reg_dog, Converter={StaticResource BoolToVisConverter}}">
+                            <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/Transfer_Loan_2832.jpg" Width="16"/>
+                        </Button>
+                        <Button Style="{StaticResource ToolBoxBtStyle}" Command="lcl:LoanCommands.Transfer_Loan_To_Third_Person"
+                                Visibility="{Binding ElementName=_this, Path=Sign_reg_dog, Converter={StaticResource BoolToVisConverter}}">
+                            <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/Transfer_Loan_3228.jpg" Width="16"/>
+                        </Button>
+                    </ToolBar>
+                </ToolBarTray>
+                <DataGrid Grid.Row="1" Grid.Column="1" Name="dgGuarantor_Loan" ItemsSource="{Binding}" Style="{StaticResource DataGridLoanStyle}"
+                          SelectionUnit="CellOrRowHeader" SelectionMode="Extended" IsReadOnly="True" Grid.RowSpan="2">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="№ договора&#13;поручительства" Binding="{Binding Path=GUARANTOR_CONTRACT_NUMBER}"/>
+                        <DataGridTextColumn Header="Дата договора&#13;поручительства" Binding="{Binding Path=GUARANTOR_CONTRACT_DATE, StringFormat={}{0:d}}"/>
+                        <DataGridTextColumn Header="Подр." Binding="{Binding Path=CODE_SUBDIV}"/>
+                        <DataGridTextColumn Header="Текущее&#13;подр." Binding="{Binding Path=REAL_CODE_SUBDIV}"/>
+                        <DataGridTextColumn Header="Таб.№" Binding="{Binding Path=PER_NUM}"/>
+                        <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=EMP_LAST_NAME}"/>
+                        <DataGridTextColumn Header="Имя" Binding="{Binding Path=EMP_FIRST_NAME}"/>
+                        <DataGridTextColumn Header="Отчество" Binding="{Binding Path=EMP_MIDDLE_NAME}"/>
+                        <DataGridTextColumn Header="Признак&#13;увольнения" Binding="{Binding Path=SIGN_DISMISS}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="Документы удержаний и удержания"
+                  Visibility="{Binding ElementName=_this, Path=IsVisibleRetention}">
+            <DataGrid x:Name="dgEmpPaySalary" AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True" VirtualizingStackPanel.IsVirtualizing="True" 
+                      IsReadOnly="True" ItemsSource="{Binding }" Foreground="Black" HorizontalGridLinesBrush="DarkGray" 
+                      VerticalGridLinesBrush="LightGray" Background="White" Grid.IsSharedSizeScope="True"
+                      CanUserResizeRows="False"
+                      CanUserSortColumns="False" Height="200">
+                <DataGrid.Resources>
+                    <Style TargetType="ToolTip">
+                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="FontSize" Value="11"/>
+                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="BorderBrush" Value="Gray"/>
+                    </Style>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="HorizontalContentAlignment"  Value="Stretch"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Border CornerRadius="2" BorderBrush="LightGray" BorderThickness="1"  Margin="20,0,0,0" >
+                                                <Expander x:Name="_expDocRetGroup1" Expanded="Expander_Exp" Collapsed="Expander_Coll" Background="#FDEFEFEF" 
+                                                          ToolTip="Кликните для подробного просмотра">
+                                                    <Expander.IsExpanded>
+                                                        <MultiBinding Converter="{StaticResource ExpandStateSaver}" Mode="OneWay">
+                                                            <Binding RelativeSource="{RelativeSource Mode=Self}" Path="IsEnabled" Mode="OneWay"/>
+                                                            <Binding Path="Name" Mode="OneWay"/>
+                                                        </MultiBinding>
+                                                    </Expander.IsExpanded>
+                                                    <Expander.Header>
+                                                        <Grid Language="ru-RU">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition SharedSizeGroup="column1"/>
+                                                                <ColumnDefinition SharedSizeGroup="column2"/>
+                                                                <ColumnDefinition SharedSizeGroup="column3"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" x:Name="txtName" Text="{Binding Name}" FontSize="12" 
+                                                                       FontWeight="Bold" VerticalAlignment="Center">
+                                                            </TextBlock>
+                                                            <Label Grid.Column="1" Content="{Binding Path=ItemCount}" ContentStringFormat="{}Кол-во строк: {0}" VerticalAlignment="Center" 
+                                                                                        Margin="20,2"/>
+                                                            <Label Grid.Column="2" Content="{Binding Path=Items, Converter={StaticResource DocRetGroupSumConv}}" ContentStringFormat="{}Сумма = {0:N}" VerticalAlignment="Center" 
+                                                                                        Margin="20,2" BorderThickness="2" BorderBrush="#FFC7C12B"/>
+                                                        </Grid>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter/>
+                                                </Expander>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="5,2"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=PAY_DATE, StringFormat={}{0:d}}" Width="95" x:Name="dgclCodePayment" SortMemberPath="PAY_DATE">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Дата удержания" TextWrapping="Wrap" TextAlignment="Center" Foreground="#FF2D467A" FontWeight="Bold" ForceCursor="True" x:Name="textBlockHeaderCodePayment"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>                   
+                    <DataGridTextColumn Binding="{Binding SUM_SAL, StringFormat={}{0:N2}}" Width="90" TextBlock.TextAlignment="Right" x:Name="dgclSumSal">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Сумма" TextWrapping="Wrap" TextAlignment="Center"  Foreground="#FFA10000" FontWeight="Black" x:Name="textBlockHeaderSumSal"/>
+                        </DataGridTextColumn.Header>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Right"/>
+                                <Setter Property="Language" Value="ru-RU"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding PAY_TYPE_NOTE}" Width="390">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Вид удержания" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+    </Grid>
+</UserControl>

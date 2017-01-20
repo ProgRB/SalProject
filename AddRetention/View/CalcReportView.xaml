@@ -1,0 +1,128 @@
+﻿<Window x:Class="Salary.View.CalcReportView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewmodel="clr-namespace:Salary.ViewModel"
+        xmlns:add_ret="clr-namespace:Salary"
+        xmlns:view="clr-namespace:Salary.View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Расчет и просмотр ЗП сотрудников (удержания, налоги, взносы)" Height="562" Width="687" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Closing="Window_Closing"
+        MinHeight="100" MinWidth="100"
+        Name="_this">
+    <Window.Resources>
+        <add_ret:InvertBoolConverter x:Key="InvertBoolConverter"/>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="viewmodel:AppCommands.CalcSubdivEmpRetent" CanExecute="CalcStart_CanExecute" Executed="CalcStart_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Header="Настройки для расчета заработной платы" IsEnabled="{Binding ElementName=_this, Path=IsRun, Converter={StaticResource InvertBoolConverter}}">
+            <StackPanel Orientation="Vertical" Margin="5">
+                <GroupBox Header="Выбранные типы оплат для расчета">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="CheckBox" BasedOn="{StaticResource EnabledTextBox}">
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                <Setter Property="Margin"  Value="10,4"/>
+                                <Setter Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
+                        <CheckBox Content="Начисления" Grid.Row="0" IsChecked="{Binding ElementName=_this, Path=[1], Mode=TwoWay}"/>
+                        <CheckBox Content="Удержания" Grid.Row="1" IsChecked="{Binding ElementName=_this, Path=[9], Mode=TwoWay}"/>
+                        <CheckBox Content="Прочие доходы" Grid.Row="2" IsChecked="{Binding ElementName=_this, Path=[6], Mode=TwoWay}"/>
+                        <CheckBox Content="Прочие шифры оплат" Grid.Row="3" IsChecked="{Binding ElementName=_this, Path=[2], Mode=TwoWay}"/>
+                        <CheckBox Content="Взносы предприятия" Grid.Row="4" IsChecked="{Binding ElementName=_this, Path=[3], Mode=TwoWay}"/>
+                        <CheckBox Content="Аванс" Grid.Row="5" IsChecked="{Binding ElementName=_this, Path=IsAdvanceCalc, Mode=TwoWay}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Месяц расчета заработной платы">
+                    <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5, 0, 1" HorizontalAlignment="Left" MinWidth="170"
+                                add_ret:DatePickerCalendar.IsMonthYear="True" add_ret:DatePickerDateFormat.DateFormat="MMMM yyyy"
+                                Style="{StaticResource EnabledTextBox}"/>
+                </GroupBox>
+                <GroupBox Header="Подразделение">
+                    <add_ret:SubdivSelector Width="Auto" AppRoleName="Salary" SubdivId="{Binding ElementName=_this, Path=SubdivID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                             ShowPromt="False" Margin="0,3, 0, 1"/>
+                </GroupBox>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Настройка для отображения процесса расчета">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="Margin"  Value="10,5"/>
+                    </Style>
+                </Grid.Resources>
+                <TextBlock Grid.Row="1" Text="Период обновления" VerticalAlignment="Center" Margin="10,2,10,2" HorizontalAlignment="Right"/>
+                <TextBox Grid.Row="1" Text="{Binding TimerInterval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue={x:Static sys:String.Empty}}" Grid.Column="1" Width="50" IsEnabled="{Binding ElementName=cbAutoUpdate, Path=IsChecked}"
+                         HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Text="Обновлять автоматически" Grid.Row="0"/>
+                <CheckBox x:Name="cbAutoUpdate" IsChecked="{Binding Path=AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBlock Text="Автопрокрутка" Grid.Row="2"/>
+                <CheckBox Grid.Row="2" Grid.Column="3" x:Name="cbAutoScroll" IsChecked="{Binding Path=AutoScroll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Grid.Row="3" Click="btRefreshClick" Margin="10,2" Padding="10,2"  MaxWidth="200" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/refresh2424.png" Width="20"/>
+                        <TextBlock Text="Обновить статус расчета" VerticalAlignment="Center" Margin="4,2"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <DataGrid Grid.Row="3" Grid.ColumnSpan="2" IsReadOnly="True" x:Name="dgReportCalc" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Статус" Binding="{Binding REPORT_MESSAGE}" Width="180"/>
+                <DataGridTextColumn Header="Табельный" Binding="{Binding PER_NUM}"/>
+                <DataGridTextColumn Header="Время" Binding="{Binding DATE_ERROR}"/>
+                <DataGridTextColumn Header="Комментарий" Binding="{Binding EX_MESSAGE}" Width="180"/>
+            </DataGrid.Columns>
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                    <Setter Property="Height" Value="25"/>
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="4" Orientation="Horizontal">
+            <Button Command="viewmodel:AppCommands.CalcSubdivEmpRetent" Content="Начать расчет" Margin="10,3" Padding="10,1" x:Name="btStartCalc"/>
+            <Button Content="Прервать" Margin="5,3" Padding="10,1" Click="btCancel_Click" IsEnabled="{Binding ElementName=btStartCalc, Path=IsEnabled, Converter={StaticResource InvertBoolConverter}}"/>
+        </StackPanel>
+    </Grid>
+</Window>

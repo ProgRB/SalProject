@@ -1,0 +1,488 @@
+﻿<UserControl x:Class="Salary.View.EmpAccounts"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+             xmlns:cmd="clr-namespace:Salary.ViewModel"
+             xmlns:cm ="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:dat ="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
+             xmlns:local="clr-namespace:Salary"
+             xmlns:v="clr-namespace:Salary.View"
+             xmlns:om ="clr-namespace:System.Collections.ObjectModel;assembly=System"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="485" d:DesignWidth="1201"
+             x:Name="_this"
+             >
+    <UserControl.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.AddClientAccount" CanExecute="AddAccount_CanExecute" Executed="AddAccount_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.EditClientAccount" CanExecute="EditAccount_CanExecute" Executed="EditAccount_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteClientAccount" CanExecute="EditAccount_CanExecute" Executed="DeleteAccount_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.AddClientRetention" CanExecute="AddRetent_CanExecute" Executed="AddRetent_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.EditClientRetention" CanExecute="EditRetent_CanExecute" Executed="EditRetent_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteClientRetention" CanExecute="EditRetent_CanExecute" Executed="DeleteRetent_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.ViewEmpRetentAccount" CanExecute="AddAccount_CanExecute" Executed="ViewEmpRetentAccount_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.ViewEmpSalaryRetents" CanExecute="AddAccount_CanExecute" Executed="ViewEmpSalaryRetent_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_AddPremiumCatalog" CanExecute="ReportSubdiv_CanExecute" Executed="Rep_AddPremiumCatalog_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_AddPremiumRegister" CanExecute="ReportSubdiv_CanExecute" Executed="Rep_AddPremiumRegister_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepSalaryErrors" CanExecute="ReportSubdiv_CanExecute" Executed="RepSalaryErrors_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepUploadTxtClientAccount" CanExecute="AddAccount_CanExecute" Executed="RepUploadTxtClientAccount_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepLoadTxtClientAccount" CanExecute="AddAccount_CanExecute" Executed="RepLoadTxtClientAccount_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_EmpAccountNote" CanExecute="AddAccount_CanExecute" Executed="Rep_EmpAccountNote_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepAllTransferredSum" CanExecute="ReportSubdiv_CanExecute" Executed="RepAllTransferredSum_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepTypeBankEmpTransfer" CanExecute="ReportSubdiv_CanExecute" Executed="RepTypeBankEmpTransfer_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RepEmpTransferByRegisters" CanExecute="ReportSubdiv_CanExecute" Executed="RepEmpTransferByRegisters_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.CopyAccountsFromMainWork" CanExecute="EditRetentSignComb_CanExecute" Executed="CopyAccountsFromMainWork_Executed"/>
+    </UserControl.CommandBindings>
+    
+    <UserControl.Resources>
+        <cmd:EmpAccountsViewModel x:Key="Model"/>
+        <CollectionViewSource x:Key="RetentSource" Source="{Binding Source={StaticResource Model}, Path=EmpRetent}" Filter="RetentSource_Filter">
+            <CollectionViewSource.GroupDescriptions>
+                <dat:PropertyGroupDescription PropertyName="NAME_PAYMENT"/>
+                <dat:PropertyGroupDescription PropertyName="RETENTION_ID">
+                </dat:PropertyGroupDescription>
+            </CollectionViewSource.GroupDescriptions>
+            <CollectionViewSource.SortDescriptions>
+                <cm:SortDescription PropertyName="SORT_NUMBER"/>
+                <cm:SortDescription PropertyName="CODE_PAYMENT"/>
+                <cm:SortDescription PropertyName="ORDER_NUMBER"/>
+                <cm:SortDescription PropertyName="DATE_START_RET"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <v:PeriodToExpandedConverter x:Key="PeriodToExpandedConverter" FirstProperty="DATE_START_RET" SecondProperty="DATE_END_RET"/>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding Source={StaticResource Model}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="197*" />
+            <RowDefinition Height="208*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Expander Header="Фильтр" Grid.ColumnSpan="2" IsExpanded="True" KeyDown="Filter_KeyDown">
+            <Expander.Resources>
+                <Style BasedOn="{StaticResource EnabledTextBox}" TargetType="TextBox">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="TextAlignment" Value="Right"/>
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </Expander.Resources>
+            <Expander.BindingGroup>
+                <BindingGroup Name="FilterBindingGroupName" x:Name="filterBindingGroup"/>
+            </Expander.BindingGroup>
+            <WrapPanel>
+                <local:SubdivSelector x:Name="subdivSelector" Grid.Row="2" Grid.ColumnSpan="3" Width="350" Margin="0,2,2,2" SubdivId="{Binding Path=EmpProvider.SubdivID, Mode=TwoWay, UpdateSourceTrigger=Explicit}" AppRoleName="APSTAFF.SUBDIV"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="На дату" Margin="15,2,4,2"/>
+                    <DatePicker SelectedDate="{Binding EmpProvider.SelectedDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="150"
+                                local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyyy"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Таб.№" Margin="15,2,4,2"/>
+                    <TextBox Text="{Binding EmpProvider.PerNum, Mode=TwoWay, UpdateSourceTrigger=Explicit}" MinWidth="80"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Фамилия" Margin="15,2,4,2"/>
+                    <TextBox Text="{Binding EmpProvider.Family, Mode=TwoWay, UpdateSourceTrigger=Explicit}" MinWidth="100"/>
+                </StackPanel>
+                
+                <Button Margin="2" ToolTip="Применить фильтр" Click="btFilter_Click">
+                    <Image Source="/Images/filter_3232.png" Height="18"/>
+                </Button>
+            </WrapPanel>
+        </Expander>
+        <GroupBox Header="Сотрудники" Grid.Row="1">
+            <DockPanel>
+                <WrapPanel  Background="{StaticResource PanelGrayBack}" DockPanel.Dock="Top">
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.ViewEmpRetentAccount">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/table_edit.jpg"/>
+                    </Button>
+                    <Separator/>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.ViewEmpSalaryRetents">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/coins_3232.png"/>
+                    </Button>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.CopyAccountsFromMainWork">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/copy_emp_3232.png"/>
+                    </Button>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <Menu Background="Transparent" VerticalAlignment="Center" FocusManager.IsFocusScope="False">
+                        <MenuItem Header="Отчеты" VerticalAlignment="Center">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/print2424.png" Width="18"/>
+                            </MenuItem.Icon>
+                            <MenuItem Command="cmd:AppCommands.Rep_EmpAccountNote"/>
+                            <Separator/>
+                            <MenuItem Header="ДСВ к пенсии">
+                                <MenuItem Command="cmd:AppCommands.Rep_AddPremiumCatalog" CommandParameter="401" Header="Справочник ДСВ" InputGestureText="401"/>
+                                <MenuItem Command="cmd:AppCommands.Rep_AddPremiumCatalog" CommandParameter="402" Header="Справочник взносов в НПФ Первый пром. альянс" InputGestureText="402"/>
+                                <Separator/>
+                                <MenuItem Command="cmd:AppCommands.Rep_AddPremiumRegister" CommandParameter="401" Header="Реестр ДСВ" InputGestureText="401"/>
+                                <MenuItem Command="cmd:AppCommands.Rep_AddPremiumRegister" CommandParameter="402" Header="Реестр взносов в НПФ Первый пром. альянс" InputGestureText="402"/>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Возможные ошибки перечислений" Command="cmd:AppCommands.RepSalaryErrors"/>
+                            <Separator/>
+                            <MenuItem Header="Сводный отчет по перечисляемым шифрам оплат" Command="cmd:AppCommands.RepAllTransferredSum"/>
+                            <Separator/>
+                            <MenuItem Header="Список сотрудников перечисляющих ЗП в банки" Command="cmd:AppCommands.RepTypeBankEmpTransfer"/>
+                            <MenuItem Header="Сотрудники перечисляющие ЗП в банки или кассу" Command="cmd:AppCommands.RepTypeBankEmpTransfer" CommandParameter="Full"/>
+                            <Separator/>
+                            <MenuItem Header="Перечисления по реестрам для сотрудников" Command="cmd:AppCommands.RepEmpTransferByRegisters"/>
+                        </MenuItem>
+                    </Menu>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <Menu Background="Transparent" VerticalAlignment="Center" FocusManager.IsFocusScope="False">
+                        <MenuItem Header="Выгрузка/загрузка данных">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/txt_3232.png" Stretch="Uniform" Width="19"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="Выгрузка справочников для расчета">
+                                <MenuItem Command="cmd:AppCommands.RepUploadTxtClientAccount" CommandParameter="287" Header="Для расчета ЗП"/>
+                                <Separator/>
+                                <MenuItem Command="cmd:AppCommands.RepUploadTxtClientAccount" CommandParameter="487" Header="Для расчета аванса"/>
+                                <Separator/>
+                                <MenuItem Command="cmd:AppCommands.RepUploadTxtClientAccount" CommandParameter="488" Header="Для расчета прочих"/>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Загрузка из текстовых данных результатов">
+                                <MenuItem Command="cmd:AppCommands.RepLoadTxtClientAccount" CommandParameter="287" Header="Зарплата" IsEnabled="False"/>
+                                <Separator/>
+                                <MenuItem Command="cmd:AppCommands.RepLoadTxtClientAccount" CommandParameter="487" Header="Аванс"/>
+                                <Separator/>
+                                <MenuItem Command="cmd:AppCommands.RepLoadTxtClientAccount" CommandParameter="488" Header="Прочие"/>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
+                </WrapPanel>
+            <DataGrid x:Name="dgEmp" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding EmpView.CollectionView}" SelectedItem="{Binding EmpView.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      AlternatingRowBackground="#FFEFF6F8" AlternationCount="2" local:DataGridAddition.DoubleClickCommand="cmd:AppCommands.ViewEmpRetentAccount">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="cmd:AppCommands.ViewEmpRetentAccount"/>
+                            <Separator/>
+                            <MenuItem Command="cmd:AppCommands.ViewEmpSalaryRetents" InputGestureText="Ctrl+Enter"/>
+                            <Separator/>
+                            <MenuItem Command="cmd:AppCommands.CopyAccountsFromMainWork"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                    <KeyBinding Command="cmd:AppCommands.ViewEmpSalaryRetents" Gesture="Enter" Modifiers="Control"/>
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                    <!--<DataGridTemplateColumn Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding PHOTO}" MaxHeight="60"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>-->
+                    <DataGridTextColumn Binding="{Binding CODE_SUBDIV}" Header="Подр." Width="50">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding PER_NUM}" Header="Таб.№" Width="80">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding FIO}" Header="ФИО" Width="200"/>
+                    <DataGridTextColumn Binding="{Binding SIGN_COMB}" Header="Совм." Width="50">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding DATE_HIRE, StringFormat={}{0:dd/MM/yyyy}}" Header="Дата приема" Width="90" SortMemberPath="DATE_HIRE">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding DATE_FIRE, StringFormat={}{0:dd/MM/yyyy}}" Header="Дата увольнения" Width="110" SortMemberPath="DATE_FIRE">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="6,3"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+            </DockPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Перечисления сотрудника" Grid.ColumnSpan="2">
+            <DockPanel>
+                <WrapPanel Background="{StaticResource PanelGrayBack}" DockPanel.Dock="Top">
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.AddClientRetention">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                    </Button>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.EditClientRetention">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                    </Button>
+                    <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.DeleteClientRetention">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                    </Button>
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    <CheckBox Style="{StaticResource {x:Static ToolBar.CheckBoxStyleKey}}" IsChecked="{Binding Source={StaticResource Model}, Path=ArchivRetent}" ToolTip="Показывать архивные записи">
+                        <Image Source="/Images/archive_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                    </CheckBox>
+                </WrapPanel>
+                <DataGrid IsReadOnly="True" ItemsSource="{Binding Source={StaticResource RetentSource}}" AutoGenerateColumns="False" Grid.IsSharedSizeScope="True"
+                          SelectedItem="{Binding Source={StaticResource Model}, Path=EmpRetent.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          local:DataGridAddition.DoubleClickCommand="cmd:AppCommands.EditClientRetention">
+                    <DataGrid.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="GroupItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <Expander x:Name="_expGroup1" Background="White" ToolTip="Кликните для подробного просмотра"
+                                                                              Style="{DynamicResource ExpanderStylePlussed}">
+                                                    <Expander.IsExpanded>
+                                                        <MultiBinding Mode="OneWay" Converter="{StaticResource PeriodToExpandedConverter}">
+                                                            <Binding Path="Items"/>
+                                                            <Binding Source="{StaticResource Model}" Path="EmpProvider.SelectedDate"/>
+                                                        </MultiBinding>
+                                                    </Expander.IsExpanded>
+                                                    <Expander.Header>
+                                                        <Grid Language="ru-RU">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition SharedSizeGroup="column1"/>
+                                                                <ColumnDefinition SharedSizeGroup="column2"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Items[0].Items[0][CODE_PAYMENT]}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="10,2,1,2" Foreground="White" 
+                                                                       ToolTip="Наименование раздела" Padding="12,2">
+                                                                    <TextBlock.Background>
+                                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0"><GradientStop Color="#FF7187B4" Offset="0" /><GradientStop Color="#FF4B5580" Offset="0.977" />
+                                                                        </LinearGradientBrush>
+                                                                    </TextBlock.Background>
+                                                            </TextBlock>
+                                                            <TextBlock Grid.Column="1" x:Name="txtName" Text="{Binding Name}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="10,2,1,2" Foreground="#FF1C1CC7" 
+                                                                       ToolTip="Наименование раздела"/>
+                                                        </Grid>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter/>
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="GroupItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <Expander x:Name="_expGroup1" ToolTip="Кликните для подробного просмотра"
+                                                                              Style="{DynamicResource ExpanderStylePlussed}"
+                                                          Margin="20,2,2,2" BorderBrush="Gray" BorderThickness="1">
+                                                    <Expander.IsExpanded>
+                                                        <MultiBinding Mode="OneWay" Converter="{StaticResource PeriodToExpandedConverter}">
+                                                            <Binding Path="Items"/>
+                                                            <Binding Source="{StaticResource Model}" Path="EmpProvider.SelectedDate"/>
+                                                        </MultiBinding>
+                                                    </Expander.IsExpanded>
+                                                    <Expander.Header>
+                                                        <Grid Language="ru-RU">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition SharedSizeGroup="column21"/>
+                                                                <ColumnDefinition SharedSizeGroup="column22"/>
+                                                                <ColumnDefinition SharedSizeGroup="column23"/>
+                                                                <ColumnDefinition SharedSizeGroup="column24"/>
+                                                                <ColumnDefinition SharedSizeGroup="column25"/>
+                                                                <ColumnDefinition SharedSizeGroup="column26"/>
+                                                                <ColumnDefinition SharedSizeGroup="column27"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Label Foreground="Red" Content="{Binding Items[0].ORDER_NUMBER}" ContentStringFormat="№ {0}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="3,0"
+                                                                   ToolTip="Порядковый номер удержания"/>
+                                                            <Label Grid.Column="1" Content="{Binding Items[0].DATE_START_RET}" ContentStringFormat="C {0:dd MMMM yyyy}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="5,0,1,0"
+                                                                   ToolTip="Дата начала удержания"/>
+                                                            <Label Grid.Column="2"  Content="{Binding Items[0].DATE_END_RET, TargetNullValue='&lt;не указано&gt;'}" ContentStringFormat="ПО {0:dd MMMM yyyy}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,1,0"
+                                                                   ToolTip="Дата окончания удержания"/>
+                                                            <TextBlock Grid.Column="3" Text="Процент перечисления:" VerticalAlignment="Center" Margin="10,0,1,0"/>
+                                                            <Label Grid.Column="4"  Content="{Binding Items[0].RETENT_PERCENT, TargetNullValue=0}" ContentStringFormat="{}{0:F2} %" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0,1,0"
+                                                                   BorderBrush="#FFD10815" BorderThickness="1" ToolTip="Процент перечисления"/>
+                                                            <TextBlock Grid.Column="5" Text="Сумма перечисления:" VerticalAlignment="Center" Margin="10,0,1,0" />
+                                                            <Label Grid.Column="6"  Content="{Binding Items[0].RETENT_SUM, TargetNullValue=0}" ContentStringFormat="{}{0:F2} р." FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0,1,0"
+                                                                       BorderBrush="#FFD10815" BorderThickness="1" ToolTip="Сумма для перечисления"/>
+                                                        </Grid>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter Margin="15,2,2,2"/>
+                                                    <Expander.Background>
+                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                            <GradientStop Color="#FFE8E8FF" Offset="0" />
+                                                            <GradientStop Color="#FFC7C9E8" Offset="1" />
+                                                        </LinearGradientBrush>
+                                                    </Expander.Background>
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </DataGrid.GroupStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding DATE_BEGIN_RELATION, StringFormat={}{0:dd/MM/yyyy}}" Width="100" SortMemberPath="DATE_BEGIN_RELATION" SortDirection="Ascending">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Дата начала перечисления" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding DATE_END_RELATION, StringFormat={}{0:dd/MM/yyyy}}" Width="100" SortMemberPath="DATE_END_RELATION">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Дата окончания перечисления" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding NUMBER_ACCOUNT}" Width="140" SortMemberPath="NUMBER_ACCOUNT">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="№ Счета" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding NUMBER_CARD}" Width="100" SortMemberPath="NUMBER_CARD">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="№ Карты" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding BANK_NAME}" Width="150" SortMemberPath="BANK_NAME">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Наименование банка" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding OWNER_FIO}" Width="130" SortMemberPath="OWNER_FIO">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Владелец счета" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <!--<DataGridTextColumn Binding="{Binding PLF_ADDRESS}" Width="130">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Адрес" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding PLF_NAME}" Width="100">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Адресат" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>-->
+                        <DataGridTextColumn Binding="{Binding NAME_TYPE_ACCOUNT}" Width="110" SortMemberPath="NAME_TYPE_ACCOUNT">
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Тип счета" TextWrapping="Wrap"/>
+                            </DataGridTextColumn.Header>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="6,3"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+            </DockPanel>
+        </GroupBox>
+        
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Счета для перечиcления, связанные с сотрудником">
+            <DockPanel>
+                <WrapPanel DockPanel.Dock="Top" Background="{StaticResource PanelGrayBack}">
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.AddClientAccount">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/new_1616.png"/>
+                    </Button>
+                    <Button Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.EditClientAccount">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/edit_1616.png"/>
+                    </Button>
+                    <Button  Style="{StaticResource ToolBoxLikeStyle}" Command="cmd:AppCommands.DeleteClientAccount">
+                        <Image Style="{StaticResource ToolBoxImageStyle}" Source="/Images/delete_1616.png"/>
+                    </Button>
+                </WrapPanel>
+                <DataGrid IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding ClientAccountView}" SelectedItem="{Binding ClientAccountView.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          local:DataGridAddition.DoubleClickCommand="cmd:AppCommands.EditClientAccount">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding NAME_TYPE_ACCOUNT}" Header="Тип счета">
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding BANK_NAME}" Header="Банк" Width="120"/>
+                        <DataGridTextColumn Binding="{Binding NUMBER_ACCOUNT}" Header="№ счета" Width="145"/>
+                        <DataGridTextColumn Binding="{Binding NUMBER_CARD}" Header="№ карты" Width="80"/>
+                        <DataGridTextColumn Binding="{Binding OWNER_FIO}" Header="ФИО владельца" Width="100"/>
+                        <DataGridTextColumn Binding="{Binding PLF_NAME}" Header="ФИО получателя" Width="110"/>
+                        <DataGridTextColumn Binding="{Binding PLF_ADDRESS}" Header="Адрес получателя" Width="110"/>
+                    </DataGrid.Columns>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="6,3"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+            </DockPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

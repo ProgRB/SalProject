@@ -1,0 +1,69 @@
+﻿<Window x:Class="Salary.View.OrderReplacer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        xmlns:local ="clr-namespace:Salary"
+        Title="Замена заказов" Height="184" Width="435" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.ReplaceOrders" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,3,3,3"/>
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,3,3,3"/>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="15,3,8,3"/>
+            </Style>
+        </Grid.Resources>
+        <TextBlock Grid.Row="0" Text="Отчетный месяц"/>
+        <DatePicker SelectedDate="{Binding SelectedDate}" local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyyy" Grid.Column="1"
+                    IsEnabled="False"/>
+        <TextBlock Grid.Row="1" Text="Подразделение"/>
+        <local:SubdivSelector Grid.Row="1" SubdivId="{Binding SubdivID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True}" ShowPromt="False"
+                              Grid.Column="1" AppRoleName="SALARY,SALARY_DISTR" Margin="0,3,3,3"/>
+        <TextBlock Text="Старый заказ (заменяемый)" Grid.Row="2"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding OldOrderSource}" SelectedValue="{Binding OldOrderID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                  DisplayMemberPath="ORDER_NAME" SelectedValuePath="ORDER_ID" IsSynchronizedWithCurrentItem="False" IsEditable="True">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+        </ComboBox>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Новый заказ"/>
+        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding NewOrderSource}" SelectedValue="{Binding NewOrderID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                  DisplayMemberPath="ORDER_NAME" SelectedValuePath="ORDER_ID" IsSynchronizedWithCurrentItem="False" IsEditable="True">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+        </ComboBox>
+        <StackPanel Grid.Row="9" Grid.ColumnSpan="4" Orientation="Horizontal" Background="{StaticResource LightBrush}">
+            <Button Command="cmd:AppCommands.ReplaceOrders" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"
+                    VerticalAlignment="Center" Margin="5,2" Content="Заменить" Padding="10,1">
+            </Button>
+            <Button Content="Закрыть" Click="Close_Click" VerticalAlignment="Center" Margin="5,2" Padding="10,1" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

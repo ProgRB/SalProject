@@ -1,0 +1,2201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{374C8399-A207-429A-99D5-5B9255EE37D4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Salary</RootNamespace>
+    <AssemblyName>Salary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>salary_3232.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
+      <HintPath>..\..\Kadr\Kadr\bin\Debug\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\WINDOWS\assembly\GAC_MSIL\Microsoft.ReportViewer.Common\11.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\WINDOWS\assembly\GAC_MSIL\Microsoft.ReportViewer.WinForms\11.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.WinForms.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.DataAccess, Version=2.112.3.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Luna" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="TextReportViewerLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\TextReportViewerLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="VSAX3, Version=3.1.5399.28175, Culture=neutral, PublicKeyToken=0849c260e9d6c320, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\VSAX3.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Kadr\Kadr\bin\Debug\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AppCloseForm.xaml.cs">
+      <DependentUpon>AppCloseForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Autorization.xaml.cs">
+      <DependentUpon>Autorization.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Constants\AppConstants.cs" />
+    <Compile Include="Controls\NumericUpDown.xaml.cs">
+      <DependentUpon>NumericUpDown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\AppDataSet.cs" />
+    <Compile Include="Helpers\AppDictionaries.cs" />
+    <Compile Include="Helpers\CloseNotification.cs" />
+    <Compile Include="Helpers\BindingHelper.cs" />
+    <Compile Include="Helpers\ControlHelper.cs" />
+    <Compile Include="Helpers\Converters.cs" />
+    <Compile Include="Helpers\DataSetHelper.cs" />
+    <Compile Include="Helpers\DBFHelper.cs" />
+    <Compile Include="Helpers\EnumerableExtension.cs" />
+    <Compile Include="Helpers\OracleDataAdapterHelper.cs" />
+    <Compile Include="Helpers\TestMethodHelper.cs" />
+    <Compile Include="Helpers\TreeViewItemHelper.cs" />
+    <Compile Include="Helpers\Validations.cs" />
+    <Compile Include="Helpers\Wpf32Window.cs" />
+    <Compile Include="Interfaces\ICustomFilter.cs" />
+    <Compile Include="Loan\Cash_Order_Editor.xaml.cs">
+      <DependentUpon>Cash_Order_Editor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Classes\LoanCommands.cs" />
+    <Compile Include="Loan\Classes\LoanDataSet.cs" />
+    <Compile Include="Loan\Classes\ViewTabLoanCollection.cs" />
+    <Compile Include="Loan\Classes\Guarantor_Loan_Viewer.xaml.cs">
+      <DependentUpon>Guarantor_Loan_Viewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Guarantor_Loan_Editor.xaml.cs">
+      <DependentUpon>Guarantor_Loan_Editor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Find_Emp.xaml.cs">
+      <DependentUpon>Find_Emp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Loan_Cost_Item_Viewer.xaml.cs">
+      <DependentUpon>Loan_Cost_Item_Viewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Refinancing_Rate_Viewer.xaml.cs">
+      <DependentUpon>Refinancing_Rate_Viewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Loan_Editor.xaml.cs">
+      <DependentUpon>Loan_Editor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Loan_Viewer.xaml.cs">
+      <DependentUpon>Loan_Viewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Purpose_Loan_Viewer.xaml.cs">
+      <DependentUpon>Purpose_Loan_Viewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loan\Type_Loan_Viewer.xaml.cs">
+      <DependentUpon>Type_Loan_Viewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ClientAccountModel.cs" />
+    <Compile Include="Model\PayDocumentModel.cs" />
+    <Compile Include="Model\RetentionModel.cs" />
+    <Compile Include="Model\SalaryAdvanceModel.cs" />
+    <Compile Include="Model\SalaryDocumModel.cs" />
+    <Compile Include="Reports\SalaryModel.cs" />
+    <Compile Include="Reports\CommonReports.cs" />
+    <Compile Include="Reports\ReportDataSet.cs">
+      <DependentUpon>ReportDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ViewReportWindow.xaml.cs">
+      <DependentUpon>ViewReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\AppCommands.cs" />
+    <Compile Include="ViewModel\AsyncCollection.cs" />
+    <Compile Include="ViewModel\AsynDataTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ViewModel\Details\BrigageViewModel.cs" />
+    <Compile Include="ViewModel\Details\TableBrigageViewModel.cs" />
+    <Compile Include="ViewModel\EmpAccountsViewModel.cs" />
+    <Compile Include="ViewModel\NestedTableDate.cs" />
+    <Compile Include="ViewModel\NestedTableDecimal.cs" />
+    <Compile Include="ViewModel\PaymentPropertyViewModel.cs" />
+    <Compile Include="ViewModel\PaymentReportingViewModel.cs" />
+    <Compile Include="ViewModel\Salary\TaxEmpDocumViewModel.cs" />
+    <Compile Include="ViewModel\TaskNotify.cs" />
+    <Compile Include="View\ClientAccounts\DocumTransferEditor.xaml.cs">
+      <DependentUpon>DocumTransferEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\DocumTransferView.xaml.cs">
+      <DependentUpon>DocumTransferView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Details\BrigageEditor.xaml.cs">
+      <DependentUpon>BrigageEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\FilterByPayment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\PayDocuments\TypeSalaryDocumEditor.xaml.cs">
+      <DependentUpon>TypeSalaryDocumEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Taxes\TaxCompanyEditor.xaml.cs">
+      <DependentUpon>TaxCompanyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Taxes\TaxCompanyViewer.xaml.cs">
+      <DependentUpon>TaxCompanyViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Taxes\TaxDocumEditor.xaml.cs">
+      <DependentUpon>TaxDocumEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Tools\CustomTooltip.xaml.cs">
+      <DependentUpon>CustomTooltip.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewReporting\EmpEconCard.xaml.cs">
+      <DependentUpon>EmpEconCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewReporting\FilterReporting.xaml.cs">
+      <DependentUpon>FilterReporting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewReporting\PaymentReporting.xaml.cs">
+      <DependentUpon>PaymentReporting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewReporting\PaymentReportingPartial.cs" />
+    <Compile Include="View\AboutInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AboutInfo.Designer.cs">
+      <DependentUpon>AboutInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\AlimonyCard.xaml.cs">
+      <DependentUpon>AlimonyCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CacheVsSalaryCompare.xaml.cs">
+      <DependentUpon>CacheVsSalaryCompare.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Tools\CheckXML.xaml.cs">
+      <DependentUpon>CheckXML.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\ClientAccountEditor.xaml.cs">
+      <DependentUpon>ClientAccountEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AlimoniesViewer.xaml.cs">
+      <DependentUpon>AlimoniesViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CalcReportView.xaml.cs">
+      <DependentUpon>CalcReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\CartPaidEditor.xaml.cs">
+      <DependentUpon>CartPaidEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\CartularyEditor.xaml.cs">
+      <DependentUpon>CartularyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\CartularyViewer.xaml.cs">
+      <DependentUpon>CartularyViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\CompanyAccountEditor.xaml.cs">
+      <DependentUpon>CompanyAccountEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ConsolidSalary.xaml.cs">
+      <DependentUpon>ConsolidSalary.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Details\TableBrigageView.xaml.cs">
+      <DependentUpon>TableBrigageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Details\DetailEditor.xaml.cs">
+      <DependentUpon>DetailEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EmpAccountCard.xaml.cs">
+      <DependentUpon>EmpAccountCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\EmpAccounts.xaml.cs">
+      <DependentUpon>EmpAccounts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\EmpFinder.xaml.cs">
+      <DependentUpon>EmpFinder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\EmpRetentAccountEditor.xaml.cs">
+      <DependentUpon>EmpRetentAccountEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\EmpSalaryAccountRetent.xaml.cs">
+      <DependentUpon>EmpSalaryAccountRetent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ExceptAvgEditor.xaml.cs">
+      <DependentUpon>ExceptAvgEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\FilterByList.xaml.cs">
+      <DependentUpon>FilterByList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FilterByPeriod.xaml.cs">
+      <DependentUpon>FilterByPeriod.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\FilterPaymentChanges.xaml.cs">
+      <DependentUpon>FilterPaymentChanges.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\FindOrders.xaml.cs">
+      <DependentUpon>FindOrders.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MessageControl.xaml.cs">
+      <DependentUpon>MessageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MessageEditor.xaml.cs">
+      <DependentUpon>MessageEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NotifyList.xaml.cs">
+      <DependentUpon>NotifyList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayCalcRelationEditor.xaml.cs">
+      <DependentUpon>PayCalcRelationEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Payment.xaml.cs">
+      <DependentUpon>Payment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PaymentDocumentEditor.xaml.cs">
+      <DependentUpon>PaymentDocumentEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PaymentPartial.cs" />
+    <Compile Include="View\PaymentPropertyEditor.xaml.cs">
+      <DependentUpon>PaymentPropertyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\PaymentTypeSelector.xaml.cs">
+      <DependentUpon>PaymentTypeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayTypeEditor.xaml.cs">
+      <DependentUpon>PayTypeEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\PayTypeSelector.xaml.cs">
+      <DependentUpon>PayTypeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayTypeTable.xaml.cs">
+      <DependentUpon>PayTypeTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\RefSalaryDataSelector.xaml.cs">
+      <DependentUpon>RefSalaryDataSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\RepFilterByEmp.xaml.cs">
+      <DependentUpon>RepFilterByEmp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReportGroups\ReportGroupView.xaml.cs">
+      <DependentUpon>ReportGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReportGroups\ReportSetting.xaml.cs">
+      <DependentUpon>ReportSetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RetentionCalcSetting.xaml.cs">
+      <DependentUpon>RetentionCalcSetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RetentionCalcMethods.xaml.cs">
+      <DependentUpon>RetentionCalcMethods.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RetentionEditor.xaml.cs">
+      <DependentUpon>RetentionEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryAdvanceEditor.xaml.cs">
+      <DependentUpon>SalaryAdvanceEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryDistribution\OrderReplacer.xaml.cs">
+      <DependentUpon>OrderReplacer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryDistribution\SalaryAddCorrelationEditor.xaml.cs">
+      <DependentUpon>SalaryAddCorrelationEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryDistribution\SalaryDistribView.xaml.cs">
+      <DependentUpon>SalaryDistribView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryDistribution\SalaryReceiveEditor.xaml.cs">
+      <DependentUpon>SalaryReceiveEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryDocEditor.xaml.cs">
+      <DependentUpon>SalaryDocEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PayDocuments\SalaryDocumEditor.xaml.cs">
+      <DependentUpon>SalaryDocumEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryEditor.xaml.cs">
+      <DependentUpon>SalaryEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryPreview\HistorySalaryEdit.xaml.cs">
+      <DependentUpon>HistorySalaryEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryVacCalc.xaml.cs">
+      <DependentUpon>SalaryVacCalc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SalaryVacEditor.xaml.cs">
+      <DependentUpon>SalaryVacEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Signes.xaml.cs">
+      <DependentUpon>Signes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Tools\SubdivForSalary.xaml.cs">
+      <DependentUpon>SubdivForSalary.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\SubdivListSelector.xaml.cs">
+      <DependentUpon>SubdivListSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\SubdivSelector.xaml.cs">
+      <DependentUpon>SubdivSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TaxDiscountEditor.xaml.cs">
+      <DependentUpon>TaxDiscountEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Tools\PrintTabsEmp.xaml.cs">
+      <DependentUpon>PrintTabsEmp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\TypeBankEditor.xaml.cs">
+      <DependentUpon>TypeBankEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientAccounts\TypeBankViewer.xaml.cs">
+      <DependentUpon>TypeBankViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TypeSalDocumEditor.xaml.cs">
+      <DependentUpon>TypeSalDocumEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\VacToSalaryImport.xaml.cs">
+      <DependentUpon>VacToSalaryImport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FiltersAndSelectors\YearsSelector.xaml.cs">
+      <DependentUpon>YearsSelector.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AppCloseForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="AppResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Autorization.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\NumericUpDown.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loan\Cash_Order_Editor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loan\Classes\Guarantor_Loan_Viewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loan\Guarantor_Loan_Editor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Loan\Find_Emp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loan\Loan_Cost_Item_Viewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Loan\Refinancing_Rate_Viewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Loan\Loan_Editor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loan\Loan_Viewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Loan\Purpose_Loan_Viewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Loan\Type_Loan_Viewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Library.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="Reports\ViewReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewModel\PaymentDataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\DocumTransferEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\DocumTransferView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Details\BrigageEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\FilterByPayment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayDocuments\TypeSalaryDocumEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Taxes\TaxCompanyEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Taxes\TaxCompanyViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Taxes\TaxDocumEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Tools\CustomTooltip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ViewReporting\EmpEconCard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ViewReporting\FilterReporting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ViewReporting\PaymentReporting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AlimonyCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CacheVsSalaryCompare.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Tools\CheckXML.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\ClientAccountEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AlimoniesViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CalcReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\CartPaidEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\CartularyEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\CartularyViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\CompanyAccountEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ConsolidSalary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Details\TableBrigageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Details\DetailEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EmpAccountCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\EmpAccounts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\EmpFinder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\EmpRetentAccountEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\EmpSalaryAccountRetent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ExceptAvgEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\FilterByList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FilterByPeriod.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\FilterPaymentChanges.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\FindOrders.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MessageControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MessageEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NotifyList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\PayCalcRelationEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Payment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PaymentDocumentEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PaymentPropertyEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\PaymentTypeSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayTypeEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\PayTypeSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayTypeTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\RefSalaryDataSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\RepFilterByEmp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReportGroups\ReportGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReportGroups\ReportSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ResourceDictionaryEmpRetention.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\RetentionCalcSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RetentionCalcMethods.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RetentionEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryAdvanceEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryDistribution\OrderReplacer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryDistribution\SalaryAddCorrelationEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryDistribution\SalaryDistribView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryDistribution\SalaryReceiveEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryDocEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PayDocuments\SalaryDocumEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryPreview\HistorySalaryEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryVacCalc.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SalaryVacEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Signes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Tools\SubdivForSalary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\SubdivListSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\SubdivSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TaxDiscountEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Tools\PrintTabsEmp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\TypeBankEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ClientAccounts\TypeBankViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TypeSalDocumEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\VacToSalaryImport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FiltersAndSelectors\YearsSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Reports\Rep_DistributionView.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Rep_SalaryByPaymentType.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Rep_SalaryByPaymentTypeAny.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Rep_SalaryByPaymentTypeWithOrder.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Rep_SalaryByPaymentTypeWithShiftRegion.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Rep_SalaryByPivotCodeOrder.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\TaxReports\Rep_TaxesCodePay.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\TaxReports\Rep_TaxesDiscount.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Resource Include="Images\replace_1616.png" />
+    <Resource Include="Images\copy_emp_3232.png" />
+    <Resource Include="Images\Transfer_Loan_3228.jpg" />
+    <Resource Include="Images\exchange_borrower_3232.png" />
+    <Resource Include="Images\receipt_3232.jpg" />
+    <Resource Include="Images\Transfer_Loan_2832.jpg" />
+    <Resource Include="Images\check_green_3232.png" />
+    <Resource Include="Images\check_blue_3232.png" />
+    <Resource Include="Images\group_3232.png" />
+    <Resource Include="Images\excel_3232.png" />
+    <Resource Include="Images\money_bag_128_128.png" />
+    <Resource Include="Images\kwallet_3232.png" />
+    <Resource Include="Images\money_calculator_3232.png" />
+    <Resource Include="Images\document_new_1616.png" />
+    <Resource Include="Images\document_new_2424.png" />
+    <Resource Include="Images\document_new_3232.png" />
+    <Resource Include="Images\document_new_4848.png" />
+    <Resource Include="Images\text_editor_1616.png" />
+    <Resource Include="Images\text_editor_2424.png" />
+    <Resource Include="Images\text_editor_3232.png" />
+    <Resource Include="Images\text_editor_4848.png" />
+    <Resource Include="Images\delete_2424.png" />
+    <Resource Include="Images\delete_3232.png" />
+    <Resource Include="Images\delete_4848.png" />
+    <Resource Include="Images\tick_2424.png" />
+    <Resource Include="Images\vcard_3232.png" />
+    <Content Include="Queries\ClientAccountTransfer\Rep_SalaryMissionTransferNote.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\ClientAccountTransfer\SelectCartularyTypeAccess.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\ClientAccountTransfer\SelectDocumentTransferData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\ClientAccountTransfer\SelectDocumentTransferRelView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\ClientAccountTransfer\SelectDocumentTransferView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\ClientAccountTransfer\SelectDocumOrEmpDataTransfer.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Detail\Rep_TableBrigage2.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Detail\Rep_TableBrigage.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\RepMaterial_Benefit.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\RepCirculating_Register.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\RepIssued_Loan.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectClient_Account_For_Emp.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalByDegreeOrdersOrPayTypeEcon.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Detail\SelectBrigagePieceWork.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Detail\SelectTableBrigage.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryPaymentTypeWithShiftCode.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_VacReservMem.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_VacReserv.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_QuarterReservMem.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_DistributionEconReport.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_QuarterReserv.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelecteSalaryAddCorrData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectOrderForReplace.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\UploadDOPZ8_2.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\UploadDOPZ.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\UploadMem197_198.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\UploadMem21.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\UploadDOPZ8.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectReceiveSubdivData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\UploadDOPZ26.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\UploadPril21.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\RepGuarantor_Contract.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\RepSchedule_Of_Payments.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\RepStatement.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectEmp_Find_Emp.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryPaymentTypeEconEM.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\RepLoan_Contract.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_ClosedOrders.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_DistrControl.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectDetailDistr.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectSalaryAddCorrView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectSalaryAdditionView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="XmlData\SalaryXmlData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\2015\Rep_2NDFL.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\2015\Rep_2NDFL_Subreport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\2015\Rep_2NDFL_Subreport2.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ClientAccounts\Rep_SalaryMissionTransferNote.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Detail\Rep_TableBrigage2.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Detail\Rep_TableBrigage.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Detail\Rep_TableBrigageCalendar.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Account_Cash_Order.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Cash_Order.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\RepLoan_Holder.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\RepRetention_By_Loan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\RepMaterial_Benefit.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\RepCirculating_Register.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\RepIssued_Loan.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalByDegreeOrdersEcon.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_NoteAccountForEmp.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_PaymentTypeData.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_TypeBankEmpTransferFull.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Guarantor_Contract.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\RepControl_Register.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Statement_Transfer.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Loan_Contract.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_ClosedOrders.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Loan_Contract_Subreport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Schedule_Of_Payments.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Loan\Statement.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_RetentDocumentOrder.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryRegisterRussianStand.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_2NDFLErrors.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_FileRussianStand.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryTaxLucre.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryTransferNoteAttachment.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_FiileBankATB.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_2NDFL_Subreport2.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_2NDFL.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_2NDFL_Subreport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesVersionCompare.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpAvgSickBornDay.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpTransferSubByPeriod.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryByPaymentOverSubdiv.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AdvanceSubdiv.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_CartularyConsolidSubdiv.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_CartularyConsolidTypeBank.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_ConsolidVacsMonthFull.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AllTransferredSum.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_CartularyVSSalary.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_ConsolidVacsMonth.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesBySubdiv.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesHarmProffession.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesHeadReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpAccountNote.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpAvgSickDay.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_PayForm_T-53.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_PaymentTableSheet.rdlc" />
+    <EmbeddedResource Include="Reports\Rep_SalaryCountDaysChanges.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryDiscountChildEnd.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryDocumForPeriod.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryRegisterUniversal.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryRegisterVTB24Bank.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryRegisterRosGovStrahBank.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryRegisterRosBank.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryRegisterSberBank.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AddPremRegister401.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AddPremCatalog.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AddPremRegister402.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AlimonyNoteRetent.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AllAlimonies.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesAllSubdivAllFundes.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesEmpCard.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesInvalidData.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesNotRetentPayment.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_DuesOverLimitRetent.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpAVGDay_Short.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpMissionDayFull.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AlimonyBalance.rdlc" />
+    <EmbeddedResource Include="Reports\Rep_AlimonyCatalog.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_AlimonyDeptor.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpSalaryTransferByDoc.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpSalaryWithOrders.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_FileBank0268.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_FileBankRegister.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryErrors.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryRegisterBaikalBank.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryTransferNote.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryTransferRetent.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SickPaymentRegister.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SubRetentDocs.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_TableCompare.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_TaxDiscounts.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_TypeBankEmpTransfer.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_TypeBankEmpTransfer2.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_TypeBankSumTransfer.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\SubRep_EmpAvgData.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TaxReports\Rep_TaxCommonData.rdlc" />
+    <EmbeddedResource Include="View\AboutInfo.resx">
+      <DependentUpon>AboutInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <Resource Include="Images\help_3232.png" />
+    <Resource Include="Images\import_doc_3232.png" />
+    <Resource Include="Images\alert_2424.png" />
+    <Resource Include="Images\archive_3232.png" />
+    <Resource Include="Images\replace_3232.png" />
+    <Resource Include="Images\table_edit.jpg" />
+    <Resource Include="Images\uploadfile_3232.png" />
+    <Resource Include="Images\copydoc_3232.png" />
+    <Resource Include="Images\txt_3232.png" />
+    <Resource Include="Images\break_3232.png" />
+    <Resource Include="Images\table_1616.png" />
+    <Resource Include="Images\tax_3232.png" />
+    <Resource Include="Images\db_data_3232.png" />
+    <Resource Include="Images\time_3232.png" />
+    <Resource Include="Images\document_sick_3232.png" />
+    <Resource Include="Images\Handbook_3232.png" />
+    <Resource Include="Images\filter_add.png" />
+    <Resource Include="Images\filter_delete.png" />
+    <Resource Include="Images\sallary_3232.png" />
+    <Resource Include="Images\holiday.png" />
+    <Resource Include="Images\hammer_2424.png" />
+    <Resource Include="Images\locked2_3232.png" />
+    <Resource Include="Images\contact_card_3232.png" />
+    <Resource Include="Images\balance_1616.png" />
+    <Content Include="Queries\Distribution\Rep_SalaryDistributionMainDues.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryEMCommonReport.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_SalaryDistributionReceive.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_SalaryDistributionSecond.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\EmpCatalogData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\GetCaclReport.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\GetListEmp.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\GetSubdivForSalary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\GetTaxDiscountData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Get_2NDFL_XML.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectGuarantor_Loan.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectItem_Fin_Plan.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectLoan.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectLoan_Cost_Item.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectPurposeLoan.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectRefinancing_Rate.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Loan\SelectTypeLoan.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep2NDFLErrors.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepActualDetailInPeriod.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAdditionPremSalaryCatalog.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAdditionPremSalaryRegister.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAdvancePayT-53.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAlimonyAll.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAlimonyCatalog.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAlimonyDeptor.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAlimonyNoteRetent.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAlimonyRegister.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAllTransfersSum.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepAvgWorkAndWorkerClassific.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepCalcReportSal.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepCartularyVSSalary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepConsolidSubdiv.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepDuesAllFundesByPeriod.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepDuesListInvalid.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepDuesNotRetentPayment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepDuesOverLimitSum.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepEconBookByGroupMaster.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepEconBookByPosition.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepEmpMissionDayCalc.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepEmpMissionDayCalc_Short.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepEmpTransferByRegister.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepLoadAlimonyToTxt.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepPostTransferAlimony.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepRetentByDegree.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepRetentDocumOrder.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryByGroupAndDegree.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryByMonths.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryByOrderNamePivotPDate.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryByPaymentType.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryChanges.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryDocumForPeriod.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryErrors.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryFPWByCodeDegree.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryMothersPayment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryNotePayment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryPaymentTypeEcon.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryPaymentTypeWithOrderEcon.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryPayT-53.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalaryPivotOrderCode.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalarySocNotePayment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalarySubdivEmp.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalByDegreeOrdersOrPayType.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSalVacAndPay.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSelectVacConsolid.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSelectVacSalDeptAndPaid.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSubEmpRetentDocs.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSubEmpRetention.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepSubSalDeptor.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepTypeBankEmpTransfer2.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\RepTypeBankSumTransfer.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_2NDLFReport.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_AdvanceSubdiv.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_DuesVersionCompare.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_EmpAccountsNote.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_EmpAVGDayShort.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_EmpAvgSickDay.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_EmpDieSalaryNote.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_EmpDueCard.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_ReportByPosition.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_ReportCountValuePayment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryChanges.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryDiscountChildEnd.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\Rep_SalaryDistributionMain.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryDuesHead.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryRegister.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTaxLucre.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransfer0268.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferImportDBF.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferImportToXml.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferImport_N_DBF.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferImport_ROSBANK.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferNote.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferNoteAttachment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferRegister.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferRetent.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferTXT_RUSBANK.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalaryTransferTXT_VTB24.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SalByOrdersEmps.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SelectDuesHarmProff.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_ShortBySubdiv.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_ShortBySubdivGroupMaster.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_ShortReportByEmpAndGroupMaster.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_SickPaymentRegister.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_TableCompare.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_TaxDiscountEmp.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_TXTAvgPriceDay.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_TXTVacNoteAccount.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Rep_TypeBankEmpTransfer.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectActualEmps.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectAdvancePayTxt.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectAlimonyClientAccount.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectAlimonyView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectAllMessages.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectAllRetCalcMethods.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCacheNotPayData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCacheSalaryPayData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCartPaidView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCartularyData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCartularyListBySubdiv.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCartularyPaidData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCartularyView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectClientAccountData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectClientAccountForRetent.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCompanyAccountData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectComparedVacs.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectConsolidGroup.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCopyRetentView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectCostItemsSettings.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectDocumPayment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpAccountCardData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpAccounts.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpAdvance.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpAlimonyData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpAVGDayCalc.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpClientRetent.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpDetails.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpEconCardData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpEconSalary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpForAccounts.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpInPeriod.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpListReporting.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpRetentAccountData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpRetention.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpSalary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpSalaryDocum.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpSalaryTransferByDoc.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpTaxDiscData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectEmpTaxDiscount.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectExceptCalcData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectFormatFileBank.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectKassaData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectMessage.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectMethodCalcRetData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectOrders.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPayCalcRelationData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPaymentCalcRelation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPaymentProperties.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPaymentPropertyData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPayType.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPayTypeCatalogs.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPayTypeForCalcMethods.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPositionsForFilter.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectPTForRetentSetting.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectRefData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectReportGroupData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectReportGroupTransferSum.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectReportSetting.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectRep_ConsolidSalary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectRep_EmpSalaryList.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectRetDocs.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectRetentionData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectrReportGroup.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryAdvanceData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryChanges.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectSalaryDistrCustom.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectSalaryDistributionView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryDocRelation.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryDocum.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryDocumData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryDocumDataAllDoc.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryDocumMonthACPD.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryHistory.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryPayNote.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Distribution\SelectSalaryReceive.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryTransferringSum.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalaryVacData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalDocData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSalDocsData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSickCalcPercent.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSubdivForList.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectSubdivForSalary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectTabForPrint.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectTaxDiscounts.sql" />
+    <Content Include="Queries\SelectTypeBankData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectTypeBankView.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectTypeDiscount.sql" />
+    <Content Include="Queries\SelectTypeErrors.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectUnloadTxtClientAccount.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Taxes\Rep_TaxesCodePay.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Taxes\Rep_TaxesDiscount.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Taxes\SelectEmpTaxDocums.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Taxes\SelectTaxDocumData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Taxes\SelectTaxEmpData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Unload987Payment.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\UnloadAVGDuesPercent.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\UnloadSalary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Unload_iemp_6.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Unload_ipfrdop_5.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Unload_ipfrosn_5.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Alimony\Rep_AlimonyRegister.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Reports\Rep_AlimonyToTxtView.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_CalcReportSal.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_ConsolidSalary.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_ConsolidSubdiv.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_Consolid_Dept.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpMIssionDay_Short.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpSalaryList.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpDieSalaryNote.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_PostTransferAlimony.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_RetentByDegree.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryByPaymentInPeriod.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryChanges.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalaryNotePayment.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalByDegreeAndPayType.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SalByDegreeOrders.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SubEmpRetent.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_SubSalDeptor.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_TaxDiscountEmp.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_VacNoteCalc.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_VacSalDeptAndPaid.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Test.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rep_EmpAVGDayFull.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Reports\ReportDataSet.xsc">
+      <DependentUpon>ReportDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\ReportDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ReportDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\ReportDataSet.xss">
+      <DependentUpon>ReportDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save_2222.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\delete_1616.png" />
+    <Resource Include="Images\edit_1616.png" />
+    <Resource Include="Images\new_1616.png" />
+    <Resource Include="Images\print2424.png" />
+    <Resource Include="Images\refresh2424.png" />
+    <Resource Include="Images\window-close1616.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\undo_2424.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\down_2424.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\download_1616.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\up_2424.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\setting_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\details_2424.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\document_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\calc_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\credit_card_4848.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\coins_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\coins_delete_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\left_2424.png" />
+    <Resource Include="Images\right_2424.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\filter_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mail_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="salary_3232.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\application_error_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\report_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\map_create_2424.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\exclamation_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\check_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\salary_3232.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\locked_3232.png" />
+    <Resource Include="Images\unlocked_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\user_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibrarySalary\LibrarySalary.csproj">
+      <Project>{16B25109-FEB6-419A-9A58-4BF1D6E26E3F}</Project>
+      <Name>LibrarySalary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RolesViewerLibrary\RolesViewerLibrary.csproj">
+      <Project>{2333A548-47B3-401B-B8E9-C4E86B5D752A}</Project>
+      <Name>RolesViewerLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalaryEFLibrary\SalaryEFLibrary.csproj">
+      <Project>{D8CDB3A4-91D5-41FF-B34C-02F58BCBC6DF}</Project>
+      <Name>SalaryEFLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\info_3232.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\info2_3232.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

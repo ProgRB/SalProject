@@ -1,0 +1,68 @@
+﻿<Window x:Class="Salary.View.SalaryVacEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        xmlns:l="clr-namespace:Salary.View"
+        Title="Редактор придержаний из перечислений" Height="168" Width="439" WindowStartupLocation="CenterScreen" ShowInTaskbar="False"
+        x:Name="_this">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/View/ResourceDictionaryEmpRetention.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.SaveSalaryDocum" CanExecute="Save_CanExecuted" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="10,4"/>
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,4, 10,4"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,4,10,4"/>
+            </Style>
+        </Grid.Resources>
+        <TextBlock Text="Сумма"/>
+        <TextBox Text="{Binding SUM_SAL, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
+        <TextBlock Grid.Row="1" Text="Шифр оплат"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=PaymentSource, ElementName=_this}" IsEditable="True" SelectedValuePath="PAYMENT_TYPE_ID" DisplayMemberPath="CODE_PAYMENT" SelectionChanged="ComboBox_SelectionChanged"
+                  Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}">
+            <ComboBox.SelectedValue>
+                <Binding Path="PAYMENT_TYPE_ID" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <l:NotNullValidationRule ErrorMessage="Шифр оплат должне быть выбран" ValidatesOnTargetUpdated="True"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.SelectedValue>
+        </ComboBox>
+        <TextBlock Grid.Row="2" Text="Документ удержания"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ElementName=_this, Path=RetentionSource}" SelectedValue="{Binding RETENTION_ID}" SelectedValuePath="RETENTION_ID"
+                  ItemTemplate="{StaticResource RetentTemplate}"/>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="4" Background="{StaticResource LightBrush}" Orientation="Horizontal">
+            <Button Command="cmd:AppCommands.SaveSalaryDocum" Content="Сохранить" Margin="5,3" Padding="10,0"/>
+            <Button Content="Закрыть" Margin="5,3" Padding="10,0" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

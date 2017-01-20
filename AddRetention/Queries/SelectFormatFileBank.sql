@@ -1,0 +1,1 @@
+select * from {1}.FORMAT_FILE_BANK

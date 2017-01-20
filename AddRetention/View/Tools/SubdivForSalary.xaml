@@ -1,0 +1,196 @@
+﻿<UserControl x:Class="Salary.View.SubdivForSalary"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:av="clr-namespace:Salary.View"
+        xmlns:vm="clr-namespace:Salary.ViewModel"
+        xmlns:local="clr-namespace:Salary"
+             xmlns:hlp="clr-namespace:LibrarySalary.Helpers;assembly=LibrarySalary"
+        xmlns:sys ="clr-namespace:System;assembly=mscorlib" 
+        mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             x:Name="_this"
+        d:DesignHeight="331" d:DesignWidth="957">
+    <UserControl.Resources>
+        <av:CurrentCloseSubdivStateConverter x:Key="CurrentCloseSubdivStateConverter"/>
+        <av:CurrentDateProcessEnabledConverter x:Key="CurrentDateProcessEnabledConverter"/>        
+        <!--<ObjectDataProvider x:Key="checkCloseAccess"
+                ObjectType="{x:Type hlp:GrantedRoles}"
+                MethodName="CheckRole" >
+            <ObjectDataProvider.MethodParameters>
+                <sys:String>SALARY_CLOSING</sys:String>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>-->
+
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="vm:AppCommands.AddSubdivForSalary" CanExecute="AddSubdiv_CanExecute" Executed="AddSubdiv_Executed"/>
+        <CommandBinding Command="vm:AppCommands.DeleteSubdivForSalary" CanExecute="DelSubdiv_CanExecute" Executed="DeleteSubdiv_Executed"/>
+        <CommandBinding Command="vm:AppCommands.SaveSubdivForSalary" CanExecute="SaveCloseSubdiv_CanExecute" Executed="SaveCloseSubdiv_Executed"/>
+        <CommandBinding Command="vm:AppCommands.CloseSubdivForSalary" CanExecute="CloseAllSubdiv_CanExecute" Executed="CloseAllSubdiv_Executed"/>
+    </UserControl.CommandBindings>
+
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Top">
+            <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="{StaticResource PanelGrayBack}" Height="33">
+                <WrapPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                    </Style>
+                    <Style TargetType="Separator" BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
+                    </Style>
+                </WrapPanel.Resources>
+                <TextBlock Text="Месяц для закрытия" VerticalAlignment="Center" Margin="10,1,8,1"/>
+                <DatePicker  local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyyy"
+                         SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Center" TextBlock.TextAlignment="Center"
+                         Width="150"/>
+                <Separator/>
+                <Button Style="{StaticResource ToolBoxLikeStyle}" Command="vm:AppCommands.CloseSubdivForSalary"
+                    ToolTip="Установить &#32;Закрыто&#32; по выбранный месяц для всех подразделений">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/check_blue_3232.png" Style="{StaticResource ToolBoxImageStyle}" />
+                        <TextBlock Text="Закрыть все" VerticalAlignment="Center" Margin="10,1"/>
+                    </StackPanel>
+                </Button>
+                <Separator/>
+                <Button Command="vm:AppCommands.SaveSubdivForSalary" Style="{StaticResource ToolBoxLikeStyle}" x:Name="btSaveClosing"
+                    ToolTip="Сохранить изменения закрытий/изменений для отдельных подразделений">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/check_green_3232.png" Style="{StaticResource ToolBoxImageStyle}" />
+                        <TextBlock Text="Сохранить" VerticalAlignment="Center" Margin="10,1"/>
+                    </StackPanel>
+                </Button>
+                <Separator/>
+                <Button Click="Refresh_click" Style="{StaticResource ToolBoxLikeStyle}">
+                    <Image Source="/Images/refresh2424.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                </Button>
+                <Separator/>
+                <Button Command="vm:AppCommands.AddSubdivForSalary" Style="{StaticResource ToolBoxLikeStyle}">
+                    <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                </Button>
+                <Button Command="vm:AppCommands.DeleteSubdivForSalary" Style="{StaticResource ToolBoxLikeStyle}">
+                    <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                </Button>
+                <Separator/>
+                <TextBlock Text="Рабочая область" VerticalAlignment="Center" Margin="10,2"/>
+                <ComboBox ItemsSource="{Binding AppNameSource}" SelectedValue="{Binding AppName}" DisplayMemberPath="AppComments" 
+                      SelectedValuePath="AppName" 
+                      Width="150" VerticalAlignment="Center"></ComboBox>
+            </WrapPanel>
+            <StatusBar>
+                <TextBlock Text="Состояние закрытия:" Margin="5,2"/>
+                <Label FontWeight="Bold">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Foreground" Value="Green"/>
+                            <Setter Property="Content" Value="Все изменения сохранены"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=btSaveClosing, Path=IsEnabled}" Value="True">
+                                    <Setter Property="Content" Value="Имеются несохраненные изменения в закрытии подразделений!"/>
+                                    <Setter Property="Foreground" Value="Red"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <Separator/>
+                <Label Content="{Binding SubdivForCloseSource.Count, FallbackValue=0}" ContentStringFormat="Всего подразделений: {0}"/>
+                <Separator/>
+                <Label Content="{Binding ClosedCount, FallbackValue=0}" ContentStringFormat="Из них закрыто на выбранный месяц: {0}"/>
+            </StatusBar>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <Rectangle Width="20" Height="10" Fill="LightCoral" VerticalAlignment="Center" Margin="10,3"/>
+            <TextBlock Text="- Не закрыто, не проверено"/>
+            <Rectangle Width="20" Height="10"  VerticalAlignment="Center" Margin="10,3" Fill="#FFF5F05B" />
+            <TextBlock Text="- Не закрыто, проверено"/>
+            <Rectangle Width="20" Height="10" Fill="LightGreen" VerticalAlignment="Center" Margin="10,3"/>
+            <TextBlock Text="- Закрыто"/>
+        </StackPanel>
+        <DataGrid CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" GridLinesVisibility="All"
+                    SelectedItem="{Binding SelectedSubdiv}" ItemsSource="{Binding SubdivForCloseSource}" Style="{StaticResource DataGridSalaryStyle}" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Subdiv.CodeSubdiv}" Width="60" Header="Код" IsReadOnly="True" SortMemberPath="Subdiv.CodeSubdiv"/>
+                    
+                <DataGridTextColumn Binding="{Binding Subdiv.SubdivName}" Width="250" Header="Наименование подразделения" IsReadOnly="True" SortMemberPath="Subdiv.SubdivName"/>
+                <DataGridTemplateColumn Width="150" SortMemberPath="LastDateProcessing" Header="Обработано по">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding LastDateProcessing, StringFormat={}{0:MMMM yyyy}, ConverterCulture=ru-RU}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextAlignment" Value="Center"/>
+                                        <Setter Property="Padding" Value="4"/>
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <MultiBinding Mode="OneWay" Converter="{StaticResource CurrentCloseSubdivStateConverter}">
+                                                    <Binding Path="DateClosing" Mode="OneWay"/>
+                                                    <Binding ElementName="_this" Path="DataContext.SelectedDate" Mode="OneWay"/>
+                                                    <Binding Path="LastDateProcessing" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style> 
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyyy" SelectedDate="{Binding LastDateProcessing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding SubdivID, Converter={StaticResource CurrentDateProcessEnabledConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="150" SortMemberPath="DateClosing">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Закрыто по" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DateClosing, StringFormat={}{0:MMMM yyyy}, ConverterCulture=ru-RU}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextAlignment" Value="Center"/>
+                                        <Setter Property="Padding" Value="4"/>
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <MultiBinding Mode="OneWay" Converter="{StaticResource CurrentCloseSubdivStateConverter}">
+                                                    <Binding Path="DateClosing" Mode="OneWay"/>
+                                                    <Binding ElementName="_this" Path="DataContext.SelectedDate" Mode="OneWay"/>
+                                                    <Binding Path="LastDateProcessing" Mode="OneWay"/>
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style> 
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker  local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyyy" 
+                                        SelectedDate="{Binding DateClosing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="150">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="Дата закрытия" TextWrapping="Wrap"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DateChange, StringFormat={}{0:dd.MM.yyyy HH:mm:ss }}" Padding="4">
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

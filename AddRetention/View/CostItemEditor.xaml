@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="Salary.View.CostItemEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Salary.ViewModel"
+        xmlns:l="clr-namespace:Salary"
+        mc:Ignorable="d" 
+        d:DesignHeight="365" d:DesignWidth="792" x:Name="_this">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AppResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:AppCommands.AddTypeCostItem" CanExecute="AddTypeCostItem_CanExecute" Executed="AddTypeCostItem_Executed"/>
+        <CommandBinding Command="local:AppCommands.DeleteTypeCostItem" CanExecute="AddCostItemSetting_CanExecute" Executed="DeleteTypeCostItem_Executed"/>
+        <CommandBinding Command="local:AppCommands.AddCostItemSetting" CanExecute="AddCostItemSetting_CanExecute" Executed="AddCostItemSetting_Executed"/>
+        <CommandBinding Command="local:AppCommands.DeleteCostItemSetting" CanExecute="DeleteCostItemSetting_CanExecute" Executed="DeleteCostItemSetting_Executed"/>
+        <CommandBinding Command="local:AppCommands.SaveTypeCostItem" CanExecute="SaveTypeCostItemCanExecute" Executed="SaveTypeCostItem_Executed"/>
+        
+    </UserControl.CommandBindings>
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Background="{StaticResource LightBrush}">
+            <Button Command="local:AppCommands.SaveTypeCostItem" Content="Сохранить" Margin="10,3" Padding="10,1"/>
+        </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions/>
+        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="6" Grid.RowSpan="3"/>
+        <DockPanel LastChildFill="True">
+            <ToolBar VerticalAlignment="Bottom" DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                <Button Command="local:AppCommands.AddTypeCostItem" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                </Button>
+                <Button Command="local:AppCommands.DeleteTypeCostItem" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                </Button>
+            </ToolBar>
+                <DataGrid x:Name="listTypeCostItem" ItemsSource="{Binding MainView}" SelectionChanged="listTypeCostItem_SelectionChanged"
+                          CanUserAddRows="False" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding TYPE_ITEM_NAME, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" Header="Статья затрат">                            
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn Width="100" Header="Тип затрат" SortMemberPath="TypeCostName" CanUserSort="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding TypeCostName, Mode=OneWay}" VerticalContentAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox SelectedValue="{Binding TYPE_COST_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="TYPE_COST_NAME"
+                                                  SelectedValuePath="TYPE_COST_ID" ItemsSource="{Binding Source={x:Reference _this}, Path=TypeCostView}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="100" Header="Группа затрат" SortMemberPath="CostItemGroup" CanUserSort="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding CostItemGroup, Mode=OneWay}" VerticalContentAlignment="Center"/> </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox SelectedValue="{Binding COST_ITEM_GROUP_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="COST_GROUP_NAME"
+                                                  SelectedValuePath="COST_ITEM_GROUP_ID" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=DataGrid, Mode=FindAncestor}, Path=DataContext.TypeGroupView}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        <DockPanel LastChildFill="True" Grid.Column="2">
+            <ToolBar VerticalAlignment="Bottom" DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
+                <Button Command="local:AppCommands.AddCostItemSetting" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                </Button>
+                <Button Command="local:AppCommands.DeleteCostItemSetting" Style="{StaticResource ToolBoxBtStyle}">
+                    <Image Source="/Images/delete_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                </Button>
+            </ToolBar>
+        <DataGrid ItemsSource="{Binding ChildView}" AutoGenerateColumns="False" CanUserAddRows="False" x:Name="dgSetting" SelectionChanged="dgSetting_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridComboBoxColumn SelectedValueBinding="{Binding PAYMENT_TYPE_ID}" Header="Код оплат" DisplayMemberPath="CODE_PAYMENT" SelectedValuePath="PAYMENT_TYPE_ID" 
+                                        x:Name="cbclCodePayment" SortMemberPath="CodePayment"/>
+                <DataGridComboBoxColumn SelectedValueBinding="{Binding PAYMENT_TYPE_ID}" SelectedValuePath="PAYMENT_TYPE_ID" DisplayMemberPath="NAME_PAYMENT" Header="Наименование" Width="250"
+                                        IsReadOnly="True" x:Name="cbclNamePayment"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        </DockPanel>
+        
+    </Grid>
+    </DockPanel>
+</UserControl>

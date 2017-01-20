@@ -1,0 +1,41 @@
+﻿<Window x:Class="Salary.View.PayTypeSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Salary.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="306" d:DesignWidth="609" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Title="Выбор шифров оплат">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:PayTypeSelector.SelectCommand" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+    </Window.CommandBindings>
+    <DockPanel LastChildFill="True">
+        <ToolBar DockPanel.Dock="Bottom" ToolBarTray.IsLocked="True">
+            <Button Command="local:PayTypeSelector.SelectCommand" Content="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}" Padding="10,2"
+                    IsDefault="True"></Button>
+            <Separator/>
+            <Button Content="Отмена" Click="btCancel_Click" Padding="10,2" IsCancel="True"></Button>
+        </ToolBar>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <TextBlock Text="Фильтр по типу:" VerticalAlignment="Center" Margin="10,4"/>
+            <ComboBox x:Name="cbTypePayment" SelectedValuePath="TYPE_PAYMENT_TYPE_ID" DisplayMemberPath="TYPE_PAYMENT_TYPE_NAME" SelectedValue="1" Width="200" Margin="5,4"
+                      SelectionChanged="cbTypePayment_SelectionChanged"/>
+        </StackPanel>
+        <DataGrid CanUserAddRows="False" x:Name="dgPT" AutoGenerateColumns="False" CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding FL, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.Header>
+                        <CheckBox IsChecked="False" ToolTip="Отметить все" VerticalAlignment="Center" Checked="checkAll_Checked" Unchecked="checkAll_Checked"/>
+                    </DataGridTemplateColumn.Header>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding CODE_PAYMENT}" IsReadOnly="True" Header="Шифр"/>
+                <DataGridTextColumn Binding="{Binding NAME_PAYMENT}" IsReadOnly="True" Width="250" Header="Описание"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

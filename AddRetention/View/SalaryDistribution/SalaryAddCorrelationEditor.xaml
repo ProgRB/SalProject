@@ -1,0 +1,111 @@
+﻿<Window x:Class="Salary.View.SalaryAddCorrelationEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cmd="clr-namespace:Salary.ViewModel"
+        xmlns:local="clr-namespace:Salary"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Корректировка зарплаты или нарядов для формирования базы распределения" Height="196" Width="613" Language="ru-RU" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.SaveSalaryAddCorr" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="15, 2, 10, 2"/>
+            </Style>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,3"/>
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,3"/>
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource EnabledTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,3"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Подразделение"/>
+        <ComboBox ItemsSource="{Binding SubdivSource}" SelectedValue="{Binding SubdivID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" SelectedValuePath="SUBDIV_ID"
+                  DisplayMemberPath="CODE_SUBDIV" Grid.Column="1"/>
+        <TextBlock Grid.Row="1" Text="Тип операции(опция)"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TypeOperationSource}" SelectedValue="{Binding TypeOperationID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                  SelectedValuePath="TYPE_OPERATION_ID">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding CODE_OPERATION}" Margin="3,2"/>
+                        <TextBlock Text="{Binding OPERATION_NAME}" Margin="5,2" ToolTip="Наименование опции"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Row="2" Text="Вид оплат"/>
+        <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding PaymentTypeSource}" SelectedValue="{Binding PaymentTypeID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                  SelectedValuePath="PaymentTypeID">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding CodePayment}" Margin="3,2"/>
+                        <TextBlock Text="{Binding NamePayment}" Margin="5,2"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Row="3" Text="Заказ"/>
+        <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding OrderSource}" SelectedValue="{Binding OrderID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                  SelectedValuePath="ORDER_ID" DisplayMemberPath="ORDER_NAME" IsEditable="True"
+                  >
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel VirtualizingStackPanel.VirtualizationMode="Recycling"  VirtualizingStackPanel.IsVirtualizing="True"/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+        </ComboBox>
+        <TextBlock Grid.Row="0" Grid.Column="2" Text="Часы"/>
+        <TextBox Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Column="3" Grid.Row="0"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Сумма"/>
+        <TextBox Text="{Binding SumSal, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Column="3" Grid.Row="1"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="Категория"/>
+        <ComboBox SelectedValue="{Binding DegreeID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                  ItemsSource="{Binding DegreeSource}" SelectedValuePath="DEGREE_ID" DisplayMemberPath="CODE_DEGREE"
+                  Grid.Column="3" Grid.Row="2"/>
+        <TextBlock Grid.Row="3" Grid.Column="2" Text="Отчетный месяц"/>
+        <DatePicker SelectedDate="{Binding CalcDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Column="3" Grid.Row="3"
+                   local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMMM yyy" />
+        <StackPanel Grid.Row="9" Grid.ColumnSpan="4" Orientation="Horizontal" Background="{StaticResource LightBrush}">
+            <Button Command="cmd:AppCommands.SaveSalaryAddCorr" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Command.Text}"
+                    VerticalAlignment="Center" Margin="5,2" Content="Cохранить" Padding="10,1">
+            </Button>
+            <Button Content="Закрыть" Click="Close_Click" VerticalAlignment="Center" Margin="5,2" Padding="10,1" IsCancel="True"/>
+            <Label Content="{Binding Error}" ContentStringFormat="Ошибка: {0}" Foreground="Red">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Error}" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+        </StackPanel>
+    </Grid>
+</Window>
