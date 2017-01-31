@@ -63,7 +63,12 @@ namespace Salary.View.Taxes
 
         private void ChooseEmp_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            //EmpFinder
+            EmpFinder f = new EmpFinder();
+            f.Owner = Window.GetWindow(this);
+            if (f.ShowDialog() == true)
+            {
+                Model.PerNum = f.PerNum;
+            }
         }
     }
 
@@ -184,9 +189,19 @@ namespace Salary.View.Taxes
                         RelatedEntity = this, 
                         RelationColumn = "TAX_EMP_DOCUM_ID" 
                     };
+                    _paySource.AddingNew += _paySource_AddingNew;
                 }
                 return _paySource;
             }
+        }
+
+        private void _paySource_AddingNew(object sender, System.ComponentModel.AddingNewEventArgs e)
+        {
+            e.NewObject = new TaxDocumPayment()
+            {
+                DataRow = ds.Tables["TAX_DOCUM_PAYMENT"].Rows.Add(),
+                PayDate = new DateTime((this.DocumDate ?? DateTime.Today).Year, 1, 1)
+            };
         }
 
         /// <summary>

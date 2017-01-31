@@ -1581,9 +1581,9 @@ namespace Salary.View
                             {
                                 if (eo.Error != null)
                                     MessageBox.Show(eo.Error.GetFormattedException(), "Ошибка формирования файла");
-                                else
+                                /*else
                                     (Window.GetWindow(this) as MainWindow).OpenTabs.AddNewTab("Просмотр файла отчета", new TextReportViewerLibrary.TextViewer() { FileSource = (string)eo.Result });
-                            });
+                            */});
                     }
                 }
             }

@@ -4,7 +4,7 @@
         xmlns:cmd="clr-namespace:Salary.ViewModel"
         xmlns:lc ="clr-namespace:Salary.View.Taxes"
         xmlns:local="clr-namespace:Salary"
-        Title="Редактор документов НДФЛ" Height="591" Width="889"
+        Title="Редактор документов НДФЛ" Height="570" Width="887"
         Language="ru-RU" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
     <Window.CommandBindings>
         <CommandBinding Command="lc:TaxDocumEditor.ChooseEmp" CanExecute="ChooseEmp_CanExecute" Executed="ChooseEmp_Executed"/>
@@ -47,7 +47,18 @@
                     </Style>
                 </StackPanel.Resources>
 
-                <GroupBox Header="Справка о доходах физического лица">
+                <GroupBox>
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Справка о доходах физического лица"/>
+                            <CheckBox IsChecked="{Binding LockSign, UpdateSourceTrigger=PropertyChanged}" Content="Автообновление заблокировано"
+                                      VerticalAlignment="Center" ToolTip="Обновлять ли справку из заработной платы, когда идет обновление справок">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </StackPanel>
+                    </GroupBox.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -67,7 +78,7 @@
                         <TextBlock Grid.Column="2" Text="№"/>
                         <TextBox Grid.Column="3" Text="{Binding DocumNumber}" Width="80"/>
                         <TextBlock Grid.Column="4" Text="от"/>
-                        <DatePicker Grid.Column="5" SelectedDate="{Binding DocumDate}" ToolTip="Данную дату устанавливать как последний день периода, за который выдана справка"
+                        <DatePicker Grid.Column="5" SelectedDate="{Binding DocumDate, UpdateSourceTrigger=PropertyChanged}" ToolTip="Данную дату устанавливать как последний день периода, за который выдана справка"
                                     MinWidth="150"/>
                         <TextBlock Grid.Row="1" Text="Признак"/>
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DocumSign}" Width="80" HorizontalAlignment="Left"/>
@@ -212,7 +223,34 @@
                                     </Grid>
                                 </Grid>
                             </GroupBox>
-
+                            <GroupBox Header="Документы на вычеты">
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Text="Уведомление на социальный вычет"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SocialNotifyNumber}"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="дата"/>
+                                    <DatePicker Grid.Row="0" Grid.Column="3" SelectedDate="{Binding SocialNotifyDate}"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Код ИФНС"/>
+                                    <TextBox Grid.Row="0" Grid.Column="5" Text="{Binding SocialNotifyCode}"/>
+                                    <TextBlock Grid.Row="1" Text="Уведомление на имущественный вычет"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EstateNotifyNumber}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="дата"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="3" SelectedDate="{Binding EstateNotifyDate}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="4" Text="Код ИФНС"/>
+                                    <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding EstateNotifyCode}"/>
+                                </Grid>
+                            </GroupBox>
 
 
                         </StackPanel>
@@ -235,7 +273,7 @@
                                     <DataGrid Style="{StaticResource DataGridSalaryStyle}" MinHeight="150" MaxHeight="200"
                                   ItemsSource="{Binding PaySource}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Месяц" Width="100" Binding="{Binding PayDate, StringFormat={}{0:MM}}">
+                                            <DataGridTextColumn Header="Месяц" Width="100" Binding="{Binding PayDateMonth, UpdateSourceTrigger=PropertyChanged}">
                                             </DataGridTextColumn>
                                             <DataGridTextColumn Binding="{Binding PayCode}" Header="Код дохода"/>
                                             <DataGridTextColumn Binding="{Binding SumSal, StringFormat=N2}" Header="Сумма дохода" Width="120">
@@ -324,37 +362,10 @@
                                     <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding TaxMoreThenCalced, Mode=OneWay}" IsReadOnly="True"/>
                                     <TextBlock Grid.Row="3" Grid.Column="2" Text="Сумма налога не удержанная"/>
                                     <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding TaxLessThenCalced, Mode=OneWay}" IsReadOnly="True"/>
-                                    
+
                                 </Grid>
                             </GroupBox>
-                            <GroupBox Header="Документы на вычеты">
-                                <Grid >
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="4*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="2*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Row="0" Text="Уведомление на социальный вычет"/>
-                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SocialNotifyNumber}"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="дата"/>
-                                    <DatePicker Grid.Row="0" Grid.Column="3" SelectedDate="{Binding SocialNotifyDate}"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Код ИФНС"/>
-                                    <TextBox Grid.Row="0" Grid.Column="5" Text="{Binding SocialNotifyCode}"/>
-                                    <TextBlock Grid.Row="1" Text="Уведомление на имущественный вычет"/>
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EstateNotifyNumber}"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="дата"/>
-                                    <DatePicker Grid.Row="1" Grid.Column="3" SelectedDate="{Binding EstateNotifyDate}"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="4" Text="Код ИФНС"/>
-                                    <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding EstateNotifyCode}"/>
-                                </Grid>
-                            </GroupBox>
+
                         </StackPanel>
                     </TabItem>
                 </TabControl>
