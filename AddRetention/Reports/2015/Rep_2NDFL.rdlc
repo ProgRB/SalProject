@@ -1236,7 +1236,7 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>9978</Value>
+                                                <Value>=iif(Year(Fields!PAY_DATE.Value)&lt;2016, "9978", "0323")</Value>
                                                 <Style>
                                                   <FontFamily>Times New Roman</FontFamily>
                                                   <FontSize>9pt</FontSize>
@@ -1267,6 +1267,7 @@
                                         </Style>
                                       </Textbox>
                                       <ColSpan>2</ColSpan>
+                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
@@ -7565,7 +7566,18 @@
                                           <Paragraph>
                                             <TextRuns>
                                               <TextRun>
-                                                <Value>доверенность № УК-УУАЗ-4-8</Value>
+                                                <Value>доверенность № УК-УУАЗ-4-</Value>
+                                                <Style>
+                                                  <FontStyle>Normal</FontStyle>
+                                                  <FontFamily>Times New Roman</FontFamily>
+                                                  <FontSize>8pt</FontSize>
+                                                  <FontWeight>Normal</FontWeight>
+                                                  <TextDecoration>None</TextDecoration>
+                                                </Style>
+                                              </TextRun>
+                                              <TextRun>
+                                                <Label>num</Label>
+                                                <Value>=iif(Year(Fields!PAY_DATE.Value)&gt;=2017, "32", "8")</Value>
                                                 <Style>
                                                   <FontStyle>Normal</FontStyle>
                                                   <FontFamily>Times New Roman</FontFamily>

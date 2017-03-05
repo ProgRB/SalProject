@@ -235,6 +235,12 @@
     <Compile Include="View\PayDocuments\TypeSalaryDocumEditor.xaml.cs">
       <DependentUpon>TypeSalaryDocumEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Taxes\AddressEditor.xaml.cs">
+      <DependentUpon>AddressEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Taxes\ForeignEmpEditor.xaml.cs">
+      <DependentUpon>ForeignEmpEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Taxes\TaxCompanyEditor.xaml.cs">
       <DependentUpon>TaxCompanyEditor.xaml</DependentUpon>
     </Compile>
@@ -552,6 +558,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PayDocuments\TypeSalaryDocumEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Taxes\AddressEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Taxes\ForeignEmpEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1047,6 +1061,9 @@
     <EmbeddedResource Include="Reports\2015\Rep_2NDFL_Subreport2.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ClientAccounts\Rep_ComparePFRRetent.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\ClientAccounts\Rep_SalaryMissionTransferNote.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -1313,7 +1330,12 @@
     <EmbeddedResource Include="Reports\SubRep_EmpAvgData.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\TaxReports\Rep_TaxCommonData.rdlc" />
+    <EmbeddedResource Include="Reports\TaxReports\Rep_TaxesAllocateControl.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TaxReports\Rep_TaxCommonData.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\AboutInfo.resx">
       <DependentUpon>AboutInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -1665,6 +1687,12 @@
     <Content Include="Queries\Rep_TypeBankEmpTransfer.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Queries\SalaryReport\Rep_ConsolidSalaryToExcel.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\SelectActualEmpsAll.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Queries\SelectActualEmps.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1934,6 +1962,9 @@
     <Content Include="Queries\SelectUnloadTxtClientAccount.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Queries\Taxes\Rep_TaxesDocumCommon.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Queries\Taxes\Rep_TaxesCodePay.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1965,6 +1996,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Queries\Unload_ipfrosn_5.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Queries\Upload\UploadSalaryToZARPL.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\Alimony\Rep_AlimonyRegister.rdlc">

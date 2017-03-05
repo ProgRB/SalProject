@@ -4,13 +4,6 @@
         xmlns:l="clr-namespace:Salary.View"
         xmlns:local="clr-namespace:Salary"
         Title="Поиск сотрудника" Height="416" Width="741" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/AppResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="l:EmpFinder.SelectEmp" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
     </Window.CommandBindings>
@@ -23,29 +16,43 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Фильтр">
+        <GroupBox Header="Фильтр" KeyDown="tbPerNum_KeyDown">
+            <GroupBox.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="10,2,8,2"/>
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource EnabledTextBox}">
+                    <Setter Property="Margin" Value="0,2"/>
+                </Style>
+            </GroupBox.Resources>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition MaxWidth="120"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition MaxWidth="120"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="3"/>
-                    <RowDefinition Height="22" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="ФИО" Margin="5,2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox x:Name="tbFIO" Grid.Column="1" Text="{Binding FIO}" Margin="2,2" Style="{StaticResource EnabledTextBox}" KeyDown="tbPerNum_KeyDown"/>
-                <TextBlock Grid.Row="1" Text="Таб. №" Margin="5,2" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox x:Name="tbPerNum" Grid.Row="1" Grid.Column="1" Text="{Binding FIO}" Margin="2,2,0,2" Style="{StaticResource EnabledTextBox}" 
-                         MinWidth="100" HorizontalAlignment="Left" Grid.RowSpan="2" KeyDown="tbPerNum_KeyDown"/>
-                <Button Grid.Row="1" Grid.Column="1"  Click="btFind_Click" Margin="102,2,0,2" HorizontalAlignment="Left" Height="21" Width="25" Grid.RowSpan="2" VerticalAlignment="Center"
+                <TextBlock Text="ФИО"/>
+                <TextBox Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Filter.FIO, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1" Text="Таб. №"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Filter.PerNum, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="ИНН"></TextBlock>
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Filter.INN, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="1" Grid.Column="4" Click="btFind_Click" Margin="6,2,0,2" HorizontalAlignment="Left" Height="21" Width="25" VerticalAlignment="Center"
                         ToolTip="Применить фильтр">
                     <Image Source="/Images/filter_3232.png" VerticalAlignment="Center" />
                 </Button>
             </Grid>
         </GroupBox>
-        <DataGrid Grid.Row="1" x:Name="dgEmps" IsReadOnly="True" AutoGenerateColumns="False" local:DataGridAddition.DoubleClickCommand="l:EmpFinder.SelectEmp">
+        <DataGrid Grid.Row="1" x:Name="dgEmps" IsReadOnly="True" AutoGenerateColumns="False" local:DataGridAddition.DoubleClickCommand="l:EmpFinder.SelectEmp"
+                  ItemsSource="{Binding EmpSource}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Таб.№" Binding="{Binding PER_NUM}"/>
                 <DataGridTextColumn Header="Подр." Binding="{Binding CODE_SUBDIV}" Width="60"/>
@@ -53,6 +60,7 @@
                 <DataGridTextColumn Header="Фамилия" Binding="{Binding EMP_LAST_NAME}" Width="150"/>
                 <DataGridTextColumn Header="Имя" Binding="{Binding EMP_FIRST_NAME}" Width="120"/>
                 <DataGridTextColumn Header="Отчество" Binding="{Binding EMP_MIDDLE_NAME}" Width="120"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding INN}" Width="120"/>
                 <DataGridTextColumn Binding="{Binding DATE_TRANSFER, StringFormat={}{0:dd/MM/yyyy}}" Width="80">
                     <DataGridTextColumn.Header>
                         <TextBlock TextWrapping="Wrap" Text="Дата приема"/>
@@ -64,6 +72,12 @@
                 </DataGridTextColumn.Header>
                 </DataGridTextColumn>
             </DataGrid.Columns>
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.Resources>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource LightBrush}" >
             <Button Content="Выбрать" Width="Auto" HorizontalAlignment="Center" Margin="5,3" Padding="10,1" 

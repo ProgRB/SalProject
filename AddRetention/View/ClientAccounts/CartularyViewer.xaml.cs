@@ -622,39 +622,25 @@ namespace Salary.View
             oda.SelectCommand.Parameters.Add("p_CARTULARY_ID", OracleDbType.Decimal, CurrentCartularyID, ParameterDirection.Input);
             DataTable t = new DataTable();
             AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование данных",
-                (s, pw) =>
-                {
-                    OracleDataAdapter a = pw.Argument as OracleDataAdapter;
-                    a.Fill(t);
-                    pw.Result = t;
-
-                },
                     oda, oda.SelectCommand,
                     (s, pw) =>
                     {
-                        if (pw.Cancelled)
-                            return;
-                        else if (pw.Error != null)
-                            MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка формирования данных");
-                        else
+                        System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog();
+                        sf.InitialDirectory = (string)Properties.Settings.Default["LocalUploadPath"];
+                        sf.Filter = "Файлы .Xml(*.xml)|*.xml";
+                        sf.FileName = string.Format(format.OutFileName, DateTime.Now, SelectedDate, CurrentCartulary["CARTULARY_NUM"]);
+                        if (sf.ShowDialog(new Wpf32Window(Window.GetWindow(this))) == System.Windows.Forms.DialogResult.OK)
                         {
-                            System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog();
-                            sf.InitialDirectory = (string)Properties.Settings.Default["LocalUploadPath"];
-                            sf.Filter = "Файлы .Xml(*.xml)|*.xml";
-                            sf.FileName = string.Format(format.OutFileName, DateTime.Now, SelectedDate, CurrentCartulary["CARTULARY_NUM"]);
-                            if (sf.ShowDialog(new Wpf32Window(Window.GetWindow(this))) == System.Windows.Forms.DialogResult.OK)
+                            try
                             {
-                                try
-                                {
-                                    Properties.Settings.Default["LocalUploadPath"] = System.IO.Path.GetDirectoryName(sf.FileName);
-                                    Properties.Settings.Default.Save();
-                                    File.WriteAllLines(sf.FileName, (pw.Result as DataTable).Rows.OfType<System.Data.DataRow>().Select(y => y[0].ToString()).ToArray(), Encoding.GetEncoding(1251));
-                                    MessageBox.Show(string.Format("Файл успешно сформирован"), "Зарплата предприятия");
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show(ex.Message, "Ошибка записи файла");
-                                }
+                                Properties.Settings.Default["LocalUploadPath"] = System.IO.Path.GetDirectoryName(sf.FileName);
+                                Properties.Settings.Default.Save();
+                                File.WriteAllLines(sf.FileName, (pw.Result as DataSet).Tables[0].Rows.OfType<System.Data.DataRow>().Select(y => y[0].ToString()).ToArray(), Encoding.GetEncoding(1251));
+                                MessageBox.Show(string.Format("Файл успешно сформирован"), "Зарплата предприятия");
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "Ошибка записи файла");
                             }
                         }
                     });
@@ -838,13 +824,7 @@ namespace Salary.View
             oda.SelectCommand.Parameters.Add("p_cartulary_id", OracleDbType.Decimal, CurrentCartularyID, ParameterDirection.Input);
             oda.SelectCommand.Parameters.Add("p_TRN", OracleDbType.Varchar2, format.TRN, ParameterDirection.Input);
             AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование данных",
-                (s, pw) =>
-                {
-                    OracleDataAdapter a = pw.Argument as OracleDataAdapter;
-                    DataSet t = new DataSet();
-                    a.Fill(t);
-                    pw.Result = t;
-                }, oda, oda.SelectCommand,
+                 oda, oda.SelectCommand,
                     (s, pw) =>
                     {
                         if (pw.Cancelled)
@@ -890,21 +870,11 @@ namespace Salary.View
             oda.SelectCommand.Parameters.Add("p_cartulary_id", OracleDbType.Decimal, cartularyID, ParameterDirection.Input);
             oda.SelectCommand.Parameters.Add("p_subdiv_id", OracleDbType.Decimal, subdivID, ParameterDirection.Input);
             AbortableBackgroundWorker.RunAsyncWithWaitDialog(sender, "Получение данных",
+                oda, oda.SelectCommand,
                 (s, pw) =>
                 {
-                    OracleDataAdapter a = pw.Argument as OracleDataAdapter;
-                    DataTable t = new DataTable();
-                    a.Fill(t);
-                    pw.Result = t;
-                },
-                    oda, oda.SelectCommand,
-                (s, pw) =>
-                {
-                    if (pw.Cancelled) return;
-                    if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка получения данных");
-                    else
-                        ViewReportWindow.ShowReport(sender, "Платежная ведомость", "Rep_PayForm_T-53.rdlc", pw.Result as DataTable, new ReportParameter[]{
-                                new ReportParameter("P_TYPE_PAY_FORM", cartularyName), new ReportParameter("P_DATE", dateCartulary.Value.ToShortDateString())});
+                    ViewReportWindow.ShowReport(sender, "Платежная ведомость", "Rep_PayForm_T-53.rdlc", (pw.Result as DataSet).Tables[0], new ReportParameter[]{
+                            new ReportParameter("P_TYPE_PAY_FORM", cartularyName), new ReportParameter("P_DATE", dateCartulary.Value.ToShortDateString())});
                 });
         }
 
@@ -957,22 +927,12 @@ namespace Salary.View
             oda.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
 
             AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Получение данных",
+                oda, oda.SelectCommand,
                 (s, pw) =>
                 {
-                    OracleDataAdapter a = pw.Argument as OracleDataAdapter;
-                    DataTable t = new DataTable();
-                    a.Fill(t);
-                    pw.Result = t;
-                },
-                    oda, oda.SelectCommand,
-                (s, pw) =>
-                {
-                    if (pw.Cancelled) return;
-                    if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка получения данных");
-                    else
-                        ViewReportWindow.ShowReport(this, "Сравнение реестров и ЗП", "Rep_CartularyVSSalary.rdlc", pw.Result as DataTable, new ReportParameter[]{
-                                new ReportParameter("P_TYPE_CARTULARY", CurrentTypeCartulary["TYPE_CARTULARY_NAME"].ToString()), 
-                                new ReportParameter("P_DATE", SelectedDate.Value.ToShortDateString())});
+                    ViewReportWindow.ShowReport(this, "Сравнение реестров и ЗП", "Rep_CartularyVSSalary.rdlc", (pw.Result as DataSet).Tables[0], new ReportParameter[]{
+                            new ReportParameter("P_TYPE_CARTULARY", CurrentTypeCartulary["TYPE_CARTULARY_NAME"].ToString()), 
+                            new ReportParameter("P_DATE", SelectedDate.Value.ToShortDateString())});
                 });
         }
 

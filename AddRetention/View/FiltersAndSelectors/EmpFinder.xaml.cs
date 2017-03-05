@@ -13,23 +13,49 @@ using System.Windows.Shapes;
 using System.Data;
 using Oracle.DataAccess.Client;
 using LibrarySalary.Helpers;
+using Salary.Helpers;
+using System.ComponentModel;
 
 namespace Salary.View
 {
     /// <summary>
     /// Interaction logic for EmpFinder.xaml
     /// </summary>
-    public partial class EmpFinder : Window
+    public partial class EmpFinder : Window, INotifyPropertyChanged
     {
         DataSet ds = new DataSet();
         OracleDataAdapter a;
-        public EmpFinder()
+        private EmpFilter _filter;
+        private DataView _empSource;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="findAllEmps">Искать ли сотрудников по всей базе табельных (и сторонних не работающих на заводе)</param>
+        public EmpFinder(bool findAllEmps=false)
         {
             InitializeComponent();
-            a = new OracleDataAdapter(string.Format(Queries.GetQuery("SelectActualEmps.sql"), Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
-            a.SelectCommand.BindByName = true;
-            a.SelectCommand.Parameters.Add("p_fio", OracleDbType.Varchar2, ParameterDirection.Input);
-            a.SelectCommand.Parameters.Add("p_per_num", OracleDbType.Varchar2, ParameterDirection.Input);
+            if (!findAllEmps)
+            {
+                a = new OracleDataAdapter(string.Format(Queries.GetQuery("SelectActualEmps.sql"), Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
+                a.SelectCommand.BindByName = true;
+                a.SelectCommand.Parameters.Add("p_fio", OracleDbType.Varchar2, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("p_per_num", OracleDbType.Varchar2, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
+            }
+            else
+            {
+                a = new OracleDataAdapter(string.Format(Queries.GetQuery("SelectActualEmpsAll.sql"), Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
+                a.SelectCommand.BindByName = true;
+                a.SelectCommand.Parameters.Add("p_fio", OracleDbType.Varchar2, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("p_per_num", OracleDbType.Varchar2, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("p_inn", OracleDbType.Varchar2, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
+            }
+            a.TableMappings.Add("Table", "Emps");
+            DataContext = this;
         }
 
         static EmpFinder()
@@ -45,14 +71,27 @@ namespace Salary.View
 
         private void btFind_Click(object sender, RoutedEventArgs e)
         {
-            if (ds.Tables.Contains("Emps"))
-                ds.Tables["Emps"].Clear();
-            a.SelectCommand.Parameters["p_fio"].Value = tbFIO.Text;
-            a.SelectCommand.Parameters["p_per_num"].Value = tbPerNum.Text;
-            a.Fill(ds, "Emps");
-            if (dgEmps.ItemsSource == null)
+            Exception ex = a.TryFillWithClear(ds, Filter);
+            if (ex != null)
             {
-                dgEmps.ItemsSource = new DataView(ds.Tables["Emps"], "", "DATE_TRANSFER desc", DataViewRowState.CurrentRows);
+                MessageBox.Show(ex.GetFormattedException(), "Ошибка получения данных сотрудников");
+            }
+            else
+            {
+                if (_empSource == null)
+                {
+                    OnPropertyChanged("EmpSource");
+                }
+            }
+        }
+
+        public DataView EmpSource
+        {
+            get
+            {
+                if (_empSource==null)
+                    _empSource= new DataView(ds.Tables["Emps"], "", "DATE_TRANSFER desc", DataViewRowState.CurrentRows);
+                return _empSource;
             }
         }
 
@@ -73,14 +112,15 @@ namespace Salary.View
         {
             get
             {
-                return string.Format("{0} {1} {2}", SelectedItem["EMP_LAST_NAME"], SelectedItem["EMP_FIRST_NAME"], SelectedItem["EMP_MIDDLE_NAME"]);
+                return string.Format("{0} {1} {2}", SelectedItem?.Row.Field2<string>("EMP_LAST_NAME"), SelectedItem?.Row.Field2<string>("EMP_FIRST_NAME"),
+                    SelectedItem?.Row.Field2<string>("EMP_MIDDLE_NAME"));
             }
         }
         public string PerNum
         {
             get
             {
-                return SelectedItem["PER_NUM"].ToString();
+                return SelectedItem.Row.Field2<string>("PER_NUM");
             }
         }
 
@@ -100,7 +140,76 @@ namespace Salary.View
             this.DialogResult = true;
             this.Close();
         }
+
+        /// <summary>
+        /// Фильтр для формы
+        /// </summary>
+        public EmpFilter Filter
+        {
+            get
+            {
+                if (_filter == null)
+                    _filter = new EmpFilter();
+                return _filter;
+            }
+        }
+        private void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+        }
     }
+
+    public class EmpFilter : NotificationObject
+    {
+        private string _fio;
+
+        [OracleParameterMapping(ParameterName = "p_fio")]
+        public string FIO
+        {
+            get
+            {
+                return _fio;
+            }
+            set
+            {
+                _fio = value;
+                RaisePropertyChanged(() => FIO);
+            }
+        }
+        private string _perNum;
+
+        [OracleParameterMapping(ParameterName = "p_per_num")]
+        public string PerNum
+        {
+            get
+            {
+                return _perNum;
+            }
+            set
+            {
+                _perNum = value;
+                RaisePropertyChanged(() => PerNum);
+            }
+        }
+        private string _inn;
+
+        [OracleParameterMapping(ParameterName = "p_inn")]
+        public string INN
+        {
+            get
+            {
+                return _inn;
+            }
+            set
+            {
+                _inn = value;
+                RaisePropertyChanged(() => INN);
+            }
+        }
+
+    }
+
     class NotNullCoverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

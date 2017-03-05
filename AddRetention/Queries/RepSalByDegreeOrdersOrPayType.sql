@@ -52,7 +52,7 @@ from
 				else ZONE_ADD end ZONE_ADD,
 			case 
 				when code_degree='08' and code_payment='124' then round(EXP_ADD*0.5,2)
-				when code_degree='08' and code_payment='106' then round(ZONE_ADD*0.67,2)
+				when code_degree='08' and code_payment='106' then round(EXP_ADD*0.67,2)
 				else EXP_ADD end EXP_ADD,
 			case 
 				when code_degree='08' and code_payment='124' then round(ALL_SUM*0.5,2) 
@@ -79,7 +79,7 @@ from
 				else ZONE_ADD end ZONE_ADD,
 			case 
 				when  code_payment='124' then exp_add-round(EXP_ADD*0.5,2)
-				when  code_payment='106' then exp_add-round(ZONE_ADD*0.67,2)
+				when  code_payment='106' then exp_add-round(EXP_ADD*0.67,2)
 				else EXP_ADD end EXP_ADD,
 			case 
 				when  code_payment='124' then all_sum-round(ALL_SUM*0.5,2) 

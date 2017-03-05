@@ -547,13 +547,25 @@ namespace EntityGenerator
             set;
         }
 
+        protected OracleDataAdapter _dataAdapter;
         /// <summary>
         /// Адаптер используемый для сохранения данных модели. Имеется возможность перегрузить его.
         /// </summary>
         public  OracleDataAdapter DataAdapter
         {
-            get;
-            set;
+            get
+            {
+                return _dataAdapter;
+            }
+            set
+            {
+                _dataAdapter = value;
+            }
+        }
+
+        public virtual void InitializeAdapter()
+        {
+
         }
 
 
@@ -587,6 +599,13 @@ namespace EntityGenerator
         public Exception Save()
         {
             return Save(null);
+        }
+
+        public static OracleDataAdapter GetModelAdapter<T>() where T: RowEntityBase, new()
+        {
+            T obj = new T();
+            obj.InitializeAdapter();
+            return obj.DataAdapter;
         }
 
         #endregion

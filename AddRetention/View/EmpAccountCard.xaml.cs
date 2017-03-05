@@ -72,6 +72,7 @@ namespace Salary.View
             odaEmpData.SelectCommand.Parameters.Add("c4", OracleDbType.RefCursor, ParameterDirection.Output);
             odaEmpData.SelectCommand.Parameters.Add("c5", OracleDbType.RefCursor, ParameterDirection.Output);
             odaEmpData.SelectCommand.Parameters.Add("c6", OracleDbType.RefCursor, ParameterDirection.Output);
+            odaEmpData.SelectCommand.Parameters.Add("c7", OracleDbType.RefCursor, ParameterDirection.Output);
             //odaEmpData.SelectCommand.Parameters.Add("c3", OracleDbType.RefCursor, ParameterDirection.Output);
             odaEmpData.TableMappings.Add("Table", "EmpData");
             odaEmpData.TableMappings.Add("Table1", "ACCOUNT_DATA");
@@ -79,6 +80,7 @@ namespace Salary.View
             odaEmpData.TableMappings.Add("Table3", "DEPENDENTS");
             odaEmpData.TableMappings.Add("Table4", "Address");
             odaEmpData.TableMappings.Add("Table5", "PREV_TRANSFERS");
+            odaEmpData.TableMappings.Add("Table6", "TRANSFER_CONDITION");
             LoadEmpData(transfer_id);
             try
             {
@@ -296,6 +298,17 @@ namespace Salary.View
             {
                 _selectedPrevTransfer = value;
                 RaisePropertyChanged(() => SelectedPrevTransfer);
+            }
+        }
+
+        /// <summary>
+        /// Источник данных СОУТ сотрудника
+        /// </summary>
+        public List<DataRowView> TransferConditionSource
+        {
+            get
+            {
+                return ds.Tables["TRANSFER_CONDITION"].DefaultView.Cast<DataRowView>().ToList();
             }
         }
     }

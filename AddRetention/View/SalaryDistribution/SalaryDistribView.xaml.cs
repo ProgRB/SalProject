@@ -34,7 +34,6 @@ namespace Salary.View
         {
             _model = new SalaryDistributionViewModel();
             InitializeComponent();
-            _model.OwnerWindow = this;
             DataContext = Model;
         }
 
@@ -153,7 +152,7 @@ namespace Salary.View
             if (MessageBox.Show(Window.GetWindow(this), string.Format("Рассчитать полностью распределение затрат по подразделению {0}  за {1:MMMM yyyy}?", Model.CodeSubdiv, Model.SelectedDate), 
                 "Зарплата предприятия", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                Model.CalcSalaryDistribution();
+                Model.CalcSalaryDistribution(this);
             }
         }
 
@@ -209,7 +208,7 @@ namespace Salary.View
             if (MessageBox.Show(Window.GetWindow(this), string.Format("Рассчитать базу распределение затрат по подразделению {0}  за {1:MMMM yyyy}?", Model.CodeSubdiv, Model.SelectedDate),
                 "Зарплата предприятия", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                Model.CalcBaseDistribution();
+                Model.CalcBaseDistribution(this);
             }
         }
 
@@ -1348,16 +1347,16 @@ namespace Salary.View
             get { return ""; }
         }
 
-        public DependencyObject OwnerWindow
+       /* public DependencyObject OwnerWindow
         {
             get;
             set;
-        }
+        }*/
 
         /// <summary>
         /// Расчет распределения.
         /// </summary>
-        public void CalcSalaryDistribution()
+        public void CalcSalaryDistribution(DependencyObject sender)
         {
             OracleCommand odaCalc = new OracleCommand(
                 string.Format("begin {1}.SALARY_CALC_DISTR_PKG.Calc_FULL_DISTRIBUTION(:p_date, :p_subdiv_id); end;", Connect.SchemaApstaff, Connect.SchemaSalary),
@@ -1365,26 +1364,21 @@ namespace Salary.View
             odaCalc.BindByName = true;
             odaCalc.Parameters.Add("p_date", OracleDbType.Date, SelectedDate, ParameterDirection.Input);
             odaCalc.Parameters.Add("p_subdiv_id", OracleDbType.Decimal, SubdivID, ParameterDirection.Input);
-            AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Расчет данных по распределению...",
-                (p, pw) =>
-                {
-                    OracleCommand a = pw.Argument as OracleCommand;
-                    a.ExecuteNonQuery();
-                },
-                odaCalc, odaCalc,
+            AbortableBackgroundWorker.RunAsyncWithWaitDialog(sender, "Расчет данных по распределению...",
+                odaCalc, 
                 (p, pw) =>
                 {
                     if (pw.Cancelled) return;
                     if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка расчета");
                     else
-                        MessageBox.Show(Window.GetWindow(this.OwnerWindow), "Расчет успешно закончен", "Зарплата предприятия");
+                        MessageBox.Show(Window.GetWindow(sender), "Расчет успешно закончен", "Зарплата предприятия");
                 });
         }
         
         /// <summary>
         /// А здесь просто вставка данных из ЗП и по нарядам + корректировки
         /// </summary>
-        public void CalcBaseDistribution()
+        public void CalcBaseDistribution(DependencyObject sender)
         {
             OracleCommand odaCalc = new OracleCommand(
                 string.Format("begin {1}.SALARY_CALC_DISTR_PKG.CALC_DISTR_BASE(:p_subdiv_id, :p_date); end;", Connect.SchemaApstaff, Connect.SchemaSalary),
@@ -1392,19 +1386,14 @@ namespace Salary.View
             odaCalc.BindByName = true;
             odaCalc.Parameters.Add("p_date", OracleDbType.Date, SelectedDate, ParameterDirection.Input);
             odaCalc.Parameters.Add("p_subdiv_id", OracleDbType.Decimal, SubdivID, ParameterDirection.Input);
-            AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Расчет базы распределения...",
-                (p, pw) =>
-                {
-                    OracleCommand a = pw.Argument as OracleCommand;
-                    a.ExecuteNonQuery();
-                },
-                odaCalc, odaCalc,
+            AbortableBackgroundWorker.RunAsyncWithWaitDialog(sender, "Расчет базы распределения...",
+                odaCalc,
                 (p, pw) =>
                 {
                     if (pw.Cancelled) return;
-                    if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка расчета");
+                    if (pw.Error != null) MessageBox.Show(Window.GetWindow(sender), pw.Error.GetFormattedException(), "Ошибка расчета");
                     else
-                        MessageBox.Show(Window.GetWindow(this.OwnerWindow), "Расчет успешно закончен", "Зарплата предприятия");
+                        MessageBox.Show(Window.GetWindow(sender), "Расчет успешно закончен", "Зарплата предприятия");
                 });
         }
 

@@ -11,11 +11,16 @@
              d:DesignHeight="400" d:DesignWidth="1024"
              Language="ru-RU" Background="White">
     <UserControl.CommandBindings>
+        <CommandBinding Command="cmd:AppCommands.AddTaxEmpDocum" CanExecute="AddTaxDocum_CanExecute" Executed="AddTaxDocum_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.AddTaxCompany" CanExecute="AddCompany_CanExecute" Executed="AddCompany_Executed"/>
         <CommandBinding Command="cmd:AppCommands.EditTaxCompany" CanExecute="EditCompany_CanExecute" Executed="EditCompany_Executed"/>
-        <CommandBinding Command="cmd:AppCommands.AddTaxCompany" CanExecute="EditCompany_CanExecute" Executed="AddCompany_Executed"/>
         <CommandBinding Command="cmd:AppCommands.ViewTaxEmpDocum" CanExecute="EditEmpDocum_CanExecute" Executed="EditEmpDocum_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.DeleteTaxEmpDocum" CanExecute="EditEmpDocum_CanExecute" Executed="DeleteTaxEmpDocum_Executed"/>
         <CommandBinding Command="cmd:AppCommands.RepTaxesConsolidation" CanExecute="MenuCommand_CanExecuted" Executed="RepTaxesConsolidation"/>
+        <CommandBinding Command="cmd:AppCommands.RepTaxesDocumCommon" CanExecute="MenuCommand_CanExecuted" Executed="RepTaxesDocumCommon_Executed"/>
         <CommandBinding Command="cmd:AppCommands.LoadTaxesDocum" CanExecute="MenuCommand_CanExecuted" Executed="LoadTaxesDocum_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Upload2NDFL" CanExecute="MenuCommand_CanExecuted" Executed="Upload2NDFL_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.RelocateNegativSalary" CanExecute="MenuCommand_CanExecuted" Executed="RelocateNegativSalary_Executed"/>
     </UserControl.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
@@ -46,12 +51,14 @@
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition MaxWidth="350"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition MaxWidth="200"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Организация" Grid.Column="0" Grid.Row="0"/>
                 <ComboBox Grid.Column="1" ItemsSource="{Binding TaxCompanySource}" Grid.IsSharedSizeScope="True" Margin="0,2,35,2"
@@ -84,7 +91,9 @@
                 </Button>
                 <TextBlock Text="Отчетная дата" Grid.Column="2"/>
                 <DatePicker SelectedDate="{Binding SelectedDate}" Grid.Column="3" Margin="0,2,0,2"/>
-                <Button Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" Padding="10,1" Margin="5,2" Click="Refresh_Click">
+                <TextBlock Text="ФИО" Grid.Row="1" Grid.Column="2"/>
+                <TextBox Text="{Binding FIO, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3"/>
+                <Button Grid.Column="4" Grid.Row="1" HorizontalAlignment="Left" Padding="10,1" Margin="5,2,0,2" Click="Refresh_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Images/refresh2424.png" Width="15"/>
                         <TextBlock Text="Обновить"/>
@@ -94,6 +103,16 @@
                 <TextBox Text="{Binding PerNumFilter, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="150"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,3,110,3" Text="Ставка %" HorizontalAlignment="Right"/>
                 <TextBox Margin="250,3,0,3" Text="{Binding PercentFilter, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="100"/>
+                <TextBlock Grid.Row="2" Text="Признак справки"/>
+                <TextBox Text="{Binding DocumSignFilter, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Width="150"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,3,10,3" Text="Показать только с отрицательными записями" HorizontalAlignment="Right"/>
+                <CheckBox Margin="0,3,0,3" IsChecked="{Binding NegativeSignFilter, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left"
+                          VerticalAlignment="Center">
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleY="1.4" ScaleX="1.4"/>
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+
             </Grid>
         </Expander>
         <GroupBox Header="Справки" Grid.Row="1">
@@ -105,7 +124,7 @@
                     <Button Command="cmd:AppCommands.AddTaxEmpDocum" Style="{StaticResource ToolBoxLikeStyle}">
                         <Image Source="/Images/new_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
                     </Button>
-                    <Button Command="cmd:AppCommands.EditTaxEmpDocum" Style="{StaticResource ToolBoxLikeStyle}">
+                    <Button Command="cmd:AppCommands.ViewTaxEmpDocum" Style="{StaticResource ToolBoxLikeStyle}">
                         <Image Source="/Images/edit_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
                     </Button>
                     <Button Command="cmd:AppCommands.DeleteTaxEmpDocum" Style="{StaticResource ToolBoxLikeStyle}">
@@ -119,6 +138,8 @@
                             </MenuItem.Icon>
                             <MenuItem Header="НДФЛ по сотрудникам (доходы и вычеты)" Command="cmd:AppCommands.RepTaxesConsolidation" CommandParameter="Discount"></MenuItem>
                             <MenuItem Header="НДФЛ по сотрудникам (по кодам дохода)" Command="cmd:AppCommands.RepTaxesConsolidation" CommandParameter="CodePayment"></MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Сводные данные по доходам и налогам" Command="cmd:AppCommands.RepTaxesDocumCommon"/>
                         </MenuItem>
                     </Menu>
                     <Separator/>
@@ -128,21 +149,66 @@
                                 <Image Source="/Images/download_1616.png" Style="{StaticResource ToolBoxImageStyle}"/>
                             </MenuItem.Icon>
                             <MenuItem Header="Загрузить данные из зарплаты для всех (кроме закрытых)" Command="cmd:AppCommands.LoadTaxesDocum"/>
+                            <!--<MenuItem Header="Загрузить данные из зарплаты для выбранных (кроме закрытых)" Command="cmd:AppCommands.LoadTaxesDocum" CommandParameter="Selection"/>-->
+                        </MenuItem>
+                    </Menu>
+                    <Separator/>
+                    <Menu VerticalAlignment="Center" Background="Transparent">
+                        <MenuItem Header="Выгрузка данных">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/uploadfile_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="Выгрузка электронной отчетности 2НДФЛ для ФНС (формат 5.04)" Command="cmd:AppCommands.Upload2NDFL"/>
+                        </MenuItem>
+                    </Menu>
+                    <Separator/>
+                    <Menu VerticalAlignment="Center" Background="Transparent">
+                        <MenuItem Header="Операции с документами">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/import_doc_3232.png" Style="{StaticResource ToolBoxImageStyle}"/>
+                            </MenuItem.Icon>
+                            <MenuItem Header="Перераспределение отрицательных доходов" Command="cmd:AppCommands.RelocateNegativSalary"/>
                         </MenuItem>
                     </Menu>
                 </WrapPanel>
                 <StatusBar DockPanel.Dock="Bottom">
                     <Label Content="{Binding EmpTaxDocumSource.Count, FallbackValue=0}" ContentStringFormat="Количество записей: {0}"/>
                     <Separator/>
-                    <TextBlock Text="{Binding ErrorMessage, StringFormat='Ошибка получения данных:{0}'}" Foreground="Red"/>
+                    <TextBlock Text="{Binding ErrorMessage, StringFormat='Ошибка получения данных:{0}'}" Foreground="Red" 
+                               xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ErrorMessage}" Value="{x:Static sys:String.Empty}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </StatusBar>
                 <DataGrid ItemsSource="{Binding EmpTaxDocumSource}" Style="{StaticResource DataGridSalaryStyle}" IsReadOnly="True"
                           local:DataGridAddition.DoubleClickCommand="cmd:AppCommands.ViewTaxEmpDocum"
                           SelectedItem="{Binding CurrentDocument, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="40">
+                            <DataGridTemplateColumn.Header>
+                                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" ToolTip="Отметить/снять все"/>
+                            </DataGridTemplateColumn.Header>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding FL, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <CheckBox.LayoutTransform>
+                                            <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
+                                        </CheckBox.LayoutTransform>
+                                    </CheckBox>
+                                </DataTemplate>
+                                    
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Binding="{Binding PER_NUM}" Header="Таб.№" Width="50" SortMemberPath="PER_NUM"/>
-                        <DataGridTextColumn Binding="{Binding EMP_LAST_NAME}" Header="Фамилия" Width="200" SortMemberPath="EMP_LAST_NAME"/>
-                        <DataGridTextColumn Binding="{Binding EMP_FIRST_NAME}" Header="Имя" Width="120" SortMemberPath="EMP_FIRST_NAME"/>
+                        <DataGridTextColumn Binding="{Binding EMP_LAST_NAME}" Header="Фамилия" Width="110" SortMemberPath="EMP_LAST_NAME"/>
+                        <DataGridTextColumn Binding="{Binding EMP_FIRST_NAME}" Header="Имя" Width="90" SortMemberPath="EMP_FIRST_NAME"/>
                         <DataGridTextColumn Binding="{Binding EMP_MIDDLE_NAME}" Header="Отчество" Width="130" SortMemberPath="EMP_MIDDLE_NAME"/>
                         <DataGridTextColumn Binding="{Binding DOCUM_SIGN}" Header="Признак" Width="60" SortMemberPath="DOCUM_SIGN"/>
                         <DataGridTextColumn Binding="{Binding TAX_PERCENT, StringFormat={}{0}%}" Header="Ставка" Width="60" SortMemberPath="TAX_PERCENT"/>
@@ -181,12 +247,39 @@
                                 </Style>
                             </DataGridTextColumn.CellStyle>
                         </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding NO_RETENT_TAX, StringFormat=N2}" Width="90" SortMemberPath="NO_RETENT_TAX">
+                            <DataGridTextColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Text="Не удержан налог" TextAlignment="Center"/>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.CellStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding MORE_RETENT_TAX, StringFormat=N2}" Width="90" SortMemberPath="MORE_RETENT_TAX">
+                            <DataGridTextColumn.Header>
+                                <TextBlock TextWrapping="Wrap" Text="Излишне удержано" TextAlignment="Center"/>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.CellStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding DOCUM_DATE, StringFormat={}{0:dd.MM.yyyy}}" Header="Отчетная дата" Width="70" SortMemberPath="DOCUM_DATE"/>
+                        <DataGridTextColumn Binding="{Binding UPDATE_DATE, StringFormat={}{0:dd.MM.yyyy HH:mm:ss}}" Header="Время обновления документа" SortMemberPath="UPDATE_DATE"/>
                     </DataGrid.Columns>
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
                     </DataGrid.Resources>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="Print" Header="Печать в эксель" CommandManager.CanExecute="Print_CanExecute" CommandManager.Executed="Print_Executed"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                 </DataGrid>
             </DockPanel>
         </GroupBox>

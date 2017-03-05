@@ -1,7 +1,8 @@
 declare
 	p_per_num varchar2(10);
+	l_worker_id Number;
 begin
-	select per_num into p_per_num from {0}.transfer where transfer_id=:p_transfer_id;
+	select per_num, worker_id into p_per_num, l_worker_id from {0}.transfer where transfer_id=:p_transfer_id;
 	open :c1 for select per_num, sign_comb, t.transfer_id, worker_id as ID, code_degree, 
 						pos_name, code_subdiv, emp_last_name, emp_first_name, emp_middle_name, 
 						emp_sex, emp_birth_date, photo,
@@ -75,4 +76,26 @@ begin
 				{0}.address_none_kladr s
 				left join {0}.registr using (per_num)
 			where per_num=p_per_num;
+
+	open :c7 for
+		select
+			subclass_number,
+			SPECIAL_CONDITIONS,
+			conditions_date_begin,
+			conditions_date_end,
+			code_subdiv,
+			pos_name,
+			date_transfer,
+			type_transfer_name
+		from
+			apstaff.transfer
+			left join apstaff.subdiv using (subdiv_id)
+			left join apstaff.transfer_cond_of_work using (transfer_id)
+			join apstaff.position using (pos_id)
+			left join apstaff.conditions_of_work using (conditions_of_work_id)
+			join apstaff.type_transfer using (type_transfer_id)
+			left join (select transfer_id, SPECIAL_CONDITIONS from apstaff.account_data join apstaff.PRIVILEGED_POSITION using (PRIVILEGED_POSITION_ID)) using (transfer_id)
+		where 
+			worker_id=l_worker_id
+		order by date_transfer desc, conditions_date_begin desc;
 end;

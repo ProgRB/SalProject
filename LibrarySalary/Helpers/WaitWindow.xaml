@@ -13,7 +13,7 @@
     <xctk:BusyIndicator IsBusy="True">
         <xctk:BusyIndicator.BusyContent>
             <StackPanel Margin="5,0">
-                <TextBlock Text="{Binding ElementName=_this, Path=ContentText}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding ElementName=_this, Path=BackWorker.CurrentStatus}" VerticalAlignment="Center" TextWrapping="Wrap"/>
                 <Button Content="Отменить" Padding="7,2" HorizontalAlignment="Center" Margin="0,5" Click="Button_Click" Visibility="{Binding ElementName=_this, Path=IsAbortable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </StackPanel>
         </xctk:BusyIndicator.BusyContent>

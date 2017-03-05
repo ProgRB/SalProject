@@ -369,19 +369,13 @@ namespace Salary.View
             a.SelectCommand.Parameters.Add("p_date", OracleDbType.Date, Model.EmpProvider.SelectedDate, ParameterDirection.Input);
             a.SelectCommand.Parameters.Add("C", OracleDbType.RefCursor, ParameterDirection.Output);
             AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование данных",
-                (s, pw) =>
-                {
-                    OracleDataAdapter aa = pw.Argument as OracleDataAdapter;
-                    DataTable t = new DataTable();
-                    a.Fill(t);
-                    pw.Result = t;
-                }, a, a.SelectCommand,
+                 a, a.SelectCommand,
                     (s, pw) =>
                     {
                         if (pw.Cancelled) return;
                         else if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка формирования");
                         else
-                            ViewReportWindow.ShowReport(this, "Сводный отчет", "Rep_AllTransferredSum.rdlc", (pw.Result as DataTable), new ReportParameter[] { new ReportParameter("P_DATE", Model.EmpProvider.SelectedDate.ToShortDateString()) });
+                            ViewReportWindow.ShowReport(this, "Сводный отчет", "Rep_AllTransferredSum.rdlc", (pw.Result as DataSet).Tables[0], new ReportParameter[] { new ReportParameter("P_DATE", Model.EmpProvider.SelectedDate.ToShortDateString()) });
                     });
         }
 
@@ -395,19 +389,13 @@ namespace Salary.View
                 a.SelectCommand.Parameters.Add("p_date_end", OracleDbType.Date, Model.EmpProvider.SelectedDate, ParameterDirection.Input);
                 a.SelectCommand.Parameters.Add("p_subdiv_id", OracleDbType.Decimal, Model.EmpProvider.SubdivID, ParameterDirection.Input);
                 AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование данных",
-                    (s, pw) =>
-                    {
-                        OracleDataAdapter aa = pw.Argument as OracleDataAdapter;
-                        DataTable t = new DataTable();
-                        a.Fill(t);
-                        pw.Result = t;
-                    }, a, a.SelectCommand,
+                     a, a.SelectCommand,
                         (s, pw) =>
                         {
                             if (pw.Cancelled) return;
                             else if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка формирования");
                             else
-                                ViewReportWindow.ShowReport(this, "Отчет Кто куда ЗП перечисляет (банки)", "Rep_TypeBankEmpTransfer2.rdlc", (pw.Result as DataTable),
+                                ViewReportWindow.ShowReport(this, "Отчет Кто куда ЗП перечисляет (банки)", "Rep_TypeBankEmpTransfer2.rdlc", (pw.Result as DataSet).Tables[0],
                                     new ReportParameter[] { 
                                     new ReportParameter("P_DATE", Model.EmpProvider.SelectedDate.ToShortDateString()) ,
                                     new ReportParameter("P_CODE_SUBDIV", Model.EmpProvider.CodeSubdiv) 
@@ -455,19 +443,13 @@ namespace Salary.View
                 a.SelectCommand.Parameters.Add("p_transfer_ids", OracleDbType.Array, f.SelectedRows.OfType<DataRowView>().Select(t => t.Row.Field2<decimal>("WORKER_ID")).ToArray(), ParameterDirection.Input).UdtTypeName = "SALARY.NUMBER_COLLECTION_TYPE";
                 a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
                 AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование данных",
-                    (s, pw) =>
-                    {
-                        OracleDataAdapter aa = pw.Argument as OracleDataAdapter;
-                        DataTable t = new DataTable();
-                        a.Fill(t);
-                        pw.Result = t;
-                    }, a, a.SelectCommand,
+                     a, a.SelectCommand,
                         (s, pw) =>
                         {
                             if (pw.Cancelled) return;
                             else if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка формирования");
                             else
-                                ViewReportWindow.ShowReport(this, "Отчет Перечисление за период по сотрудникам", "Rep_EmpTransferSubByPeriod.rdlc", (pw.Result as DataTable),
+                                ViewReportWindow.ShowReport(this, "Отчет Перечисление за период по сотрудникам", "Rep_EmpTransferSubByPeriod.rdlc", (pw.Result as DataSet).Tables[0],
                                     new ReportParameter[] { 
                                         new ReportParameter("P_DATE1", f.DateBegin.Value.ToShortDateString()) ,
                                         new ReportParameter("P_DATE2", f.DateEnd.Value.ToShortDateString())
@@ -503,9 +485,28 @@ namespace Salary.View
             e.CanExecute = ControlRoles.GetState(e.Command) && Model != null && Model.EmpView.SelectedItem != null
                 && Model.EmpView.SelectedItem["SIGN_COMB"] != DBNull.Value;
         }
+
+        /// <summary>
+        /// Отчет по изменениям в 401 402 взносамх по сравнению с пред. месяцем
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Rep_CompareRetent401402_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OracleDataAdapter a = new OracleDataAdapter("begin SALARY.SALARY_TRANSFER.ComparePFRRetentsReport(:p_date, :c); end;", Connect.CurConnect);
+            a.SelectCommand.BindByName = true;
+            a.SelectCommand.Parameters.Add("p_date", OracleDbType.Date, Model.EmpProvider.SelectedDate, ParameterDirection.Input);
+            a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
+            AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование отчета по изменениям", a, a.SelectCommand,
+                (p, pw) =>
+                {
+                    ViewReportWindow.ShowReport(this, "Изменения за период", @"ClientAccounts/Rep_ComparePFRRetent.rdlc", (pw.Result as DataSet).Tables[0],
+                        new ReportParameter[] { new ReportParameter("P_DATE", Model.EmpProvider.SelectedDate.ToShortDateString()) });
+                });
+        }
     }
-     
- 
+
+
 
     public class PeriodToExpandedConverter : IMultiValueConverter
     {

@@ -19,21 +19,30 @@ namespace Salary.View
     /// </summary>
     public partial class WaitWindow : Window
     {
-        private string _contentText;
-        public WaitWindow(string content, AbortableBackgroundWorker related_worker=null)
+        //private string _contentText;
+        public WaitWindow(AbortableBackgroundWorker related_worker=null)
         {
-            _contentText = content;
             BackWorker = related_worker;
             InitializeComponent();
-
-        }
-        public string ContentText
-        {
-            get
+            this.DataContext = related_worker;
+            if (related_worker != null && related_worker.InQueue)
             {
-                return _contentText;
+                this.Loaded += WaitWindow_Loaded;
             }
         }
+
+        private void WaitWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetPosition(GetQueuePosition(BackWorker));
+        }
+
+        /*public string ContentText
+{
+   get
+   {
+       return _contentText;
+   }
+}*/
 
         public AbortableBackgroundWorker BackWorker
         {
@@ -60,6 +69,41 @@ namespace Salary.View
             {
                 BackWorker.Abort();
             }
+        }
+
+        protected Point GetQueuePosition(AbortableBackgroundWorker item)
+        {
+            int k = AbortableBackgroundWorker.Queue.IndexOf(item);
+            AbortableBackgroundWorker prev;
+            if (k < 0)
+                prev = AbortableBackgroundWorker.Queue.LastOrDefault();
+            else
+                prev = k > 0 ? AbortableBackgroundWorker.Queue[k] : null;
+            Window mainWindow = this.Owner;
+            if (prev != null)
+            {
+                if (prev.WaitWindow.Top - this.ActualHeight-40 > 0)
+                    return new Point(prev.WaitWindow.Left, prev.WaitWindow.Top - this.ActualHeight-40);
+                else
+                    return new Point(prev.WaitWindow.Left - ActualWidth, Owner.ActualHeight - this.ActualHeight-40);
+            }
+            return new Point(mainWindow.ActualWidth - this.ActualWidth, Owner.ActualHeight - this.ActualHeight-40);
+        }
+
+        public void SetPosition(Point p)
+        {
+            this.WindowStartupLocation = WindowStartupLocation.Manual;
+            Left = p.X;
+            Top = p.Y;
+        }
+
+        public static void RepositionAllWindows()
+        {
+            foreach (var item in AbortableBackgroundWorker.Queue)
+            {
+                item.WaitWindow.SetPosition(item.WaitWindow.GetQueuePosition(item));
+            }
+            
         }
 
     }

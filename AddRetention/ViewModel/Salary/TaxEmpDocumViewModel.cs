@@ -21,18 +21,26 @@ namespace Salary.ViewModel.Salary
         private DataRowView _currentDocument;
         private string _perNumFilter = string.Empty;
         private string _percent;
+        private string _fio;
+        private string _documSign;
+        decimal _negativeSign = 0;
 
         public TaxEmpDocumViewModel()
         {
             ds = new DataSet();
             odaTaxCompany = new OracleDataAdapter("Select * from salary.tax_company", Connect.CurConnect);
             odaTaxCompany.TableMappings.Add("Table", "TAX_COMPANY");
+            ds.Tables.Add("TAX_EMP_DOCUM").Columns.Add("FL", typeof(decimal)).DefaultValue = 0m;
 
             odaTaxDocums = new OracleDataAdapter(Queries.GetQueryWithSchema(@"Taxes\SelectEmpTaxDocums.sql"), Connect.CurConnect);
             odaTaxDocums.SelectCommand.BindByName = true;
             odaTaxDocums.SelectCommand.Parameters.Add("p_date", OracleDbType.Date, null, ParameterDirection.Input);
             odaTaxDocums.SelectCommand.Parameters.Add("p_tax_company_id", OracleDbType.Decimal, null, ParameterDirection.Input);
             odaTaxDocums.SelectCommand.Parameters.Add("p_percent", OracleDbType.Decimal, null, ParameterDirection.Input);
+            odaTaxDocums.SelectCommand.Parameters.Add("p_fio", OracleDbType.Varchar2, null, ParameterDirection.Input);
+            odaTaxDocums.SelectCommand.Parameters.Add("p_docum_sign", OracleDbType.Varchar2, null, ParameterDirection.Input);
+            odaTaxDocums.SelectCommand.Parameters.Add("p_negative_sign", OracleDbType.Decimal, null, ParameterDirection.Input);
+            odaTaxDocums.SelectCommand.Parameters.Add("p_fio", OracleDbType.Varchar2, null, ParameterDirection.Input);
             odaTaxDocums.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
             odaTaxDocums.TableMappings.Add("Table", "TAX_EMP_DOCUM");
 
@@ -88,6 +96,56 @@ namespace Salary.ViewModel.Salary
             }
         }
 
+        /// <summary>
+        /// Фио для фильтра
+        /// </summary>
+        [OracleParameterMapping(ParameterName = "p_fio")]
+        public string FIO
+        {
+            get
+            {
+                return _fio;
+            }
+            set
+            {
+                _fio = value;
+                RaisePropertyChanged(() => FIO);
+            }
+        }
+
+        /// <summary>
+        /// Признак документа фильтр
+        /// </summary>
+        [OracleParameterMapping(ParameterName = "p_docum_sign")]
+        public string DocumSignFilter
+        {
+            get
+            {
+                return _documSign;
+            }
+            set
+            {
+                _documSign = value;
+                RaisePropertyChanged(() => DocumSignFilter);
+            }
+        }
+
+        /// <summary>
+        /// Фильтр признак показывать отрицательные
+        /// </summary>
+        [OracleParameterMapping(ParameterName = "p_negative_sign")]
+        public decimal NegativeSignFilter
+        {
+            get
+            {
+                return _negativeSign;
+            }
+            set
+            {
+                _negativeSign = value;
+                RaisePropertyChanged(() => NegativeSignFilter);
+            }      
+        }
 
         #region участок источники данных для списков
 
@@ -218,6 +276,14 @@ namespace Salary.ViewModel.Salary
             }
         }
 
+        public decimal[] CheckedDocumIDs
+        {
+            get
+            {
+                return EmpTaxDocumSource.Where(r => r.Row.Field2<Decimal>("FL") == 1).Select(r => r.Row.Field2<decimal>("TAX_EMP_DOCUM_ID")).ToArray();
+            }
+        }
+
         /// <summary>
         /// Айдишник текущего выбанного документа
         /// </summary>
@@ -227,6 +293,12 @@ namespace Salary.ViewModel.Salary
             {
                 return _currentDocument != null ? _currentDocument.Row.Field2<Decimal?>("TAX_EMP_DOCUM_ID") : null;
             }
+        }
+
+        internal void SetChecked(bool? isChecked)
+        {
+            foreach (var p in EmpTaxDocumSource)
+                p["FL"] = isChecked==true ? 1m : 0m;
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASalary", "AddRetention\ASalary.csproj", "{374C8399-A207-429A-99D5-5B9255EE37D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarySalary", "LibrarySalary\LibrarySalary.csproj", "{16B25109-FEB6-419A-9A58-4BF1D6E26E3F}"
@@ -12,27 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryReporting", "SalaryReporting\SalaryReporting.csproj", "{7504938D-FD61-42A1-8183-B6D1F8AB93CB}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.169.100.48:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = AddRetention\\ASalary.csproj
-		SccProjectName1 = AddRetention
-		SccLocalPath1 = AddRetention
-		SccProjectUniqueName2 = LibrarySalary\\LibrarySalary.csproj
-		SccProjectName2 = LibrarySalary
-		SccLocalPath2 = LibrarySalary
-		SccProjectUniqueName3 = RolesViewerLibrary\\RolesViewerLibrary.csproj
-		SccProjectName3 = RolesViewerLibrary
-		SccLocalPath3 = RolesViewerLibrary
-		SccProjectUniqueName4 = SalaryEFLibrary\\SalaryEFLibrary.csproj
-		SccProjectName4 = SalaryEFLibrary
-		SccLocalPath4 = SalaryEFLibrary
-		SccProjectUniqueName5 = SalaryReporting\\SalaryReporting.csproj
-		SccProjectName5 = SalaryReporting
-		SccLocalPath5 = SalaryReporting
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -91,5 +72,26 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://as96:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = AddRetention\\ASalary.csproj
+		SccProjectName1 = AddRetention
+		SccLocalPath1 = AddRetention
+		SccProjectUniqueName2 = LibrarySalary\\LibrarySalary.csproj
+		SccProjectName2 = LibrarySalary
+		SccLocalPath2 = LibrarySalary
+		SccProjectUniqueName3 = RolesViewerLibrary\\RolesViewerLibrary.csproj
+		SccProjectName3 = RolesViewerLibrary
+		SccLocalPath3 = RolesViewerLibrary
+		SccProjectUniqueName4 = SalaryEFLibrary\\SalaryEFLibrary.csproj
+		SccProjectName4 = SalaryEFLibrary
+		SccLocalPath4 = SalaryEFLibrary
+		SccProjectUniqueName5 = SalaryReporting\\SalaryReporting.csproj
+		SccProjectName5 = SalaryReporting
+		SccLocalPath5 = SalaryReporting
 	EndGlobalSection
 EndGlobal

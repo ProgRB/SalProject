@@ -2,18 +2,31 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cmd="clr-namespace:Salary.ViewModel"
-        xmlns:lc ="clr-namespace:Salary.View.Taxes"
-        xmlns:local="clr-namespace:Salary"
+        xmlns:local ="clr-namespace:Salary.View.Taxes"
+        xmlns:mainclr="clr-namespace:Salary"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Редактор документов НДФЛ" Height="591" Width="889"
         Language="ru-RU" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
     <Window.CommandBindings>
-        <CommandBinding Command="lc:TaxDocumEditor.ChooseEmp" CanExecute="ChooseEmp_CanExecute" Executed="ChooseEmp_Executed"/>
+        <CommandBinding Command="local:TaxDocumEditor.ChooseEmp" CanExecute="ChooseEmp_CanExecute" Executed="ChooseEmp_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.SaveTaxEmpDocum" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
     </Window.CommandBindings>
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Background="{StaticResource PanelGrayBack}">
-            <Button Command="cmd:AppCommands.SaveAddRetention" ToolTip="Сохранить удержание" Content="Сохранить" Margin="5,2" Padding="15,1" IsDefault="True" Style="{StaticResource ToolBoxLikeStyle}" />
+            <Button Command="cmd:AppCommands.SaveTaxEmpDocum" ToolTip="Сохранить документ" Content="Сохранить" Margin="5,2" Padding="15,1" IsDefault="True" Style="{StaticResource ToolBoxLikeStyle}" />
             <Separator Style="{StaticResource ResourceKey={x:Static ToolBar.SeparatorStyleKey} }"/>
             <Button Content="Закрыть" VerticalAlignment="Center" Padding="20,1" Click="Button_Click" IsCancel="True" Style="{StaticResource ToolBoxLikeStyle}" />
+            <Label Content="{Binding DataException, StringFormat='Ошибка выполнения: {0}'}" Foreground="Red">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataException}" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
         </StackPanel>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
@@ -47,7 +60,20 @@
                     </Style>
                 </StackPanel.Resources>
 
-                <GroupBox Header="Справка о доходах физического лица">
+                <GroupBox >
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Справка о доходах физического лица" Margin="0,2" Padding="10,2"/>
+                            <CheckBox IsChecked="{Binding LockSign, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      Content="Не обновлять справку из ЗП" VerticalAlignment="Center" Margin="25,0">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.3" ScaleY="1.3">
+                                        
+                                    </ScaleTransform>
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </StackPanel>
+                    </GroupBox.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -65,19 +91,29 @@
                         <TextBox Grid.Column="1" Text="{Binding DocumDate.Year, Mode=OneWay}" Width="80" IsReadOnly="True" HorizontalAlignment="Left"/>
                         <TextBlock Text="год" Grid.Column="1" Margin="85,2,2,2"/>
                         <TextBlock Grid.Column="2" Text="№"/>
-                        <TextBox Grid.Column="3" Text="{Binding DocumNumber}" Width="80"/>
+                        <TextBox Grid.Column="3" Text="{Binding DocumNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="80"/>
                         <TextBlock Grid.Column="4" Text="от"/>
-                        <DatePicker Grid.Column="5" SelectedDate="{Binding DocumDate}" ToolTip="Данную дату устанавливать как последний день периода, за который выдана справка"
+                        <DatePicker Grid.Column="5" SelectedDate="{Binding DocumDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="Данную дату устанавливать как последний день периода, за который выдана справка"
                                     MinWidth="150"/>
                         <TextBlock Grid.Row="1" Text="Признак"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DocumSign}" Width="80" HorizontalAlignment="Left"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DocumSign, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="80" HorizontalAlignment="Left"/>
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="№ корректировки"/>
-                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding CorrNumber}" Width="80" HorizontalAlignment="Left"/>
+                        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding CorrNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="80" HorizontalAlignment="Left"/>
                     </Grid>
                 </GroupBox>
 
                 <TabControl>
                     <TabItem Header="Данные сотрудника">
+                        <TabItem.Style>
+                            <Style TargetType="TabItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DocumDate}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Setter Property="ToolTip" Value="Не установлена отчетная дат документа!!!!"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TabItem.Style>
                         <StackPanel>
                             <GroupBox Header="Данные о налоговом агенте">
                                 <Grid>
@@ -106,7 +142,7 @@
                                     <TextBox Grid.Column="7" Text="{Binding TaxCompany.Kpp}" IsReadOnly="True" ToolTip="КПП организации" MinWidth="150"/>
                                     <TextBlock Grid.Row="1" Text="Налоговый агент"/>
                                     <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" ItemsSource="{Binding TaxCompanySource}"
-                                  SelectedValue="{Binding TaxCompanyID}" SelectedValuePath="TaxCompanyID">
+                                  SelectedValue="{Binding TaxCompanyID, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" SelectedValuePath="TaxCompanyID">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -138,7 +174,7 @@
                                 <GroupBox.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Данные о физическом лице - получателе дохода" Margin="5,0"/>
-                                        <Button Content="выбрать..." Padding="5,1" ToolTip="Выбрать физическое лицо" Command="lc:TaxDocumEditor.ChooseEmp"/>
+                                        <Button Content="выбрать..." Padding="5,1" ToolTip="Выбрать физическое лицо" Command="local:TaxDocumEditor.ChooseEmp"/>
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <Grid>
@@ -170,7 +206,7 @@
                                     <TextBox Grid.Column="7" Text="{Binding Emp.EmpMiddleName}" IsReadOnly="True" ToolTip="Отчество сотрудника" MinWidth="100"/>
                                     <Grid Grid.ColumnSpan="2" Grid.Row="1">
                                         <TextBlock Text="Статус налогоплательщика" HorizontalAlignment="Left" FontSize="10"/>
-                                        <TextBox Text="{Binding TaxStatus}" Grid.Row="2" Grid.Column="2" Margin="150,2,0,2"/>
+                                        <TextBox Text="{Binding TaxStatus, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="2" Grid.Column="2" Margin="150,2,0,2"/>
                                     </Grid>
                                     <TextBlock Grid.Row="1" Grid.Column="2" Text="Дата рождения"/>
                                     <DatePicker SelectedDate="{Binding Emp.EmpBirthDate, Mode=OneWay}" Grid.Row="1" Grid.Column="3" IsEnabled="False"/>
@@ -189,35 +225,74 @@
                                     </TextBox>
                                     <TextBlock Grid.Row="3" Text="Адрес места жительства в РФ:"  Grid.ColumnSpan="3" FontWeight="Bold"/>
                                     <TextBlock Grid.Row="3" Text="Почтовый индекс" Grid.Column="3"  Grid.ColumnSpan="2"/>
-                                    <TextBox Grid.Row="3" Grid.Column="5" Text="{Binding HomeIndex}"/>
+                                    <TextBox Grid.Row="3" Grid.Column="5" Text="{Binding HomeIndex, UpdateSourceTrigger=PropertyChanged}"/>
                                     <Grid Grid.Row="3" Grid.Column="6"  Grid.ColumnSpan="2">
                                         <TextBlock  Text="код субъекта"  HorizontalAlignment="Left"/>
-                                        <TextBox Grid.Row="3" Grid.Column="7" Text="{Binding CodeRegion}" Margin="100,2,0,2"/>
+                                        <TextBox Grid.Row="3" Grid.Column="7" Text="{Binding CodeRegion, UpdateSourceTrigger=PropertyChanged}" Margin="100,2,0,2"/>
                                     </Grid>
                                     <TextBlock Grid.Row="4" Text="Район" Grid.Column="0"  Grid.ColumnSpan="1"/>
-                                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding District}" Grid.ColumnSpan="2"/>
+                                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding District, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
                                     <TextBlock Grid.Row="4" Text="Город" Grid.Column="3"  Grid.ColumnSpan="1"/>
-                                    <TextBox Grid.Row="4" Grid.Column="4" Text="{Binding City}" Grid.ColumnSpan="2" Margin="0,1,49,1"/>
+                                    <TextBox Grid.Row="4" Grid.Column="4" Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" Margin="0,1,49,1"/>
                                     <TextBlock Grid.Row="4" Text="Насел. пункт" Grid.Column="5"  Grid.ColumnSpan="2"/>
-                                    <TextBox Grid.Row="4" Grid.Column="7" Text="{Binding Locality}"/>
+                                    <TextBox Grid.Row="4" Grid.Column="7" Text="{Binding Locality, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Grid.Row="5" Text="Улица" Grid.Column="0"  Grid.ColumnSpan="1"/>
-                                    <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Street}"/>
+                                    <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Street, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Grid.Row="5" Text="Дом" Grid.Column="3"  Grid.ColumnSpan="1"/>
-                                    <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding HomeNumber}"/>
+                                    <TextBox Grid.Row="5" Grid.Column="4" Text="{Binding HomeNumber, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Grid.Row="5" Text="Корпус" Grid.Column="5"  Grid.ColumnSpan="1"/>
-                                    <TextBox Grid.Row="5" Grid.Column="6" Text="{Binding Housing}"/>
+                                    <TextBox Grid.Row="5" Grid.Column="6" Text="{Binding Housing, UpdateSourceTrigger=PropertyChanged}"/>
                                     <Grid Grid.Row="5" Grid.Column="7">
-                                        <TextBlock Grid.Row="5" Text="Кватира" Grid.Column="0"  Grid.ColumnSpan="1" HorizontalAlignment="Left" Margin="20,1,0,1"/>
-                                        <TextBox Text="{Binding FlatNumber}" Margin="80,1,0,1"/>
+                                        <TextBlock Grid.Row="5" Text="Квартира" Grid.Column="0"  Grid.ColumnSpan="1" HorizontalAlignment="Left" Margin="20,1,0,1"/>
+                                        <TextBox Text="{Binding FlatNumber, UpdateSourceTrigger=PropertyChanged}" Margin="80,1,0,1"/>
                                     </Grid>
                                 </Grid>
                             </GroupBox>
-
+                            <GroupBox Header="Документы на вычеты">
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Row="0" Text="Уведомление на социальный вычет"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SocialNotifyNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="дата"/>
+                                    <DatePicker Grid.Row="0" Grid.Column="3" SelectedDate="{Binding SocialNotifyDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Код ИФНС"/>
+                                    <TextBox Grid.Row="0" Grid.Column="5" Text="{Binding SocialNotifyCode}"/>
+                                    <TextBlock Grid.Row="1" Text="Уведомление на имущественный вычет"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EstateNotifyNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="дата"/>
+                                    <DatePicker Grid.Row="1" Grid.Column="3" SelectedDate="{Binding EstateNotifyDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="4" Text="Код ИФНС"/>
+                                    <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding EstateNotifyCode, UpdateSourceTrigger=PropertyChanged}"/>
+                                </Grid>
+                            </GroupBox>
 
 
                         </StackPanel>
                     </TabItem>
                     <TabItem Header="Доходы и вычеты">
+                        <TabItem.Style>
+                            <Style TargetType="TabItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DocumDate}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TabItem.Style>
+                        <TabItem.Resources>
+                            <local:MonthToDateConverter x:Key="MonthToDateConverter" DateConvert="{Binding DocumDate, Mode=OneWay}"/>
+                        </TabItem.Resources>
                         <StackPanel>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -228,14 +303,13 @@
                                     <GroupBox.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="Доходы, облагаемые по ставке"/>
-                                            <TextBox Text="{Binding TaxPercent}" Width="50"/>
+                                            <TextBox Text="{Binding TaxPercent, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="50"/>
                                             <TextBlock Text="%"/>
                                         </StackPanel>
                                     </GroupBox.Header>
-                                    <DataGrid Style="{StaticResource DataGridSalaryStyle}" MinHeight="150" MaxHeight="200"
-                                  ItemsSource="{Binding PaySource}">
+                                    <DataGrid Style="{StaticResource DataGridSalaryStyle}" MinHeight="200" MaxHeight="200" ItemsSource="{Binding PaySource}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Месяц" Width="100" Binding="{Binding PayDate, StringFormat={}{0:MM}}">
+                                            <DataGridTextColumn Header="Месяц" Width="100" Binding="{Binding PayDate, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MonthToDateConverter}}">
                                             </DataGridTextColumn>
                                             <DataGridTextColumn Binding="{Binding PayCode}" Header="Код дохода"/>
                                             <DataGridTextColumn Binding="{Binding SumSal, StringFormat=N2}" Header="Сумма дохода" Width="120">
@@ -262,22 +336,9 @@
                                     </DataGrid>
                                 </GroupBox>
                                 <GroupBox Grid.Column="1" Header="Стандартные, социальные и имущественные налоговые вычеты">
-                                    <DataGrid Style="{StaticResource DataGridSalaryStyle}" MinHeight="80" MaxHeight="200"
-                                  ItemsSource="{Binding DiscountSource}">
+                                    <DataGrid Style="{StaticResource DataGridSalaryStyle}" MinHeight="80" MaxHeight="220" ItemsSource="{Binding DiscountSource}">
                                         <DataGrid.Columns>
-                                            <DataGridTemplateColumn Header="Месяц вычета" Width="120">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding DateDiscount.Month, Mode=OneWay}" TextAlignment="Center"/>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                                <DataGridTemplateColumn.CellEditingTemplate>
-                                                    <DataTemplate>
-                                                        <DatePicker local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MM yyyy"
-                                                        SelectedDate="{Binding DateDiscount}"/>
-                                                    </DataTemplate>
-                                                </DataGridTemplateColumn.CellEditingTemplate>
-                                            </DataGridTemplateColumn>
+                                            <DataGridTextColumn Header="Месяц вычета" Width="120" Binding="{Binding DateDiscount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MonthToDateConverter}}"/>
                                             <DataGridTextColumn Binding="{Binding CodeDiscount}" Header="Код вычета"/>
                                             <DataGridTextColumn Binding="{Binding SumDiscount, StringFormat=N2}" Header="Сумма вычета" Width="120">
                                                 <DataGridTextColumn.ElementStyle>
@@ -311,48 +372,20 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Общая сумма дохода"/>
-                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AllPaySum, Mode=OneWay}" IsReadOnly="True"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AllPaySum, StringFormat=N2, Mode=OneWay}" IsReadOnly="True"/>
                                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Налоговая база"/>
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TaxBase, Mode=OneWay}" IsReadOnly="True"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TaxBase, StringFormat=N2, Mode=OneWay}" IsReadOnly="True"/>
                                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Сумма налога исчисленная"/>
-                                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CalcedTax}"/>
+                                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CalcedTax, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Grid.Row="0" Grid.Column="2" Text="Сумма налога удержанная"/>
-                                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding RetentTax}"/>
+                                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding RetentTax, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Grid.Row="1" Grid.Column="2" Text="Сумма налога перечисленная"/>
-                                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding TransferedTax}"/>
+                                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding TransferedTax, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Grid.Row="2" Grid.Column="2" Text="Сумма налога, излишне удержанная"/>
-                                    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding TaxMoreThenCalced, Mode=OneWay}" IsReadOnly="True"/>
+                                    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding TaxMoreThenCalced, StringFormat=N2, Mode=OneWay}" IsReadOnly="True"/>
                                     <TextBlock Grid.Row="3" Grid.Column="2" Text="Сумма налога не удержанная"/>
-                                    <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding TaxLessThenCalced, Mode=OneWay}" IsReadOnly="True"/>
-                                    
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox Header="Документы на вычеты">
-                                <Grid >
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="4*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="2*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Row="0" Text="Уведомление на социальный вычет"/>
-                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SocialNotifyNumber}"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="дата"/>
-                                    <DatePicker Grid.Row="0" Grid.Column="3" SelectedDate="{Binding SocialNotifyDate}"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Код ИФНС"/>
-                                    <TextBox Grid.Row="0" Grid.Column="5" Text="{Binding SocialNotifyCode}"/>
-                                    <TextBlock Grid.Row="1" Text="Уведомление на имущественный вычет"/>
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding EstateNotifyNumber}"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="дата"/>
-                                    <DatePicker Grid.Row="1" Grid.Column="3" SelectedDate="{Binding EstateNotifyDate}"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="4" Text="Код ИФНС"/>
-                                    <TextBox Grid.Row="1" Grid.Column="5" Text="{Binding EstateNotifyCode}"/>
+                                    <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding TaxLessThenCalced, StringFormat=N2, Mode=OneWay}" IsReadOnly="True"/>
+
                                 </Grid>
                             </GroupBox>
                         </StackPanel>

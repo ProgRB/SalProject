@@ -20,6 +20,7 @@
             </CollectionViewSource>
             <main_clr:DateToYearConverter x:Key="DateToIntConverter"/>
             <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <view:OrderIdConverter x:Key="OrderIdConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
@@ -236,9 +237,16 @@
                          IsEnabled="{Binding IsCountMeasureRestrEnabled}"/>
                 <TextBlock Grid.Row="3" Grid.Column="2" Text="Первичный документ"/>
                 <CheckBox Grid.Row="3" Grid.Column="3" IsChecked="{Binding BasicDocSign, UpdateSourceTrigger=PropertyChanged}"/>
-                <!--<TextBlock Grid.Row="2" Grid.Column="2" Text="Дата закрытия документа"/>
-                <DatePicker Grid.Column="3" Grid.Row="2" SelectedDate="{Binding DateClose, Mode=OneWay}" IsEnabled="False"/>-->
-
+                <TextBlock Grid.Row="4" Grid.Column="2" Text="Заказ для документа" Visibility="{Binding IsOrderEnabled, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <TextBox Grid.Row="4" Grid.Column="3" Validation.ErrorTemplate="{StaticResource RowNotFoundErrorTemplate}" Visibility="{Binding IsOrderEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBox.Text>
+                        <Binding Path="OrderID" UpdateSourceTrigger="PropertyChanged" ValidatesOnDataErrors="True" Converter="{StaticResource OrderIdConverter}">
+                            <Binding.ValidationRules>
+                                <view:ValidateOrderRule ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </Grid>
         </GroupBox>
         <Grid Grid.Row="4">
@@ -321,7 +329,19 @@
                     <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
                 </CheckBox.LayoutTransform>
             </CheckBox>
-            <TextBlock Text="Пересчитать документ после сохранения" Margin="5,2,5,2"/>
+            <TextBlock Text="Пересчитать документ после сохранения" Margin="5,2,5,2" />
+            <TextBlock Text="{Binding Error, StringFormat='Ошибка: {0}'}" VerticalAlignment="Center"
+                       HorizontalAlignment="Left" Foreground="Red" TextWrapping="Wrap" Width="300">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Error}" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>  
         </StackPanel>
     </Grid>
 </Window>

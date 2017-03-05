@@ -139,7 +139,8 @@ namespace Salary.View
     {
         public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
         {
-            if (value != null && !string.IsNullOrEmpty((string)value) && !DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (value != null && value!=DependencyProperty.UnsetValue && value is string 
+                && !string.IsNullOrEmpty((string)value) && !DesignerProperties.GetIsInDesignMode(new DependencyObject()))
             {
                 string s = (string)value;
                 object t = AppDataSet.Tables["ORDER"].Compute("COUNT(ORDER_ID)", string.Format("ORDER_NAME='{0}'", s));
@@ -155,13 +156,20 @@ namespace Salary.View
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null && value != DBNull.Value)
+            if (value != null && value != DBNull.Value && value!=DependencyProperty.UnsetValue)
             {
-                DataRow[] d = AppDataSet.Tables["ORDER"].Select(string.Format("ORDER_ID={0}", value));
-                if (d.Length == 0)
+                try
+                {
+                    DataRow[] d = AppDataSet.Tables["ORDER"].Select(string.Format("ORDER_ID={0}", value));
+                    if (d.Length == 0)
+                        return null;
+                    else
+                        return d[0]["ORDER_NAME"];
+                }
+                catch (Exception ex)
+                {
                     return null;
-                else
-                    return d[0]["ORDER_NAME"];
+                }
             }
             return null;
         }

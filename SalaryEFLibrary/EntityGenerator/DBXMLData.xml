@@ -1,11 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Tables>
-  <Table Name="RETENTION" Comment="Таблица удержаний">
-    <Column Name="RETENTION_ID" Comment ="Уникальный номер удержания" Type="System.Decimal" DBType="Number" Nullable="False" IsPrimaryKey="True"/>
-    <Column Name="DATE_START_RET" Comment ="Дата начала удержания" Type="System.DateTime" DBType="Number" Nullable="True"/>
-    <Column Name="DATE_END_RET" Type="System.DateTime" DBType="Number"/>
+  <Table Name="RETENTION" Comment="Таблица удержаний" SchemaName="SALARY">
+    <Column Name="RETENTION_ID" DBType="NUMBER" Nullable="False" Type="System.Decimal"/>
+    <Column Name="TRANSFER_ID" Comment="Уникальный номер перевода" DBType="NUMBER" Nullable="False" ColumnRef="APSTAFF.TRANSFER.TRANSFER_ID" Type="System.Decimal"/>
+    <Column Name="PAYMENT_TYPE_ID" DBType="NUMBER" ColumnRef="SALARY.PAYMENT_TYPE.PAYMENT_TYPE_ID" Type="System.Decimal"/>
+    <Column Name="ORDER_NUMBER" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="ORIGINAL_SUM" Comment="Изначальная сумма удержания" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="RETENT_PERCENT" Comment="Процент вычислений" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="RETENT_SUM" Comment="Сумма ежемесячных вычислений" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="REMAIN_SUM" Comment="Остаток суммы вычислений" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="DATE_ADD" Comment="Дата добавления доп удержания;" DBType="DATE" Type="System.DateTime"/>
+    <Column Name="DATE_START_RET" Comment="Дата начала удержания" DBType="DATE" Type="System.DateTime"/>
+    <Column Name="DATE_END_RET" Comment="Дата окончания удержания" DBType="DATE" Type="System.DateTime"/>
+    <Column Name="SALARY_DOC_ID" Comment="Уникальный ключ документа основания ЗП" DBType="NUMBER" ColumnRef="SALARY.SALARY_DOC.SALARY_DOC_ID" Type="System.Decimal"/>
+    <Column Name="POST_TRANSFER_SIGN" Comment="Признак добавления удержания за почтовые переводы;" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="DATE_REM_CALC" Comment="Дата расчета предварительного остатка" DBType="DATE" Type="System.DateTime"/>
   </Table>
-  <Table Name="CLIENT_RETENT_RELATION">
+  
+  <Table Name="CLIENT_RETENT_RELATION" SchemaName="SALARY">
     <Column Name="CLIENT_RETENT_RELATION_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="RELATION_COMMENT" Comment="Текст комментария к перечислению" DBType="VARCHAR2" Type="System.String"></Column>
     <Column Name="BCC_CODE" Comment="КБК" DBType="VARCHAR2" Type="System.String"></Column>
@@ -17,8 +29,8 @@
     <Column Name="RETENTION_ID" Comment="Документ удержания для перечисления" DBType="NUMBER" Type="System.Decimal"></Column>
   </Table>
 
-  <Table Name="REPORT_GROUP">
-    <Column Name="REPORT_GROUP_ID" Comment="Уникальный номер кода группы" DBType="NUMBER" Type="System.Decimal"/>
+  <Table Name="REPORT_GROUP" SchemaName="SALARY">
+    <Column Name="REPORT_GROUP_ID" Comment="Уникальный номер кода группы" DBType="NUMBER" Type="System.Decimal" IsPrimaryKey="True"/>
     <Column Name="GROUP_COMMENT" Comment="Комментарий к группе - чаще где используется" DBType="VARCHAR2" Type="System.String"/>
     <Column Name="PARENT_GROUP_ID" DBType="NUMBER" Type="System.Decimal"/>
     <Column Name="SORT_NUMBER" Comment="Подрядковый номер сортировки группы" DBType="NUMBER" Type="System.Decimal"/>
@@ -29,8 +41,8 @@
     <Column Name="GROUP_CODE" Comment="Код группы для отчетов" DBType="VARCHAR2" Type="System.String"/>
   </Table>
   
-  <Table Name="CLIENT_ACCOUNT" Comment="Счет сотрудника">
-    <Column Name="CLIENT_ACCOUNT_ID" DBType="NUMBER" Type="System.Decimal"></Column>
+  <Table Name="CLIENT_ACCOUNT" Comment="Счет сотрудника" SchemaName="SALARY">
+    <Column Name="CLIENT_ACCOUNT_ID" DBType="NUMBER" Type="System.Decimal" IsPrimaryKey="True"></Column>
     <Column Name="DATE_DOC" Comment="Дата выдачи док-та удостоверяющего личность" DBType="DATE" Type="System.DateTime"></Column>
     <Column Name="CODE_DOC" Comment="Код док-та удостов. личность" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="PER_INSURANCE_NUM" Comment="Номер договора индивидуального страхования" DBType="VARCHAR2" Type="System.String"></Column>
@@ -54,19 +66,19 @@
     
   </Table>
   
-  <Table Name="TYPE_ACCOUNT">
+  <Table Name="TYPE_ACCOUNT" SchemaName="SALARY">
     <Column Name="TYPE_ACCOUNT_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="NEED_TYPE_BANK" Comment="Требуется ли банк для этого типа счета" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="NAME_TYPE_ACCOUNT" DBType="VARCHAR2" Type="System.String"></Column>
   </Table>
 
-  <Table Name="BANK_FOR_TYPE_ACCOUNT">
+  <Table Name="BANK_FOR_TYPE_ACCOUNT" SchemaName="SALARY">
     <Column Name="BANK_FOR_TYPE_ACCOUNT_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="TYPE_ACCOUNT_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="TYPE_BANK_ID" DBType="NUMBER" Type="System.Decimal"></Column>
   </Table>
 
-  <Table Name="TYPE_BANK" Comment="Типы банков">
+  <Table Name="TYPE_BANK" Comment="Типы банков" SchemaName="SALARY">
     <Column Name="TYPE_BANK_ID" Comment="Уникальный номер банка" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="BANK_ADDRESS" Comment="Адрес головного отделения банка" DBType="VARCHAR2" Type="System.String"></Column>
     <Column Name="CONTRACT_DATE" Comment="Дата заключения договора на услуги" DBType="DATE" Type="System.DateTime"></Column>
@@ -82,7 +94,7 @@
     <Column Name="CURRENT_ACCOUNT" Comment="Расчетный счет" DBType="VARCHAR2" Type="System.String"></Column>
   </Table>
   
-  <Table Name="SALARY_ADVANCE">
+  <Table Name="SALARY_ADVANCE" SchemaName="SALARY">
     <Column Name="SALARY_ADVANCE_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="TYPE_ROW_SALARY_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="RETENTION_ID" DBType="NUMBER" Type="System.Decimal"></Column>
@@ -105,7 +117,7 @@
     <Column Name="PAYMENT_TYPE_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="PAY_DATE" DBType="DATE" Type="System.DateTime"></Column>
   </Table>
-  <Table Name="SALARY_DOCUM">
+  <Table Name="SALARY_DOCUM" Comment="Документы начисления" SchemaName="SALARY">
     <Column Name="SALARY_DOCUM_ID" DBType="NUMBER" Type="System.Decimal" IsPrimaryKey="True"></Column>
     <Column Name="LAST_CALC_DATE" Comment="Последнее время расчета" DBType="DATE" Type="System.DateTime"></Column>
     <Column Name="PAYMENT_PERCENT" Comment="Процент оплаты" DBType="NUMBER" Type="System.Decimal"></Column>
@@ -123,28 +135,34 @@
     <Column Name="REG_DOC_ID" Comment="Ссылка на документ в табеле" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="BASIC_DOC_SIGN" Comment="Признак первичного документа" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="RELATED_DOCUM_ID" Comment="Ссылка на документ первичный" DBType="NUMBER" Type="System.Decimal"></Column>
+    <Column Name="ORDER_ID" Comment="Ссылка на заказ" DBType="NUMBER" Type="System.Decimal"></Column>
   </Table>
-  <Table Name="SALARY_DOCUM_DETAIL" Comment="Детали оплаты документа зарплаты">
+  <Table Name="SALARY_DOCUM_DETAIL" Comment="Детали оплаты документа зарплаты" SchemaName="SALARY">
     <Column Name="SALARY_DOCUM_DETAIL_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="SALARY_DOCUM_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="PAYMENT_SUM" DBType="NUMBER" Type="System.Decimal" Comment="Сумма оплаты"></Column>
     <Column Name="PAYMENT_TYPE_ID" DBType="NUMBER" Type="System.Decimal" Comment="Вид оплаты для расчета"></Column>
   </Table>
-  <Table Name="TYPE_SAL_DOCUM" Comment="Тип документа зарплаты">
-    <Column Name="TYPE_SAL_DOCUM_ID" DBType="NUMBER" Type="System.Decimal"></Column>
-    <Column Name="COUNT_RESTRICT_DAYS" Comment="Кол-во дней, ограничивающих расчет первых шифров оплат" DBType="NUMBER" Type="System.Decimal"></Column>
-    <Column Name="NEED_DOC_PERIOD" Comment="Требуется ли указывать период документа" DBType="NUMBER" Type="System.Decimal"></Column>
-    <Column Name="VAC_SIGN" Comment="Признак отпуска" DBType="NUMBER" Type="System.Decimal"></Column>
-    <Column Name="TYPE_SAL_DOC_NAME" DBType="VARCHAR2" Type="System.String"></Column>
-    <Column Name="NEED_CALC_PERIOD" DBType="NUMBER" Type="System.Decimal"></Column>
+  
+  <Table Name="TYPE_SAL_DOCUM" SchemaName="SALARY" Comment="Таблица типов документа начисления">
+    <Column Name="TYPE_SAL_DOCUM_ID" DBType="NUMBER" Nullable="False" Type="System.Decimal"/>
+    <Column Name="TYPE_SAL_DOC_NAME" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="VAC_SIGN" Comment="Признак отпуска" DBType="NUMBER" Nullable="False" Type="System.Decimal"/>
+    <Column Name="NEED_DOC_PERIOD" Comment="Требуется ли указывать период документа" DBType="NUMBER" Nullable="False" Type="System.Decimal"/>
+    <Column Name="COUNT_RESTRICT_DAYS" Comment="Кол-во дней, ограничивающих расчет первых шифров оплат" DBType="NUMBER" Nullable="False" Type="System.Decimal"/>
+    <Column Name="NEED_CALC_PERIOD" Comment="Требуется ли период для расчета документа" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="EXCLUDE_DAY_SIGN" Comment="Признак исключения дней в годах расчета периодов" DBType="NUMBER" Type="System.Decimal"/>
+    <Column Name="TYPE_DESCRIPTION" Comment="Описание типа, используется для показа в справке расчета" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="IS_ORDER_ENABLED" Comment="Доступен ли заказ для документа (выбор)" DBType="NUMBER" Type="System.Decimal"/>
   </Table>
-  <Table Name="SALARY_DOCUM_PERIOD">
+  
+  <Table Name="SALARY_DOCUM_PERIOD" SchemaName="SALARY">
     <Column Name="SALARY_DOCUM_PERIOD_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="SALARY_DOCUM_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="END_PERIOD" DBType="DATE" Type="System.DateTime"></Column>
     <Column Name="BEGIN_PERIOD" DBType="DATE" Type="System.DateTime"></Column>
   </Table>
-  <Table Name="SALARY" Comment="Основная таблица - зарплата сотрудников">
+  <Table Name="SALARY" Comment="Основная таблица - зарплата сотрудников" SchemaName="SALARY">
     <Column Name="SALARY_ID" Comment="Уникальный номер ЗП" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="TYPE_ROW_SALARY_ID" Comment="Тип записи в ЗП" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="RETENTION_ID" Comment="Документ удержания" DBType="NUMBER" Type="System.Decimal"></Column>
@@ -168,7 +186,7 @@
     <Column Name="PAY_DATE" Comment="Дата оплаты" DBType="DATE" Type="System.DateTime"></Column>
   </Table>
 
-  <Table Name="DOC_LIST" Comment="Таблица типов документов табеля">
+  <Table Name="DOC_LIST" Comment="Таблица типов документов табеля" SchemaName="APSTAFF">
     <Column Name="DOC_LIST_ID" Comment="Уникальный идентификатор документа;" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="DOC_END_VALID" Comment="Дата окончания действия типа документа;" DBType="DATE" Type="System.DateTime"></Column>
     <Column Name="DOC_BEGIN_VALID" Comment="Дата начала действия типа документа;" DBType="DATE" Type="System.DateTime"></Column>
@@ -181,7 +199,7 @@
     <Column Name="DOC_NAME" Comment="Наименование документа;" DBType="VARCHAR2" Type="System.String"></Column>
   </Table>
 
-  <Table Name="REG_DOC" Comment="Таблица документов в табеле">
+  <Table Name="REG_DOC" Comment="Таблица документов в табеле" SchemaName="APSTAFF">
     <Column Name="REG_DOC_ID" Comment="Уникальный идентификатор регистрационного документа;" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="DOC_LOCATION" Comment="Местонахождение;" DBType="VARCHAR2" Type="System.String"></Column>
     <Column Name="TRANSFER_ID" DBType="NUMBER" Type="System.Decimal"></Column>
@@ -194,7 +212,7 @@
     <Column Name="PER_NUM" Comment="Табельный номер;" DBType="VARCHAR2" Type="System.String"></Column>
   </Table>
 
-  <Table Name="SALARY_DOCUM_PAY_CHANGE" Comment="Таблица изменений процентов расчета">
+  <Table Name="SALARY_DOCUM_PAY_CHANGE" Comment="Таблица изменений процентов расчета" SchemaName="SALARY">
     <Column Name="SALARY_DOCUM_PAY_CHANGE_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="SALARY_DOCUM_ID" DBType="NUMBER" Type="System.Decimal"></Column>
     <Column Name="BY_CODE_DOC_SIGN" DBType="NUMBER" Type="System.Decimal"></Column>
@@ -202,7 +220,7 @@
     <Column Name="COUNT_DAYS" DBType="NUMBER" Type="System.Decimal" Comment="День, начиная с которого начинается изменения расчета"></Column>
   </Table>
 
-  <Table Name="LOAN">
+  <Table Name="LOAN" SchemaName="SALARY">
     <Column Name="LOAN_ID" Comment="Уникальный идентификатор ссуды" DBType="NUMBER" Type="System.Decimal"/>
     <Column Name="CLIENT_ACCOUNT_ID" Comment="Ключ счета сотрудника" DBType="NUMBER" Type="System.Decimal"/>
     <Column Name="LOAN_DATE_END" Comment="Дата окончания действия ссуды (перевод в архив)" DBType="DATE" Type="System.DateTime"/>
@@ -226,7 +244,7 @@
     <Column Name="PROTOCOL_NUMBER" Comment="Номер протокола" DBType="VARCHAR2" Type="System.String"/>
   </Table>
 
-  <Table Name="ADDRESS_NONE_KLADR">
+  <Table Name="ADDRESS_NONE_KLADR" SchemaName="APSTAFF">
     <Column Name="PER_NUM" Comment="Табельный номер;" DBType="VARCHAR2" Type="System.String"/>
     <Column Name="NAME_STREET" Comment="Улица; Наименование улицы;" DBType="VARCHAR2" Type="System.String"/>
     <Column Name="NAME_LOCALITY" Comment="Населенный пункт; Наименование населенного пункта;" DBType="VARCHAR2" Type="System.String"/>
@@ -234,8 +252,20 @@
     <Column Name="NAME_DISTRICT" Comment="Район; Наименование района;" DBType="VARCHAR2" Type="System.String"/>
     <Column Name="NAME_REGION" Comment="Регион; Наименование региона;" DBType="VARCHAR2" Type="System.String"/>
   </Table>
+  
+   <Table Name="REGISTR" SchemaName="APSTAFF" Comments="Место жительства сотрудника по прописке;">
+        <Column Name="PER_NUM" Comment="Табельный номер;" DBType="VARCHAR2" Nullable="False" IsPrimaryKey="True" ColumnRef="APSTAFF.EMP.PER_NUM" Type="System.String"/>
+        <Column Name="REG_POST_CODE" Comment="Почтовый индекс; Почтовый индекс по прописке сотрудника;" DBType="VARCHAR2" Type="System.String"/>
+        <Column Name="REG_FLAT" Comment="Квартира; Номер квартиры по прописке сотрудника;" DBType="VARCHAR2" Type="System.String"/>
+        <Column Name="REG_HOUSE" Comment="Дом; Номер дома по прописке сотрудника;" DBType="VARCHAR2" Type="System.String"/>
+        <Column Name="REG_BULK" Comment="Корпус; Номер корпуса по прописке сотрудника;" DBType="VARCHAR2" Type="System.String"/>
+        <Column Name="REG_CODE_STREET" Comment="Код улицы; Код улицы (берется из kladr), на которой проживает сотрудник по прописке;" DBType="VARCHAR2" ColumnRef="APSTAFF.STREET.CODE_STREET" Type="System.String"/>
+        <Column Name="REG_PHONE" Comment="Телефон; Номер телефона по прописке сотрудника;" DBType="VARCHAR2" Type="System.String"/>
+        <Column Name="DATE_REG" Comment="Дата прописки; Дата прописки сотрудника;" DBType="DATE" Type="System.DateTime"/>
+        <Column Name="SOURCE_FILL_ID" Comment="Уникальный идентификатор источника пополнения;" DBType="NUMBER" ColumnRef="APSTAFF.SOURCE_FILL.SOURCE_FILL_ID" Type="System.Decimal"/>
+    </Table>
 
-  <Table Name="EMP_ALL_DATA" Commment="Общие данные по сотруднику">
+  <Table Name="EMP_ALL_DATA" Commment="Общие данные по сотруднику" SchemaName="APSTAFF">
     <Column Name="TRANSFER_ID" Comment="Перевод сотрудника" DbType="NUMBER" Type="System.Decimal"/>
     <Column Name="EMP_LAST_NAME" Comment="ФАМИЛИЯ" DbType="VARCHAR2" Type="System.String"/>
     <Column Name="EMP_FIRST_NAME" Comment="Имя" DbType="VARCHAR2" Type="System.String"/>
@@ -254,7 +284,7 @@
     <Column Name="CHAR_TRANSFER_ID" Comment="Хбз че это" DbType="NUMBER" Type="System.Decimal"/>
   </Table>
 
-  <Table Name="EMP_ACCOUNT_DATA" Comment="Общие и бухгалтерские данные по сотруднику">
+  <Table Name="EMP_ACCOUNT_DATA" Comment="Общие и бухгалтерские данные по сотруднику" SchemaName="APSTAFF">
     <Column Name="TRANSFER_ID" Comment="Перевод сотрудника" DbType="NUMBER" Type="System.Decimal"/>
     <Column Name="EMP_LAST_NAME" Comment="ФАМИЛИЯ" DbType="VARCHAR2" Type="System.String"/>
     <Column Name="EMP_FIRST_NAME" Comment="Имя" DbType="VARCHAR2" Type="System.String"/>
@@ -289,7 +319,7 @@
         <Column Name="TAR_ADDITION" Comment="Надбавка;" DBType="NUMBER" Type="System.Decimal"/>
     </Table>
 
-  <Table Name="CLIENT_ACCOUNT_DATA" Comment ="Общие данные по счету сотрудника">
+  <Table Name="CLIENT_ACCOUNT_DATA" Comment ="Общие данные по счету сотрудника" SchemaName="SALARY">
     <Column Name="CLIENT_ACCOUNT_ID" Comment="Уникальный номер счета" DbType="NUMBER" Type="System.Decimal"/>
     <Column Name="NUMBER_ACCOUNT" Comment="Номер счета" DbType="VARCHAR2" Type="System.String"/>
     <Column Name="NUMBER_CARD" Comment="Номер карты" DbType="VARCHAR2" Type="System.String"/>
@@ -316,7 +346,7 @@
     <Column Name="TYPE_PER_DOC_ID" Comment="Уникальный идентификатор типа личного документа;" DBType="NUMBER" Type="System.Decimal"/>
   </Table>
 
-  <Table Name="ACCOUNT_DATA">
+  <Table Name="ACCOUNT_DATA" SchemaName="APSTAFF">
     <Column Name="ACCOUNT_DATA_ID" Comment="Уникальный идентификатор бухгалтерских данных;" DBType="NUMBER" Type="System.Decimal"/>
     <Column Name="HARMFUL_ADDITION_ADD" Comment="Надбавка за вредность дополнительная;" DBType="NUMBER" Type="System.Double"/>
     <Column Name="ENCODING_ADDITION" Comment="Надбавка за работу с шифрами;" DBType="NUMBER" Type="System.Single"/>
@@ -356,7 +386,7 @@
     <Column Name="TRANSFER_ID" Comment="Уникальный идентификатор перевода на  заводе;" DBType="NUMBER" Type="System.Decimal"/>
   </Table>
 
-  <Table Name="PER_DATA">
+  <Table Name="PER_DATA" SchemaName="APSTAFF">
     <Column Name="PER_NUM" Comment="Табельный номер;" DBType="VARCHAR2" Type="System.String"/>
     <Column Name="SOURCE_EMPLOYABILITY_ID" Comment="Уникальный идентификатор источника трудоустройства;" DBType="NUMBER" Type="System.Decimal"/>
     <Column Name="INN" Comment="ИНН; Индивидуальный номер налогоплательщика сотрудника;" DBType="VARCHAR2" Type="System.String"/>
@@ -369,7 +399,48 @@
     <Column Name="TRIP_SIGN" Comment="Признак того, что сотрудник командирован на завод;" DBType="NUMBER" Type="System.Decimal"/>
   </Table>
 
-  <Table Name="PAYMENT_TYPE">
+  <Table Name="ADDRESS" Comment="Адрес представление" SchemaName="APSTAFF">
+    <Column Name="COUNTRY" Comment="Страна" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="REGION" Comment="Регион" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="CODE_REGION" Comment="Код региона" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="DISTRICT" Comment="Район" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="CITY" Comment="Город" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="LOCALITY" Comment="Населенный пункт" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="STREET" Comment="Улица" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="HOUSE" Comment="Номер дома" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="BULK" Comment="Блок" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="FLAT" Comment="Квартира" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="POST_INDEX" Comment="Индекс почтовый" DBType="VARCHAR2" Type="System.String"/>
+  </Table>
+
+  <Table Name="CITY" SchemaName="APSTAFF" Comments="Справочник городов;">
+    <Column Name="CODE_CITY" Comment="Код города; Код города (берется из kladr);" DBType="VARCHAR2" Nullable="False" Type="System.String"/>
+    <Column Name="NAME_CITY" Comment="Наименование города;" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="ABBREV_ID" Comment="Уникальный идентификатор аббревиатуры (Населенного пункта, города, улиц и т.д.);" DBType="NUMBER" ColumnRef="APSTAFF.ABBREV.ABBREV_ID" Type="System.Decimal"/>
+  </Table>
+  <Table Name="DISTRICT" SchemaName="APSTAFF" Comments="Справочник районов;">
+    <Column Name="CODE_DISTRICT" Comment="Код района; Код района (берется из kladr);" DBType="VARCHAR2" Nullable="False" Type="System.String"/>
+    <Column Name="NAME_DISTRICT" Comment="Район; Наименование района;" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="ABBREV_ID" Comment="Уникальный идентификатор аббревиатуры (Населенного пункта, города, улиц и т.д.);" DBType="NUMBER" ColumnRef="APSTAFF.ABBREV.ABBREV_ID" Type="System.Decimal"/>
+  </Table>
+  <Table Name="LOCALITY" SchemaName="APSTAFF" Comments="Справочник населенных пунктов;">
+    <Column Name="CODE_LOCALITY" Comment="Код населенного пункта; Код населенного пункта (берется из kladr);" DBType="VARCHAR2" Nullable="False" Type="System.String"/>
+    <Column Name="LOCALITY_NAME" Comment="Населенный пункт; Наименование населенного пункта;" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="ABBREV_ID" Comment="Уникальный идентификатор аббревиатуры (Населенного пункта, города, улиц и т.д.);" DBType="NUMBER" ColumnRef="APSTAFF.ABBREV.ABBREV_ID" Type="System.Decimal"/>
+  </Table>
+  <Table Name="REGION" SchemaName="APSTAFF" Comments="Справочник регионов;">
+    <Column Name="CODE_REGION" Comment="Код региона; Код региона (берется из kladr);" DBType="VARCHAR2" Nullable="False" Type="System.String"/>
+    <Column Name="NAME_REGION" Comment="Регион; Наименование региона;" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="ABBREV_ID" Comment="Уникальный идентификатор аббревиатуры (Населенного пункта, города, улиц и т.д.);" DBType="NUMBER" ColumnRef="APSTAFF.ABBREV.ABBREV_ID" Type="System.Decimal"/>
+  </Table>
+  <Table Name="STREET" SchemaName="APSTAFF" Comments="Справочник улиц;">
+    <Column Name="CODE_STREET" Comment="Код улицы; Код улицы (берется из kladr);" DBType="VARCHAR2" Nullable="False" Type="System.String"/>
+    <Column Name="NAME_STREET" Comment="Улица; Наименование улицы;" DBType="VARCHAR2" Type="System.String"/>
+    <Column Name="ABBREV_ID" Comment="Уникальный идентификатор аббревиатуры (Населенного пункта, города, улиц и т.д.);" DBType="NUMBER" ColumnRef="APSTAFF.ABBREV.ABBREV_ID" Type="System.Decimal"/>
+    <Column Name="STR_POST_CODE" Comment="Почтовый индекс улицы;" DBType="VARCHAR2" Type="System.String"/>
+  </Table>
+
+  <Table Name="PAYMENT_TYPE" SchemaName="SALARY">
     <Column Name="PAYMENT_TYPE_ID" DBType="NUMBER" Type="System.Decimal" IsPrimaryKey="True"/>
     <Column Name="IS_NEGATIV_ALOWED" Comment="Допустимы отрицательные суммы в виде оплат" DBType="NUMBER" Type="System.Decimal"/>
     <Column Name="CONSIDER_TYPE_ID" Comment="тип измерения" DBType="NUMBER" Type="System.Decimal"/>
@@ -381,7 +452,7 @@
     <Column Name="CODE_PAYMENT" DBType="VARCHAR2" Type="System.String"/>
   </Table>
   
-  <Table Name="SAL_SUBDIV_RECEIVE" Comment="Таблица принятых/переданых затрат">
+  <Table Name="SAL_SUBDIV_RECEIVE" Comment="Таблица принятых/переданых затрат" SchemaName="SALARY">
     <Column Name="SAL_SUBDIV_RECEIVE_ID" DBType="NUMBER" Type="System.Decimal" IsPrimaryKey="True"/>
     <Column Name="REC_DATE" Comment="Отчетный месяц" DBType="DATE" Type="System.DateTime" Nullable="False"/>
     <Column Name="RECEIVE_SUBDIV_ID" Comment="подразделение передающее затраты (откуда, передано)" DBType="NUMBER" Type="System.Decimal" Nullable="False"/>
@@ -392,7 +463,7 @@
     <Column Name="SUBDIV_ID" Comment="Подразделение принимающее  затраты (куда передали, принято)" DBType="NUMBER" Type="System.Decimal" Nullable="False"/>
   </Table>
 
-  <Table Name="CARTULARY" SchemaName="SALARY">
+  <Table Name="CARTULARY" SchemaName="SALARY" >
     <Column Name="CARTULARY_ID" Comment="Уникальный номер реестра" DBType="NUMBER" Nullable="False" Type="System.Decimal"/>
     <Column Name="TYPE_CARTULARY_ID" Comment="Тип реестра" DBType="NUMBER" Nullable="False" ColumnRef="SALARY.TYPE_CARTULARY.TYPE_CARTULARY_ID" Type="System.Decimal"/>
     <Column Name="DATE_CARTULARY" Comment="Дата реестра" DBType="DATE" Type="System.DateTime"/>
@@ -487,7 +558,7 @@
     <Column Name="PER_NUM" Comment="Табельный номер;" DBType="VARCHAR2" Type="System.String"/>
   </Table>
 
-  <Table Name="BRIGAGE" Comment="Таблица бригад" GenerateAdapter="True">
+  <Table Name="BRIGAGE" Comment="Таблица бригад" GenerateAdapter="True" SchemaName="SALARY">
       <Column Name="BRIGAGE_ID" Comment="Уникальный номер бригады (автопоследовательность)" DBType="NUMBER" Type="System.Decimal"/>
       <Column Name="DATE_END_BRIGAGE" Comment="Дата окончания действия бригады" DBType="DATE" Type="System.DateTime"/>
       <Column Name="DATE_BEGIN_BRIGAGE" Comment="Дата начала действия бригады" DBType="DATE" Type="System.DateTime"/>
@@ -497,7 +568,7 @@
       <Column Name="BRIGAGE_CODE" Comment="Код бригады" DBType="VARCHAR2" Type="System.String"/>
   </Table>
   
-  <Table Name="TABLE_BRIGAGE" Comment="Таблица табелей бригад">
+  <Table Name="TABLE_BRIGAGE" Comment="Таблица табелей бригад" SchemaName="SALARY">
       <Column Name="TABLE_BRIGAGE_ID" Comment="Уникальный номер записи табеля бригады" DBType="NUMBER" Type="System.Decimal"/>
       <Column Name="WORK_DATE" Comment="Дата работы сотрудника (месяц) по табелю бригады" DBType="DATE" Type="System.DateTime"/>
       <Column Name="SUBDIV_ID" Comment="Уникальный номер подразделения" DBType="NUMBER" Type="System.Decimal"/>
@@ -511,7 +582,7 @@
       <Column Name="BRIGAGE_ID" Comment="Уникальный номер бригады" DBType="NUMBER" Type="System.Decimal"/>
   </Table>
 
-  <Table Name="PIECE_WORK_DATA" Comment="Класс представляющий общие данные">
+  <Table Name="PIECE_WORK_DATA" Comment="Класс представляющий общие данные по нарядам" SchemaName="SALARY">
     <Column Name="ORDER_NAME" Comment="Заказ" DBType="VARCHAR2" Type="System.String"/>
     <Column Name="PACKAGE_NUMBER" Comment="№ пачки" DBType="VARCHAR2" Type="System.String"/>
     <Column Name="COMPLETE_DATE" Comment="Дата выполнения" DBType="DATE" Type="System.DateTime"/>
@@ -522,7 +593,7 @@
     <Column Name="DETAIL_TIME" Comment="Сумма часов" DBType="NUMBER" Type="System.Decimal"/>
   </Table>
 
-  <Table Name="SUBDIV_FOR_CLOSE" Comment="Таблица для закрытия областей редактирования">
+  <Table Name="SUBDIV_FOR_CLOSE" Comment="Таблица для закрытия областей редактирования" SchemaName="SALARY">
     <Column Name="SUBDIV_ID" Comment="Уникальный идентификатор подразделения" DBType="NUMBER" Type="System.Decimal"/>
     <Column Name="LAST_DATE_PROCESSING" DBType="DATE" Type="System.DateTime" Comment="Дата готовности (обработки) подразделения"/>
     <Column Name="SUBDIV_FOR_CLOSE_ID" Comment="Уникальный идентификатор закрытия подразделения" DBType="NUMBER" Type="System.Decimal"/>
@@ -547,10 +618,10 @@
     <Column Name="AGENT_DOCUMENT" Comment="Документ подтверждающий полномочия представителя" DBType="VARCHAR2" Type="System.String"/>
   </Table>
 
-  <Table Name="TAX_EMP_DOCUM">
+  <Table Name="TAX_EMP_DOCUM" SchemaName="SALARY">
         <Column Name="TAX_EMP_DOCUM_ID" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="PER_NUM" Comment="Таб. № документа" DBType="VARCHAR2" Type="System.String"/>
-        <Column Name="TAX_STATUS" Comment="Налоговый статус документа" DBType="NUMBER" Type="System.Decimal"/>
+        <Column Name="TAX_STATUS" Comment="Налоговый статус документа" DBType="NUMBER"  Nullable="False" Type="System.Decimal"/>
         <Column Name="TYPE_PER_DOC_ID" Comment="Ссылка на документ удостоверяющего личность" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="HOME_INDEX" Comment="Индекс места прописки" DBType="VARCHAR2" Type="System.String"/>
         <Column Name="CODE_REGION" Comment="Код региона места прописки" DBType="VARCHAR2" Type="System.String"/>
@@ -561,7 +632,7 @@
         <Column Name="HOME_NUMBER" Comment="Номер дома" DBType="VARCHAR2" Type="System.String"/>
         <Column Name="HOUSING" Comment="Блок" DBType="VARCHAR2" Type="System.String"/>
         <Column Name="FLAT_NUMBER" Comment="Номер хаты" DBType="VARCHAR2" Type="System.String"/>
-        <Column Name="TAX_PERCENT" Comment="Налоговая ставка в процентах" DBType="NUMBER" Type="System.Decimal"/>
+        <Column Name="TAX_PERCENT" Comment="Налоговая ставка в процентах" DBType="NUMBER"  Nullable="False" Type="System.Decimal"/>
         <Column Name="SOCIAL_NOTIFY_NUMBER" Comment="Номер уведомления дающего право на социальный вычет" DBType="VARCHAR2" Type="System.String"/>
         <Column Name="SOCIAL_NOTIFY_DATE" Comment="Дата уведомления дающего право на социальный вычет" DBType="DATE" Type="System.DateTime"/>
         <Column Name="SOCIAL_NOTIFY_CODE" Comment="Код уведомления дающего право на социальный вычет" DBType="VARCHAR2" Type="System.String"/>
@@ -571,7 +642,7 @@
         <Column Name="ADVANCE_PAY_NOTIFY_NUMBER" Comment="Номер уведомления дающего право на уменьшение фиксированных авансовых платежей" DBType="VARCHAR2" Type="System.String"/>
         <Column Name="ADVANCE_PAY_NOTIFY_DATE" Comment="Дата уведомления дающего право на уменьшение фиксированных авансовых платежей" DBType="DATE" Type="System.DateTime"/>
         <Column Name="ADVANCE_PAY_NOTIFY_CODE" Comment="Код уведомления дающего право на уменьшение фиксированных авансовых платежей" DBType="VARCHAR2" Type="System.String"/>
-        <Column Name="TAX_COMPANY_ID" Comment="Ссылка на организацию" DBType="NUMBER" Type="System.Decimal"/>
+        <Column Name="TAX_COMPANY_ID" Comment="Ссылка на организацию" DBType="NUMBER"  Nullable="False" Type="System.Decimal"/>
         <Column Name="DOCUM_NUMBER" Comment="Номер справки" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="DOCUM_SIGN" Comment="Признак справки" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="CORR_NUMBER" Comment="Номер корректировки" DBType="NUMBER" Type="System.Decimal"/>
@@ -580,18 +651,18 @@
         <Column Name="TRANSFERED_TAX" Comment="Сумма налога перечисленная" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="CODE_COUNTRY" Comment="Код страны гражданства" DBType="VARCHAR2" Type="System.String"/>
         <Column Name="CALCED_TAX" Comment="Сумма рассчитанного налога" DBType="NUMBER" Type="System.Decimal"/>
-        <Column Name="DOCUM_DATE" Comment="Отчетный период документа (последний месяц)" DBType="DATE" Type="System.DateTime"/>
+        <Column Name="DOCUM_DATE" Comment="Отчетный период документа (последний месяц)" DBType="DATE"  Nullable="False" Type="System.DateTime"/>
         <Column Name="UPDATE_DATE" DBType="DATE" Type="System.DateTime"/>
     </Table>
 
-    <Table Name="TAX_DOCUM_DISCOUNT" Comment="Налоговый вычеты по документу">
+    <Table Name="TAX_DOCUM_DISCOUNT" Comment="Налоговый вычеты по документу" SchemaName="SALARY">
         <Column Name="TAX_DOCUM_DISCOUNT_ID" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="TAX_EMP_DOCUM_ID" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="CODE_DISCOUNT" DBType="VARCHAR2" Type="System.String"/>
         <Column Name="SUM_DISCOUNT" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="DATE_DISCOUNT" DBType="DATE" Type="System.DateTime"/>
     </Table>
-    <Table Name="TAX_DOCUM_PAYMENT" Comment="Выплаты по документу">
+    <Table Name="TAX_DOCUM_PAYMENT" Comment="Выплаты по документу" SchemaName="SALARY">
         <Column Name="TAX_DOCUM_PAYMENT_ID" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="TAX_EMP_DOCUM_ID" DBType="NUMBER" Type="System.Decimal"/>
         <Column Name="PAY_DATE" DBType="DATE" Type="System.DateTime"/>

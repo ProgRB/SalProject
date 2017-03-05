@@ -65,6 +65,10 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AddRetention\bin\Release\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Oracle.DataAccess, Version=2.112.3.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Kadr\Kadr\Kadr\bin\Debug\Oracle.DataAccess.dll</HintPath>
@@ -102,11 +106,13 @@
     </Compile>
     <Compile Include="Helpers\AppXmlHelper.cs" />
     <Compile Include="Helpers\ClipboardHelper.cs" />
+    <Compile Include="Helpers\ConnectionQueue.cs" />
     <Compile Include="Helpers\Converters.cs" />
     <Compile Include="Helpers\CSVHelper.cs" />
     <Compile Include="Helpers\DataTableHelpers.cs" />
     <Compile Include="Helpers\DateTimeHelpers.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
+    <Compile Include="Helpers\ExcelHelper.cs" />
     <Compile Include="Helpers\ExceptionHelper.cs" />
     <Compile Include="Helpers\MailHelper.cs" />
     <Compile Include="Helpers\NotificationObject.cs" />

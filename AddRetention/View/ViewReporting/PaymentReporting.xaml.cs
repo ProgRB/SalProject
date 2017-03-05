@@ -226,24 +226,23 @@ namespace Salary.ViewReporting
             {
                 OracleDataAdapter oda = OracleAdapterHelper.GetDefaultAdapter("RepSalaryFPWByCodeDegree.sql", f,
                     FilterParameter.p_subdiv_id, FilterParameter.p_date_begin, FilterParameter.p_date_end, FilterParameter.c);
+                oda.SelectCommand.Parameters.Add("p_all_degree", OracleDbType.Decimal, e.Parameter == null ? 0 : 1, ParameterDirection.Input);
                 AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Получение данных. Ожидайте...",
+                        oda, oda.SelectCommand,
                         (s, pw) =>
                         {
-                            OracleDataAdapter a = pw.Argument as OracleDataAdapter;
-                            DataTable t = new DataTable();
-                            a.Fill(t);
-                            pw.Result = t;
-                        },
-                            oda, oda.SelectCommand,
-                        (s, pw) =>
-                        {
-                            if (pw.Cancelled) return;
-                            if (pw.Error != null) MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка получения данных");
-                            else
-                                ViewReportWindow.ShowReport(this, "Отчет распределение ФОТ по категориям", "Rep_SalaryFPWByDegree.rdlc", pw.Result as DataTable,
+                            if (e.Parameter == null)
+                            {
+                                ViewReportWindow.ShowReport(this, "Отчет распределение ФОТ по категориям", "Rep_SalaryFPWByDegree.rdlc", (pw.Result as DataSet).Tables[0],
                                     new ReportParameter[]{ new ReportParameter("P_DATE1", f.DateBegin.Value.ToShortDateString()),
                                     new ReportParameter("P_DATE2", f.DateEnd.Value.ToShortDateString())
                                     }, System.Drawing.Printing.Duplex.Default, false);
+                            }
+                            else
+                                ViewReportWindow.ShowReport(this, "Отчет структура ЗП по категориям", "Rep_SalaryFPWByDegreeTotal.rdlc", (pw.Result as DataSet).Tables[0],
+                                   new ReportParameter[]{ new ReportParameter("P_DATE1", f.DateBegin.Value.ToShortDateString()),
+                                    new ReportParameter("P_DATE2", f.DateEnd.Value.ToShortDateString())
+                                   }, System.Drawing.Printing.Duplex.Default, false);
                         });
             }
         }

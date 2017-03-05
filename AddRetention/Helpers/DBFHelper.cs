@@ -17,7 +17,7 @@ namespace Salary.Helpers
     {
 
         /// <summary>
-        /// Записывает данные из таблицы в дбфку со структурой по указанному пути, скопированную локально и предлагая сохранить ее
+        /// Записывает данные из таблицы в дбфку указанную по пути. Если надо удаляет данные по фильтру удаления
         /// </summary>
         /// <param name="DBFFilePath"></param>
         /// <param name="table"></param>
@@ -127,6 +127,70 @@ namespace Salary.Helpers
                     return OleDbType.Boolean;
                 else
                     throw new ArgumentOutOfRangeException(StringType);
+        }
+
+
+        /// <summary>
+        /// Записывает данные из таблицы в дбфку со структурой по указанному пути, скопированную локально и предлагая сохранить ее
+        /// </summary>
+        /// <param name="DBFFilePath"></param>
+        /// <param name="table"></param>
+        public static void WriteDataTableToDBF(string DBFFilePath, DataTable table, string delete_where, bool with_delete = false, bool HandleRowUpdatingErrors = false)
+        {
+            IgnoreErrors = false;
+            if (!CheckVfpOleDb.IsInstalled())
+                MessageBox.Show("Не установлен драйвер FoxPro. Обратитесь к системным администраторам для установки", "Ошибка записи", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            else
+            {
+                if (table == null)
+                    throw new NullReferenceException("Не задано таблица источник данных");
+                else
+                {
+                    string TableName = System.IO.Path.GetFileNameWithoutExtension(DBFFilePath);
+                    using (OleDbConnection fpConnection = new OleDbConnection($"Provider=VFPOLEDB.1;Data Source={DBFFilePath};Mode=Write;"))
+                    {
+                        fpConnection.Open();
+                        OleDbCommand cmdDelete = new OleDbCommand($"delete from {TableName} {(string.IsNullOrEmpty(delete_where)?"":"where "+delete_where)}", fpConnection);
+                        if (with_delete)
+                            cmdDelete.ExecuteNonQuery();
+
+                        OleDbDataAdapter a = new OleDbDataAdapter(string.Format("select * from {0}", TableName), fpConnection);
+                        if (HandleRowUpdatingErrors)
+                            a.RowUpdated += new OleDbRowUpdatedEventHandler(a_RowUpdated);
+
+                        Dictionary<string, OleDbParameter> ColumnsMapping = new Dictionary<string, OleDbParameter>(StringComparer.OrdinalIgnoreCase);
+
+                        //Получаем данные по дбфки, структуру, чтобы составить потом команды вставки
+                        OleDbDataReader reader = a.SelectCommand.ExecuteReader(CommandBehavior.KeyInfo);
+                        DataTable schemaTable = reader.GetSchemaTable();
+                        ColumnsMapping = schemaTable.Rows.OfType<DataRow>().OrderBy(p => p.Field2<Int32>("ColumnOrdinal"))
+                                            .ToDictionary(y => y["ColumnName"].ToString().ToUpper(), p => new OleDbParameter(p["ColumnName"].ToString(),
+                                        GetOleType(p["DataType"].ToString()), p.Field<Int32>("ColumnSize"), p["ColumnName"].ToString()));
+
+                        //Колонки берем из таблицы которую надо залить в дбфку
+                        string[] columns = table.Columns.Cast<DataColumn>().Select(r=>r.ColumnName.ToUpper()).ToArray();
+
+                        a.InsertCommand = new OleDbCommand(string.Format("INSERT INTO {0}({1}) VALUES({2})",
+                            TableName,
+                            string.Join(", ", columns.Select(r => r.ToUpper())), 
+                            string.Join(", ", columns.Select(r => "?"))), fpConnection);
+
+                        int i = 0;
+                        foreach (string s in columns)
+                        {
+                            a.InsertCommand.Parameters.Add(string.Format("p{0}", i++), ColumnsMapping[s].OleDbType, ColumnsMapping[s].Size, ColumnsMapping[s].SourceColumn).IsNullable = true;
+                        }
+
+                        for (i = 0; i < table.Rows.Count; ++i)
+                        {
+                            table.Rows[i].SetAdded();
+                        }
+                        new OleDbCommand("SET NULL OFF", fpConnection).ExecuteNonQuery();
+                        a.Update(table);
+                        fpConnection.Close();
+                    }
+                }
+            }
         }
     }
     /// <summary>

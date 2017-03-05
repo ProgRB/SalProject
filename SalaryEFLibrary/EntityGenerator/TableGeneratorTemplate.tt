@@ -27,42 +27,93 @@ namespace EntityGenerator
     XmlDocument doc= new XmlDocument();
     doc.Load(file_name);
     XmlNodeList nodes =  doc.DocumentElement.SelectNodes("/Tables/Table");
-    foreach (XmlNode n in nodes)
+    foreach (XmlNode n in nodes.Cast<XmlNode>().OrderBy(r=>new Tuple<string, string>(r.Attributes["SchemaName"]?.InnerText, r.Attributes["Name"]?.InnerText)))
     {
         ClearIndent();
         PushIndent("    ");
         PushComment(n);
         WriteLine("");
         string schName=string.Format("SchemaName(\"{0}\")", n.Attributes["SchemaName"]==null? "":n.Attributes["SchemaName"].InnerText);
-        WriteLine(string.Format("[{0}, {1}]", string.Format("Table(Name=\"{0}\")", n.Attributes["Name"].InnerText), schName));
+		string tableName = n.Attributes["Name"].InnerText;
+        WriteLine(string.Format("[{0}, {1}]", string.Format("Table(Name=\"{0}\")", tableName), schName));
 #>
 public partial class <#=GetFormattedName(n.Attributes["Name"].InnerText)#> : RowEntityBase
 {
-<#        PushIndent("    ");#>#region Class Members
+<#        PushIndent("    ");#>
+#region Class Members
 <# 
     foreach (XmlNode inner in n.ChildNodes)
     { 
         if (inner.Name=="Column")
-        {#>
+        {
+			string columnName = inner.Attributes["Name"].InnerText.ToUpper();
+		#>
 <# PushComment(inner);#>
 <#PushAttributtes(inner); #>
 
-public <#= GetColumnType(inner)#> <#= GetFormattedName(inner.Attributes["Name"].InnerText) #>
+public <#= GetColumnType(inner)#> <#= GetFormattedName(columnName) #>
 {
     get
     {
-        return this.GetDataRowField<<#= GetColumnType(inner)#>>(() => <#= GetFormattedName(inner.Attributes["Name"].InnerText) #>);
+		return GetDataRowField<<#= GetColumnType(inner)#>>("<#= columnName #>");
+        //return this.GetDataRowField<<#= GetColumnType(inner)#>>(() => <#= GetFormattedName(columnName) #>);
     }
     set
     {
-        UpdateDataRow<<#= GetColumnType(inner)#>>(() => <#= GetFormattedName(inner.Attributes["Name"].InnerText) #>, value);
+        UpdateDataRow<<#= GetColumnType(inner)#>>(() => <#= GetFormattedName(columnName) #>, value);
     }
 }
 <#
-            }
-        }                                           
+        }
+   }
+PopIndent();                                           
 #>
-        #endregion
+    #endregion
+	
+	#region Adapter region contructor
+	public override void InitializeAdapter()
+	{
+	<#
+	PushIndent("    ");
+	#>
+	DataAdapter = new OracleDataAdapter();
+	_dataAdapter.InsertCommand = new OracleCommand(@<#Write(GetProcedureUpdate(n, tableName));#>, CurConnect);
+	_dataAdapter.InsertCommand.BindByName = true;
+	_dataAdapter.InsertCommand.UpdatedRowSource = UpdateRowSource.OutputParameters;
+	<#
+	PushIndent("    ");
+	foreach (XmlNode inner in n.ChildNodes)
+	{
+		PushColumnAdapter("InsertCommand", inner.Attributes["Name"].InnerText, inner, IsPrimaryKey(inner, tableName));
+    }
+	WriteLine("");
+	PopIndent();
+	#>
+	_dataAdapter.UpdateCommand = new OracleCommand(@<#Write(GetProcedureUpdate(n, tableName));#>, CurConnect);
+	_dataAdapter.UpdateCommand.BindByName = true;
+	_dataAdapter.UpdateCommand.UpdatedRowSource = UpdateRowSource.OutputParameters;
+	<#
+	PushIndent("    ");
+	foreach (XmlNode inner in n.ChildNodes)
+	{
+		PushColumnAdapter("UpdateCommand", inner.Attributes["Name"].InnerText, inner,  IsPrimaryKey(inner, tableName));
+    }
+	WriteLine("");
+	PopIndent();
+	#>
+	_dataAdapter.DeleteCommand = new OracleCommand(@<#Write(GetProcedureDelete(n, tableName));#>, CurConnect);
+	_dataAdapter.DeleteCommand.BindByName = true;
+	<#
+	foreach (XmlNode inner in n.ChildNodes.Cast<XmlNode>().Where(r=>IsPrimaryKey(r, tableName)))
+	{
+		PushColumnAdapter("DeleteCommand", inner.Attributes["Name"].InnerText, inner, false);
+    }
+	PopIndent();
+	PopIndent();
+	#>
+	}
+		
+	#endregion
 <#        ClearIndent();#>
     }
 <#
@@ -114,4 +165,57 @@ string FirstCapChar(string s)
 			WriteLine("/// </summary>");
         }
     }
+#>
+<#+
+void PushColumnAdapter(string command, string name, XmlNode node, bool is_primary = false)
+{
+	string direction = is_primary?".Direction = ParameterDirection.InputOutput":"";
+	WriteLine($"_dataAdapter.{command}.Parameters.Add(\"p_{name}\", OracleDbType.{GetOracleDBType(node)}, 0, \"{name}\"){direction};");
+	if (is_primary && GetOracleDBType(node)=="Decimal")
+	WriteLine($"_dataAdapter.{command}.Parameters[\"p_{name}\"].DbType = DbType.{GetOracleDBType(node)};");
+}
+#>
+<#+
+string GetOracleDBType(XmlNode n)
+{
+	switch (n.Attributes.Cast<XmlAttribute>().Where(r=>r.Name.ToUpper()=="DBTYPE").FirstOrDefault().InnerText.ToUpper())
+    {
+		case "VARCHAR2": return "Varchar2";
+		case "BLOB": return "Blob";
+		case "NUMBER": return "Decimal";
+		case "DATE": return "Date";
+		default: return "Varchar2";
+    }
+}
+#>
+
+<#+ 
+bool IsPrimaryKey(XmlNode n, string table_name)
+{
+	string cn = n.Attributes["Name"].InnerText.ToUpper();
+	if (cn.Length>2) 
+		cn = cn.Substring(0, cn.Length-3);
+	return n.Attributes["IsPrimaryKey"]!=null && n.Attributes["IsPrimaryKey"].InnerText.ToUpper()=="TRUE" || table_name.ToUpper()==cn;
+	return true;
+}
+#>
+
+<#+
+string GetProcedureUpdate(XmlNode n, string table_name)
+{
+	string cols = string.Join(", ", n.ChildNodes.Cast<XmlNode>().Select(p=>$"p_{p.Attributes["Name"].InnerText}=>:p_{p.Attributes["Name"].InnerText}").ToArray());
+	string schema = n.Attributes["SchemaName"]==null? "БЛАБЛАНЕТСХЕМЫ":n.Attributes["SchemaName"].InnerText;
+	return $"\"BEGIN {schema}.{table_name}_UPDATE({cols});END;\"";
+	return cols;
+}
+#>
+
+<#+
+string GetProcedureDelete(XmlNode n, string table_name)
+{
+	string schema = n.Attributes["SchemaName"]==null? "БЛАБЛАНЕТСХЕМЫ":n.Attributes["SchemaName"].InnerText;
+	string prColName= n.ChildNodes.Cast<XmlNode>().Where(p=>IsPrimaryKey(p, table_name)).Select(p=>p.Attributes["Name"].InnerText).FirstOrDefault();
+	return $"\"BEGIN {schema}.{table_name}_DELETE(p_{prColName} => :p_{prColName});END;\"";
+	return schema;
+}
 #>

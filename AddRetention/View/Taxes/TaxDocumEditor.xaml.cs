@@ -16,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Salary.Helpers;
 using System.Data.Linq.Mapping;
+using System.Globalization;
+using System.ComponentModel;
 
 namespace Salary.View.Taxes
 {
@@ -63,21 +65,47 @@ namespace Salary.View.Taxes
 
         private void ChooseEmp_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            //EmpFinder
+            EmpFinder f = new EmpFinder(true);
+            f.Owner = Window.GetWindow(this);
+            if (f.ShowDialog() == true)
+            {
+                Model.PerNum = f.PerNum;
+            }
+        }
+
+        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = ControlRoles.GetState(e.Command) && Model != null && Model.HasChanges;
+        }
+
+        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Exception ex = Model.Save();
+            if (ex != null)
+            {
+                MessageBox.Show(ex.GetFormattedException(), "Ошибка сохранения");
+            }
+            else
+            {
+                if (this.IsLoaded)
+                {
+                    this.DialogResult = true;
+                    Close();
+                }
+            }
         }
     }
 
     /// <summary>
     /// Модель для обработки и обновления данных документа налога на доходы
     /// </summary>
-    public partial class TaxEmpDocumentModel : TaxEmpDocum
+    public partial class TaxEmpDocumentModel : TaxEmpDocum, IDataErrorInfo
     {
         DataSet ds;
         OracleDataAdapter odaPerData;
-        OracleConnection CurConnect;
         private EntityRelationList<TaxDocumPayment> _paySource;
         private EntityRelationList<TaxDocumDiscount> _discountSource;
-        private OracleDataAdapter odaTaxEmpDocum;
+        private OracleDataAdapter odaTaxEmpDocum, odaTax_Docum_Payment, odaTax_Docum_Discount;
         private string _exception;
 
         public TaxEmpDocumentModel(OracleConnection _connect, decimal? tax_emp_docum_id)
@@ -91,11 +119,14 @@ namespace Salary.View.Taxes
             odaPerData.SelectCommand.Parameters.Add("c1", OracleDbType.RefCursor, ParameterDirection.Output);
             odaPerData.SelectCommand.Parameters.Add("c2", OracleDbType.RefCursor, ParameterDirection.Output);
             odaPerData.SelectCommand.Parameters.Add("c3", OracleDbType.RefCursor, ParameterDirection.Output);
+            odaPerData.SelectCommand.Parameters.Add("c4", OracleDbType.RefCursor, ParameterDirection.Output);
             odaPerData.TableMappings.Add("Table", "EMP");
             odaPerData.TableMappings.Add("Table1", "PER_DATA");
             odaPerData.TableMappings.Add("Table2", "PASSPORT");
+            odaPerData.TableMappings.Add("Table3", "ADDRESS");
 
-            odaTaxEmpDocum = new OracleDataAdapter(Queries.GetQueryWithSchema(@"Taxes/SelectTaxDocumData.sql"), CurConnect);
+            odaTaxEmpDocum = GetModelAdapter<TaxEmpDocum>();
+            odaTaxEmpDocum.SelectCommand = new OracleCommand(Queries.GetQueryWithSchema(@"Taxes/SelectTaxDocumData.sql"), CurConnect);
             odaTaxEmpDocum.SelectCommand.BindByName = true;
             odaTaxEmpDocum.SelectCommand.Parameters.Add("p_TAX_EMP_DOCUM_ID", OracleDbType.Decimal, tax_emp_docum_id, ParameterDirection.Input);
             odaTaxEmpDocum.SelectCommand.Parameters.Add("c1", OracleDbType.RefCursor, ParameterDirection.Output);
@@ -107,7 +138,8 @@ namespace Salary.View.Taxes
             odaTaxEmpDocum.TableMappings.Add("Table2", "TAX_DOCUM_DISCOUNT");
             odaTaxEmpDocum.TableMappings.Add("Table3", "TAX_DOCUM_PAYMENT");
 
-
+            odaTax_Docum_Discount = GetModelAdapter<TaxDocumDiscount>();
+            odaTax_Docum_Payment = GetModelAdapter<TaxDocumPayment>();
 
             try
             {
@@ -123,9 +155,64 @@ namespace Salary.View.Taxes
             {
                 DataRow r = ds.Tables["TAX_EMP_DOCUM"].NewRow();
                 ds.Tables["TAX_EMP_DOCUM"].Rows.Add(r);
+                this.DataRow = ds.Tables["TAX_EMP_DOCUM"].Rows[0];
+                LockSign = 1;
+                DocumDate = new DateTime(DateTime.Today.Year, ((DateTime.Today.Month - 1) / ((int)3)) * 3 + 1, 1).AddDays(-1);
+                _isNew = true;
             }
-            this.DataRow = ds.Tables["TAX_EMP_DOCUM"].Rows[0];
+            else
+                this.DataRow = ds.Tables["TAX_EMP_DOCUM"].Rows[0];
             UpdateEmpData();
+        }
+
+        /// <summary>
+        /// Сохранение данных по модели
+        /// </summary>
+        /// <returns></returns>
+        public new Exception Save()
+        {
+            OracleTransaction tr = Connect.CurConnect.BeginTransaction();
+            try
+            {
+                if (IsNew && TaxEmpDocumID!=null)
+                    TaxEmpDocumID = null;
+                odaTaxEmpDocum.Update(new DataRow[] { this.DataRow });
+                foreach (var p in PaySource)
+                {
+                    if (p.TaxDocumPaymentID != null && (IsNew || p.EntityState == DataRowState.Added))
+                        p.TaxDocumPaymentID = null;
+                    if (p.TaxEmpDocumID == null || p.TaxEmpDocumID != TaxEmpDocumID)
+                        p.TaxEmpDocumID = TaxEmpDocumID;
+                }
+                foreach (var p in DiscountSource)
+                {
+                    if (p.TaxDocumDiscountID != null && (IsNew || p.EntityState == DataRowState.Added))
+                        p.TaxDocumDiscountID = null;
+                    if (p.TaxEmpDocumID == null || p.TaxEmpDocumID != TaxEmpDocumID)
+                        p.TaxEmpDocumID = TaxEmpDocumID;
+                }
+                odaTax_Docum_Payment.Update(ds.Tables["TAX_DOCUM_PAYMENT"]);
+                odaTax_Docum_Discount.Update(ds.Tables["TAX_DOCUM_DISCOUNT"]);
+                tr.Commit();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                tr.Rollback();
+                return ex;
+            }
+        }
+
+        bool _isNew = false;
+        /// <summary>
+        /// Является ли документ добавляемым
+        /// </summary>
+        public bool IsNew
+        {
+            get
+            {
+                return _isNew;
+            }
         }
 
         /// <summary>
@@ -153,6 +240,33 @@ namespace Salary.View.Taxes
             {
                 base.TaxCompanyID = value;
                 RaisePropertyChanged(() => TaxCompany);
+            }
+        }
+
+        public new decimal? TaxPercent
+        {
+            get
+            {
+                return base.TaxPercent;
+            }
+            set
+            {
+                base.TaxPercent = value;
+                CalcedTax = CalcTax();
+            }
+        }
+
+        public new decimal? CalcedTax
+        {
+            get
+            {
+                return base.CalcedTax;
+            }
+            set
+            {
+                base.CalcedTax = value;
+                RaisePropertyChanged(() => TaxMoreThenCalced);
+                RaisePropertyChanged(() => TaxLessThenCalced);
             }
         }
 
@@ -184,8 +298,28 @@ namespace Salary.View.Taxes
                         RelatedEntity = this, 
                         RelationColumn = "TAX_EMP_DOCUM_ID" 
                     };
+                    _paySource.ListChanged += _paySource_ListChanged;
                 }
                 return _paySource;
+            }
+        }
+
+        private void _paySource_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            CalcedTax = CalcTax();
+            RaisePropertyChanged(() => AllPaySum);
+            RaisePropertyChanged(() => TaxBase);
+        }
+
+        private decimal? CalcTax()
+        {
+            if (this.TaxPercent == 13)
+            {
+                return Math.Round(((PaySource.Sum(r => r.SumSal - (r.SumDisc??0)) - DiscountSource.Sum(r => r.SumDiscount??0)) * TaxPercent/100) ?? 0, 0, MidpointRounding.AwayFromZero);
+            }
+            else
+            {
+                return PaySource.Sum(r=> Math.Round(((r.SumSal - (r.SumDisc??0)) * TaxPercent/100)?? 0, 0, MidpointRounding.AwayFromZero));
             }
         }
 
@@ -203,12 +337,17 @@ namespace Salary.View.Taxes
                         RelatedEntity = this,
                         RelationColumn = "TAX_EMP_DOCUM_ID"
                     };
+                    _discountSource.ListChanged += _discountSource_ListChanged;
                 }
                 return _discountSource;
             }
         }
 
-        
+        private void _discountSource_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            CalcedTax = CalcTax();
+            RaisePropertyChanged(() => TaxBase);
+        }
 
         [OracleParameterMapping(ParameterName="p_per_num")]
         public new string PerNum
@@ -221,6 +360,7 @@ namespace Salary.View.Taxes
             {
                 base.PerNum = value;
                 UpdateEmpData();
+                UpdateEmpAddress();
                 RaisePropertyChanged(() => Emp);
                 RaisePropertyChanged(() => Passport);
                 RaisePropertyChanged(() => PerData);
@@ -264,6 +404,24 @@ namespace Salary.View.Taxes
                 DataException = ex.Message;
             else
                 DataException = string.Empty;
+        }
+
+        public void UpdateEmpAddress()
+        {
+            if (ds.Tables["ADDRESS"].Rows.Count > 0)
+            {
+                Address a = new Address() { DataRow = ds.Tables["ADDRESS"].Rows[0] };
+                this.CodeRegion = a.CodeRegion;
+                this.CodeCountry = "643";
+                this.HomeIndex = a.PostIndex;
+                this.District = a.District;
+                this.City = a.City;
+                this.Locality = a.Locality;
+                this.Street = a.Street;
+                this.HomeNumber = a.House;
+                this.Housing = a.Bulk;
+                this.FlatNumber = a.Flat;
+            }
         }
 
 
@@ -365,6 +523,56 @@ namespace Salary.View.Taxes
                 _exception = value;
                 RaisePropertyChanged(() => DataException);
             }
+        }
+
+        public bool HasChanges {
+            get
+            {
+                return ds != null && ds.HasChanges();
+            }
+        }
+    }
+
+    public class MonthToDateConverter : FrameworkElement, IValueConverter
+    {
+
+        public static readonly DependencyProperty DateConvertProperty = DependencyProperty.Register("DateConvert", typeof(DateTime?), typeof(MonthToDateConverter),
+            new PropertyMetadata(DateTime.Today));
+
+        public DateTime? DateConvert
+        {
+            get
+            {
+                return (DateTime?)GetValue(DateConvertProperty);
+            }
+            set
+            {
+                SetValue(DateConvertProperty, value);
+            }
+        }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value != null && value != DependencyProperty.UnsetValue)
+            {
+                return ((DateTime)value).Month;
+            }
+            else
+                return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value != null && value != DependencyProperty.UnsetValue && DateConvert!=null)
+            {
+                int k = System.Convert.ToInt32(value);
+                if (k >0 && k < 13)
+                    return new DateTime(DateConvert.Value.Year, k, 1);
+                else
+                    return null;
+            }
+            else
+                return null;
         }
     }
 }

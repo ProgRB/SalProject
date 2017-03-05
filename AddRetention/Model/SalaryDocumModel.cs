@@ -19,7 +19,7 @@ using LibrarySalary.Helpers;
 namespace Salary.Model
 {
     [Table(Name = "SALARY_DOCUM")]
-    public partial class SalaryDocumModel: RowEntityBase, IDataErrorInfo
+    public partial class SalaryDocumModel: SalaryDocum, IDataErrorInfo
     {
         DataSet ds, ds_rel;
         OracleDataAdapter odaSalary_Docum, odaSalary_Docum_Detail, odaSalary_Docum_Period, odaSalary_Docum_Pay_Change, odaAllSalDocum;
@@ -59,9 +59,11 @@ namespace Salary.Model
             odaSalary_Docum.TableMappings.Add("Table6", "DOC_LIST");
             odaSalary_Docum.TableMappings.Add("Table7", "REG_DOC");
             odaSalary_Docum.TableMappings.Add("Table8", "SALARY_DOCUM_PAY_CHANGE");
-#region Создание адаптера
-            odaSalary_Docum.InsertCommand = new OracleCommand(string.Format(@"BEGIN {0}.SALARY_DOCUM_UPDATE(:p_SALARY_DOCUM_ID,:p_CODE_DOC,:p_NAME_DOC,:p_DATE_DOC,:p_DATE_CLOSE,:p_TYPE_SAL_DOCUM_ID,:p_DOC_SUBDIV_ID,:p_DATE_FORM_DOCUM,:p_TRANSFER_ID,:p_DOC_END,
-                    :p_LAST_CALC_DATE, :p_DOC_BEGIN, :p_COUNT_RESTRICT_DAYS, :p_REG_DOC_ID, :p_BASIC_DOC_SIGN, :p_RELATED_DOCUM_ID);end;", Connect.SchemaSalary), Connect.CurConnect);
+
+            #region Создание адаптера
+
+            odaSalary_Docum.InsertCommand = new OracleCommand(string.Format(@"BEGIN {1}.SALARY_DOCUM_UPDATE(p_SALARY_DOCUM_ID=>:p_SALARY_DOCUM_ID,p_CODE_DOC=>:p_CODE_DOC,p_NAME_DOC=>:p_NAME_DOC,p_DATE_DOC=>:p_DATE_DOC,p_DATE_CLOSE=>:p_DATE_CLOSE,p_TYPE_SAL_DOCUM_ID=>:p_TYPE_SAL_DOCUM_ID,p_DOC_SUBDIV_ID=>:p_DOC_SUBDIV_ID,p_DATE_FORM_DOCUM=>:p_DATE_FORM_DOCUM,p_TRANSFER_ID=>:p_TRANSFER_ID,p_DOC_END=>:p_DOC_END,
+                                p_LAST_CALC_DATE=>:p_LAST_CALC_DATE,p_DOC_BEGIN=>:p_DOC_BEGIN,p_COUNT_RESTRICT_DAYS=>:p_COUNT_RESTRICT_DAYS,p_REG_DOC_ID=>:p_REG_DOC_ID,p_BASIC_DOC_SIGN=>:p_BASIC_DOC_SIGN,p_RELATED_DOCUM_ID=>:p_RELATED_DOCUM_ID,p_ORDER_ID=>:p_ORDER_ID);end;", Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
             odaSalary_Docum.InsertCommand.BindByName = true;
             odaSalary_Docum.InsertCommand.UpdatedRowSource = UpdateRowSource.OutputParameters;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_SALARY_DOCUM_ID", OracleDbType.Decimal, 0, "SALARY_DOCUM_ID").Direction = ParameterDirection.InputOutput;
@@ -75,17 +77,16 @@ namespace Salary.Model
             odaSalary_Docum.InsertCommand.Parameters.Add("p_DATE_FORM_DOCUM", OracleDbType.Date, 0, "DATE_FORM_DOCUM").Direction = ParameterDirection.Input;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_TRANSFER_ID", OracleDbType.Decimal, 0, "TRANSFER_ID").Direction = ParameterDirection.Input;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_DOC_END", OracleDbType.Date, 0, "DOC_END").Direction = ParameterDirection.Input;
-            /*odaSalary_Docum.InsertCommand.Parameters.Add("p_PAYMENT_SUM", OracleDbType.Decimal, 0, "PAYMENT_SUM").Direction = ParameterDirection.Input;
-            odaSalary_Docum.InsertCommand.Parameters.Add("p_PAYMENT_PERCENT", OracleDbType.Decimal, 0, "PAYMENT_PERCENT").Direction = ParameterDirection.Input;
-            */odaSalary_Docum.InsertCommand.Parameters.Add("p_LAST_CALC_DATE", OracleDbType.Date, 0, "LAST_CALC_DATE").Direction = ParameterDirection.Input; 
+            odaSalary_Docum.InsertCommand.Parameters.Add("p_LAST_CALC_DATE", OracleDbType.Date, 0, "LAST_CALC_DATE").Direction = ParameterDirection.Input;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_DOC_BEGIN", OracleDbType.Date, 0, "DOC_BEGIN").Direction = ParameterDirection.Input;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_COUNT_RESTRICT_DAYS", OracleDbType.Decimal, 0, "COUNT_RESTRICT_DAYS").Direction = ParameterDirection.Input;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_REG_DOC_ID", OracleDbType.Decimal, 0, "REG_DOC_ID").Direction = ParameterDirection.Input;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_BASIC_DOC_SIGN", OracleDbType.Decimal, 0, "BASIC_DOC_SIGN").Direction = ParameterDirection.Input;
             odaSalary_Docum.InsertCommand.Parameters.Add("p_RELATED_DOCUM_ID", OracleDbType.Decimal, 0, "RELATED_DOCUM_ID").Direction = ParameterDirection.Input;
+            odaSalary_Docum.InsertCommand.Parameters.Add("p_ORDER_ID", OracleDbType.Decimal, 0, "ORDER_ID").Direction = ParameterDirection.Input;
 
-            odaSalary_Docum.UpdateCommand = new OracleCommand(string.Format(@"BEGIN {0}.SALARY_DOCUM_UPDATE(:p_SALARY_DOCUM_ID,:p_CODE_DOC,:p_NAME_DOC,:p_DATE_DOC,:p_DATE_CLOSE,:p_TYPE_SAL_DOCUM_ID,:p_DOC_SUBDIV_ID,:p_DATE_FORM_DOCUM,:p_TRANSFER_ID,:p_DOC_END,
-                    :p_LAST_CALC_DATE, :p_DOC_BEGIN, :p_COUNT_RESTRICT_DAYS, :p_REG_DOC_ID, :p_BASIC_DOC_SIGN, :p_RELATED_DOCUM_ID);end;", Connect.SchemaSalary), Connect.CurConnect);
+            odaSalary_Docum.UpdateCommand = new OracleCommand(string.Format(@"BEGIN {1}.SALARY_DOCUM_UPDATE(p_SALARY_DOCUM_ID=>:p_SALARY_DOCUM_ID,p_CODE_DOC=>:p_CODE_DOC,p_NAME_DOC=>:p_NAME_DOC,p_DATE_DOC=>:p_DATE_DOC,p_DATE_CLOSE=>:p_DATE_CLOSE,p_TYPE_SAL_DOCUM_ID=>:p_TYPE_SAL_DOCUM_ID,p_DOC_SUBDIV_ID=>:p_DOC_SUBDIV_ID,p_DATE_FORM_DOCUM=>:p_DATE_FORM_DOCUM,p_TRANSFER_ID=>:p_TRANSFER_ID,p_DOC_END=>:p_DOC_END,
+                                p_LAST_CALC_DATE=>:p_LAST_CALC_DATE,p_DOC_BEGIN=>:p_DOC_BEGIN,p_COUNT_RESTRICT_DAYS=>:p_COUNT_RESTRICT_DAYS,p_REG_DOC_ID=>:p_REG_DOC_ID,p_BASIC_DOC_SIGN=>:p_BASIC_DOC_SIGN,p_RELATED_DOCUM_ID=>:p_RELATED_DOCUM_ID,p_ORDER_ID=>:p_ORDER_ID);end;", Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
             odaSalary_Docum.UpdateCommand.BindByName = true;
             odaSalary_Docum.UpdateCommand.UpdatedRowSource = UpdateRowSource.OutputParameters;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_SALARY_DOCUM_ID", OracleDbType.Decimal, 0, "SALARY_DOCUM_ID").Direction = ParameterDirection.InputOutput;
@@ -99,17 +100,15 @@ namespace Salary.Model
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_DATE_FORM_DOCUM", OracleDbType.Date, 0, "DATE_FORM_DOCUM").Direction = ParameterDirection.Input;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_TRANSFER_ID", OracleDbType.Decimal, 0, "TRANSFER_ID").Direction = ParameterDirection.Input;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_DOC_END", OracleDbType.Date, 0, "DOC_END").Direction = ParameterDirection.Input;
-            /*odaSalary_Docum.UpdateCommand.Parameters.Add("p_PAYMENT_SUM", OracleDbType.Decimal, 0, "PAYMENT_SUM").Direction = ParameterDirection.Input;
-            odaSalary_Docum.UpdateCommand.Parameters.Add("p_PAYMENT_PERCENT", OracleDbType.Decimal, 0, "PAYMENT_PERCENT").Direction = ParameterDirection.Input;
-            */odaSalary_Docum.UpdateCommand.Parameters.Add("p_LAST_CALC_DATE", OracleDbType.Date, 0, "LAST_CALC_DATE").Direction = ParameterDirection.Input;
+            odaSalary_Docum.UpdateCommand.Parameters.Add("p_LAST_CALC_DATE", OracleDbType.Date, 0, "LAST_CALC_DATE").Direction = ParameterDirection.Input;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_DOC_BEGIN", OracleDbType.Date, 0, "DOC_BEGIN").Direction = ParameterDirection.Input;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_COUNT_RESTRICT_DAYS", OracleDbType.Decimal, 0, "COUNT_RESTRICT_DAYS").Direction = ParameterDirection.Input;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_REG_DOC_ID", OracleDbType.Decimal, 0, "REG_DOC_ID").Direction = ParameterDirection.Input;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_BASIC_DOC_SIGN", OracleDbType.Decimal, 0, "BASIC_DOC_SIGN").Direction = ParameterDirection.Input;
             odaSalary_Docum.UpdateCommand.Parameters.Add("p_RELATED_DOCUM_ID", OracleDbType.Decimal, 0, "RELATED_DOCUM_ID").Direction = ParameterDirection.Input;
-            
+            odaSalary_Docum.UpdateCommand.Parameters.Add("p_ORDER_ID", OracleDbType.Decimal, 0, "ORDER_ID").Direction = ParameterDirection.Input;
 
-            odaSalary_Docum.DeleteCommand = new OracleCommand(string.Format(@"BEGIN {0}.SALARY_DOCUM_DELETE(:p_SALARY_DOCUM_ID);end;", Connect.SchemaSalary), Connect.CurConnect);
+            odaSalary_Docum.DeleteCommand = new OracleCommand(string.Format(@"BEGIN {1}.SALARY_DOCUM_DELETE(:p_SALARY_DOCUM_ID);end;", Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
             odaSalary_Docum.DeleteCommand.BindByName = true;
             odaSalary_Docum.DeleteCommand.Parameters.Add("p_SALARY_DOCUM_ID", OracleDbType.Decimal, 0, "SALARY_DOCUM_ID").Direction = ParameterDirection.InputOutput;
 
@@ -244,7 +243,7 @@ namespace Salary.Model
         /// Сохранение данных по документу
         /// </summary>
         /// <returns></returns>
-        public bool Save()
+        public new bool Save()
         {
             OracleTransaction tr = Connect.CurConnect.BeginTransaction();
             bool _is_new = IsNew;
@@ -307,7 +306,7 @@ namespace Salary.Model
         {
             get
             {
-                return this.SalaryDocumID == null;
+                return this.SalaryDocumID == null|| this.EntityState == DataRowState.Added;
             }
         }
         /// <summary>
@@ -338,150 +337,33 @@ namespace Salary.Model
             }
         }
 
-#region Class Members
-
-
-        [Column(Name = "SALARY_DOCUM_ID")]
-        public Decimal? SalaryDocumID
+        public bool IsOrderEnabled
         {
             get
             {
-                return this.GetDataRowField<Decimal?>(() => SalaryDocumID);
-            }
-            set
-            {
-                UpdateDataRow<Decimal?>(() => SalaryDocumID, value);
+                return TypeSalDocum?.IsOrderEnabled==1;
             }
         }
 
-        /// <summary>
-        /// Последнее время расчета
-        /// </summary>
-        [Column(Name = "LAST_CALC_DATE")]
-        public DateTime? LastCalcDate
-        {
-            get
-            {
-                return this.GetDataRowField<DateTime?>(() => LastCalcDate);
-            }
-            set
-            {
-                UpdateDataRow<DateTime?>(() => LastCalcDate, value);
-            }
-        }
+        #region Class Members
 
-        /*/// <summary>
-        /// Процент оплаты
-        /// </summary>
-        [Column(Name = "PAYMENT_PERCENT")]
-        public Decimal? PaymentPercent
-        {
-            get
-            {
-                return this.GetDataRowField<Decimal?>(() => PaymentPercent);
-            }
-            set
-            {
-                UpdateDataRow<Decimal?>(() => PaymentPercent, value);
-            }
-        }
-
-        /// <summary>
-        /// Сумма оплаты за единицу дня или месяца
-        /// </summary>
-        [Column(Name = "PAYMENT_SUM")]
-        public Decimal? PaymentSum
-        {
-            get
-            {
-                return this.GetDataRowField<Decimal?>(() => PaymentSum);
-            }
-            set
-            {
-                UpdateDataRow<Decimal?>(() => PaymentSum, value);
-            }
-        }*/
-
-        /// <summary>
-        /// Дата окончания документа
-        /// </summary>
-        [Column(Name = "DOC_END", CanBeNull=false)]
-        public DateTime? DocEnd
-        {
-            get
-            {
-                return this.GetDataRowField<DateTime?>(() => DocEnd);
-            }
-            set
-            {
-                UpdateDataRow<DateTime?>(() => DocEnd, value);
-            }
-        }
-
+      
         /// <summary>
         /// Дата начала документа
         /// </summary>
         [Column(Name = "DOC_BEGIN", CanBeNull=false)]
-        public DateTime? DocBegin
+        public new DateTime? DocBegin
         {
             get
             {
-                return this.GetDataRowField<DateTime?>(() => DocBegin);
+                return base.DocBegin;
             }
             set
             {
-                UpdateDataRow<DateTime?>(() => DocBegin, value);
+                base.DocBegin = value;
                 FillDocumPeriod();
                 FillDocumPayChange();
                 RaisePropertyChanged(() => IsDocumDetailEnabled);
-            }
-        }
-
-        /// <summary>
-        /// Перевод сотрудника для документа
-        /// </summary>
-        [Column(Name = "TRANSFER_ID", CanBeNull=false)]
-        public Decimal? TransferID
-        {
-            get
-            {
-                return this.GetDataRowField<Decimal?>(() => TransferID);
-            }
-            set
-            {
-                UpdateDataRow<Decimal?>(() => TransferID, value);
-            }
-        }
-
-        /// <summary>
-        /// Дата создания документа
-        /// </summary>
-        [Column(Name = "DATE_FORM_DOCUM")]
-        public DateTime? DateFormDocum
-        {
-            get
-            {
-                return this.GetDataRowField<DateTime?>(() => DateFormDocum);
-            }
-            set
-            {
-                UpdateDataRow<DateTime?>(() => DateFormDocum, value);
-            }
-        }
-
-        /// <summary>
-        /// подразделение документа
-        /// </summary>
-        [Column(Name = "DOC_SUBDIV_ID", CanBeNull=false)]
-        public Decimal? DocSubdivID
-        {
-            get
-            {
-                return this.GetDataRowField<Decimal?>(() => DocSubdivID);
-            }
-            set
-            {
-                UpdateDataRow<Decimal?>(() => DocSubdivID, value);
             }
         }
 
@@ -490,15 +372,15 @@ namespace Salary.Model
         /// Тип документа начисления
         /// </summary>
         [Column(Name = "TYPE_SAL_DOCUM_ID", CanBeNull=false)]
-        public Decimal? TypeSalDocumID
+        public new Decimal? TypeSalDocumID
         {
             get
             {
-                return this.GetDataRowField<Decimal?>(() => TypeSalDocumID);
+                return base.TypeSalDocumID;
             }
             set
             {
-                UpdateDataRow<Decimal?>(() => TypeSalDocumID, value);
+                base.TypeSalDocumID = value;
                 RaisePropertyChanged(() => IsDocumDetailEnabled);
                 RaisePropertyChanged(() => MeasureName);
                 FillDocumPeriod();
@@ -507,89 +389,41 @@ namespace Salary.Model
                 FillDocumPayChange();
                 RaisePropertyChanged(() => IsCountMeasureRestrEnabled);
                 RaisePropertyChanged(() => ShowAdditionParameters);
-            }
-        }
-
-        /// <summary>
-        /// Дата проведения документа
-        /// </summary>
-        [Column(Name = "DATE_CLOSE")]
-        public DateTime? DateClose
-        {
-            get
-            {
-                return this.GetDataRowField<DateTime?>(() => DateClose);
-            }
-            set
-            {
-                UpdateDataRow<DateTime?>(() => DateClose, value);
+                RaisePropertyChanged(() => IsOrderEnabled);
             }
         }
 
         /// <summary>
         /// Дата документа
         /// </summary>
-        [Column(Name = "DATE_DOC", CanBeNull=false)]
-        public DateTime? DateDoc
+        public new DateTime? DateDoc
         {
             get
             {
-                return this.GetDataRowField<DateTime?>(() => DateDoc);
+                return base.DateDoc;
             }
             set
             {
-                UpdateDataRow<DateTime?>(() => DateDoc, value);
+                base.DateDoc = value;
                 RaisePropertyChanged(() => IsDocumDetailEnabled);
             }
         }
 
-        /// <summary>
-        /// наименование документа
-        /// </summary>
-        [Column(Name = "NAME_DOC")]
-        public String NameDoc
-        {
-            get
-            {
-                return this.GetDataRowField<String>(() => NameDoc);
-            }
-            set
-            {
-                UpdateDataRow<String>(() => NameDoc, value);
-            }
-        }
-
-        /// <summary>
-        /// Код документа
-        /// </summary>
-        [Column(Name = "CODE_DOC")]
-        public String CodeDoc
-        {
-            get
-            {
-                return this.GetDataRowField<String>(() => CodeDoc);
-            }
-            set
-            {
-                UpdateDataRow<String>(() => CodeDoc, value);
-            }
-        }
 
         /// <summary>
         /// Ссылка на документ в табеле
         /// </summary>
-        [Column(Name = "REG_DOC_ID")]
-        public decimal? RegDocID
+        public new decimal? RegDocID
         {
             get
             {
-                return this.GetDataRowField<decimal?>(() => RegDocID);
+                return base.RegDocID;
             }
             set
             {
                 if (this.RegDocID != value)
                 {
-                    UpdateDataRow<decimal?>(() => RegDocID, value);
+                    base.RegDocID = value;
                     SetMainDocumValues();
                 }
             }
@@ -630,7 +464,7 @@ namespace Salary.Model
         /// <summary>
         /// Тип документа по заработной плате
         /// </summary>
-        public TypeSalDocum TypeSalDocum
+        public new TypeSalDocum TypeSalDocum
         {
             get
             {
@@ -641,51 +475,20 @@ namespace Salary.Model
             }
         }
 
-        /// <summary>
-        /// Кол-во дней ограничивающих расчеты в видах оплат
-        /// </summary>
-        [Column(Name="COUNT_RESTRICT_DAYS")]
-        public decimal? CountRestrictDays
-        {
-            get
-            {
-                return this.GetDataRowField<decimal?>(() => CountRestrictDays);
-            }
-            set
-            {
-                UpdateDataRow<decimal?>(() => CountRestrictDays, value);
-            }
-        }
 
-        /// <summary>
-        /// Признак первичного документа
-        /// </summary>
-        [Column(Name="BASIC_DOC_SIGN")]
-        public decimal? BasicDocSign
-        {
-            get
-            {
-                return this.GetDataRowField<decimal?>(() => BasicDocSign);
-            }
-            set
-            {
-                UpdateDataRow<decimal?>(() => BasicDocSign, value);
-            }
-        }
         
         /// <summary>
         /// Ссылка на первичный документ
         /// </summary>
-        [Column(Name = "RELATED_DOCUM_ID")]
-        public decimal? RelatedDocumID
+        public new decimal? RelatedDocumID
         {
             get
             {
-                return this.GetDataRowField<decimal?>(() => RelatedDocumID);
+                return base.RelatedDocumID;
             }
             set
             {
-                UpdateDataRow<decimal?>(() => RelatedDocumID, value);
+                base.RelatedDocumID = value;
                 if (value!=null)
                     SetDocValuesByRelated(value);
             }
@@ -755,7 +558,7 @@ namespace Salary.Model
         /// <summary>
         /// ошибка для класса всего
         /// </summary>
-        public string Error
+        public new string Error
         {
             get 
             {
@@ -777,6 +580,11 @@ namespace Salary.Model
         { 
             get
             {
+                if (column_name=="DateDoc" && DateDoc == null) return "Требуется дата документа";
+                if (column_name == "TypeSalDocumID" &&  TypeSalDocumID == null) return "Требуется указать тип документа";
+                if (TypeSalDocum.NeedDocPeriod == 1 && (DocBegin == null && column_name=="DocBegin" || DocEnd == null && column_name=="DocEnd")) return "Для данного типа документа требуется период";
+                if (column_name=="TransferID" && TransferID == null) return "Требуется указать сотрудника";
+                if (column_name=="DocSubdivID" && DocSubdivID == null) return "Требуется указать подразделение документа";
                 string st =base[column_name];
                 if (!string.IsNullOrEmpty(st))
                     return st;

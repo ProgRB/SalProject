@@ -10,7 +10,7 @@
              xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="511" d:DesignWidth="1130" x:Name="_this"> 
+             d:DesignHeight="511" d:DesignWidth="1130" x:Name="_this" Background="White"> 
     <UserControl.CommandBindings>
         <CommandBinding Command="vm:AppCommands.RepSalaryByMonths" CanExecute="Report_CanExecute" Executed="RepSalaryByMonths_Executed"/>
         <CommandBinding Command="vm:AppCommands.RepEconBookByPosition" CanExecute="Report_CanExecute" Executed="RepEconBookByPosition_Executed"/>
@@ -327,6 +327,7 @@
                 </MenuItem>
                 <Separator/>
                 <MenuItem Command="vm:AppCommands.RepSalaryFPWByDegree"/>
+                <MenuItem Command="vm:AppCommands.RepSalaryFPWByDegree" CommandParameter="All" Header="Структура зарплаты по категориям"/>
             </MenuItem>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
             <MenuItem Header="Срочный отчет">

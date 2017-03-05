@@ -45,14 +45,14 @@
             </Style>
         </Grid.Resources>
         <TextBlock Text="Сумма"/>
-        <TextBox Text="{Binding SUM_SAL, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
+        <TextBox Text="{Binding SUM_SAL, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Language="ru-RU"/>
         <TextBlock Grid.Row="1" Text="Шифр оплат"/>
         <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=PaymentSource, ElementName=_this}" IsEditable="True" SelectedValuePath="PAYMENT_TYPE_ID" DisplayMemberPath="CODE_PAYMENT" SelectionChanged="ComboBox_SelectionChanged"
                   Validation.ErrorTemplate="{StaticResource NotNullErrorTemplate}">
             <ComboBox.SelectedValue>
                 <Binding Path="PAYMENT_TYPE_ID" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
-                        <l:NotNullValidationRule ErrorMessage="Шифр оплат должне быть выбран" ValidatesOnTargetUpdated="True"/>
+                        <l:NotNullValidationRule ErrorMessage="Шифр оплат должен быть выбран" ValidatesOnTargetUpdated="True"/>
                     </Binding.ValidationRules>
                 </Binding>
             </ComboBox.SelectedValue>

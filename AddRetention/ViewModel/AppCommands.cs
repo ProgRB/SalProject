@@ -318,6 +318,7 @@ namespace Salary.ViewModel
 
             RepUploadTxtSalaryPayNote = new RoutedUICommand("Платежная ведомость в текстовый файл", "EditCartulary", typeof(AppCommands));
             Unload987ToTxt = new RoutedUICommand("Выгрузка данных перечисленной зарплаты в банк (987 в.о)", "EditCartulary", typeof(AppCommands));
+            UnloadSalaryToZarpl = new RoutedUICommand("Выгрузка данных в дбфку ZARPL", "UploadSalaryChanges540", typeof(AppCommands));
 
             AddMessage = new RoutedUICommand("Добавить сообщение", "MessageEdit", typeof(AppCommands));
             DeleteMessage = new RoutedUICommand("Удалить сообщение", "MessageEdit", typeof(AppCommands));
@@ -397,6 +398,7 @@ namespace Salary.ViewModel
 
             Rep_AddPremiumCatalog = new RoutedUICommand("Взносы к пенсии", "AdditionPremiumSalary", typeof(AppCommands));
             Rep_AddPremiumRegister = new RoutedUICommand("Взносы к пенсии", "AdditionPremiumSalary", typeof(AppCommands));
+            Rep_CompareRetent401402 = new RoutedUICommand("Сравнительный отчет изменений по взносам 401 402", "AdditionPremiumSalary", typeof(AppCommands));
 
             RepSubEmpTransferRetent = new RoutedUICommand("Перечисление удержаний", "RepSubEmpRetent", typeof(AppCommands));
 
@@ -471,10 +473,16 @@ namespace Salary.ViewModel
             DeleteTaxEmpDocum = new RoutedUICommand("Удалить документ", "EditTaxDocum", typeof(AppCommands));
             SaveTaxEmpDocum = new RoutedUICommand("Сохранить документ НДФЛ", "EditTaxDocum", typeof(AppCommands));
 
-            LoadTaxesDocum = new RoutedUICommand("Загрузить документы ндфл сотрудников", "EditTaxCompany", typeof(AppCommands));
+            LoadTaxesDocum = new RoutedUICommand("Загрузить документы ндфл сотрудников", "EditTaxDocum", typeof(AppCommands));
 
             RepTaxesConsolidation = new RoutedUICommand("Отчет по налогам сводный", "ViewTaxCompany", typeof(AppCommands));
-        #endregion
+            RepTaxesDocumCommon = new RoutedUICommand("Отчет по документам 2НДФЛ", "ViewTaxCompany", typeof(AppCommands));
+
+            SaveForeignEmp = new RoutedUICommand("Сохранить данные сотрудника", "EditTaxCompany", typeof(AppCommands));
+
+            Upload2NDFL = new RoutedUICommand("Выгрузить данные для ФНС", "EditTaxCompany", typeof(AppCommands));
+            RelocateNegativSalary = new RoutedUICommand("Перераспределение отрицательных записей доходов", "EditTaxCompany", typeof(AppCommands));
+            #endregion
 
             #region Выгрузка данных в текстовые файлы
             SalaryTabForPrint = new RoutedUICommand("Расчетные листы сотрудников для бухгалтерии", "ReportForPrintSalary", typeof(AppCommands));
@@ -1947,6 +1955,12 @@ namespace Salary.ViewModel
         public static RoutedUICommand RepTaxesConsolidation { get; private set; }
         public static RoutedUICommand LoadTaxesDocum { get; private set; }
         public static RoutedUICommand ExtendTaxDiscounts { get; private set; }
+        public static RoutedUICommand Rep_CompareRetent401402 { get; private set; }
+        public static RoutedUICommand SaveForeignEmp { get; private set; }
+        public static RoutedUICommand Upload2NDFL { get; private set; }
+        public static RoutedUICommand RepTaxesDocumCommon { get; private set; }
+        public static RoutedUICommand RelocateNegativSalary { get; private set; }
+        public static RoutedUICommand UnloadSalaryToZarpl { get; private set; }
     }
 
 }

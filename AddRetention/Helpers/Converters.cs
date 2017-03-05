@@ -415,7 +415,7 @@ namespace Salary.View
                             if (pd[prop]!=null) // если есть такое свойство у объекта, то суммируем его
                             {
                                 object temp = pd[prop].GetValue(value);
-                                result[i]+= temp==null?0:(decimal)temp; // если значение не Null то суммируем его
+                                result[i]+= temp==null||temp==DBNull.Value?0:(decimal)temp; // если значение не Null то суммируем его
                             }
                         }
                     }

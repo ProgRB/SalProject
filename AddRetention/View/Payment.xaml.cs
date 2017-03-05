@@ -737,7 +737,7 @@ namespace Salary.View
         {
             CalcReportView f = new CalcReportView(EmpFilterItempProvider.SubdivID, EmpFilterItempProvider.SelectedDate);
             f.Owner = Window.GetWindow(this);
-            f.ShowDialog();
+            f.Show();
         }
         
         
@@ -834,7 +834,7 @@ namespace Salary.View
         {
             CalcReportView f = new CalcReportView(EmpFilterItempProvider.SubdivID, EmpFilterItempProvider.SelectedDate);
             f.Owner = Window.GetWindow(this);
-            f.ShowDialog();
+            f.Show();
         }
         
         private void Report_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -1174,31 +1174,56 @@ namespace Salary.View
         /// <param name="e"></param>
         private void Rep_ConsolidSalary_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            OracleDataAdapter a = new OracleDataAdapter(string.Format(Queries.GetQuery("SelectRep_ConsolidSalary.sql"), Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
-            a.SelectCommand.Parameters.Add("p_subdiv_id", OracleDbType.Decimal, EmpFilterItempProvider.SubdivID, ParameterDirection.Input);
-            a.SelectCommand.Parameters.Add("p_date1", OracleDbType.Date, EmpFilterItempProvider.SelectedDate, ParameterDirection.Input);
-            a.SelectCommand.Parameters.Add("p_date2", OracleDbType.Date, EmpFilterItempProvider.SelectedDate, ParameterDirection.Input);
-            a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
-            a.SelectCommand.BindByName = true;
-            AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование отчета", 
-                (s, pw)=>
-                    {
-                        DataTable t = new DataTable();
-                        (pw.Argument as OracleDataAdapter).Fill(t);
-                        pw.Result = t;
-                    },
-                a, a.SelectCommand,
-                (s, pw)=>
-                    {
-                        if (pw.Cancelled)
-                            return;
-                        else
-                            if (pw.Error != null)
-                                        MessageBox.Show(pw.Error.GetFormattedException(), "Ошибка формирования", MessageBoxButton.OK);
-                            else
-                                ViewReportWindow.ShowReport(this, "\"Сводный отчет по шифра оплат в подразделении\"", "Rep_ConsolidSalary.rdlc", pw.Result as DataTable,
-                                    new ReportParameter[] { new ReportParameter("CODE_SUBDIV", CodeSubdiv), new ReportParameter("P_DATE", EmpFilterItempProvider.SelectedDate.Value.ToString("MMMM yyyy")) }.ToList());
-                    });
+            if (e.Parameter == null)
+            {
+                OracleDataAdapter a = new OracleDataAdapter(string.Format(Queries.GetQuery("SelectRep_ConsolidSalary.sql"), Connect.SchemaApstaff, Connect.SchemaSalary), Connect.CurConnect);
+                a.SelectCommand.Parameters.Add("p_subdiv_id", OracleDbType.Decimal, EmpFilterItempProvider.SubdivID, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("p_date1", OracleDbType.Date, EmpFilterItempProvider.SelectedDate, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("p_date2", OracleDbType.Date, EmpFilterItempProvider.SelectedDate, ParameterDirection.Input);
+                a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
+                a.SelectCommand.BindByName = true;
+                AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование отчета",
+                    a, a.SelectCommand,
+                    (s, pw) =>
+                        {
+                            ViewReportWindow.ShowReport(this, "\"Сводный отчет по шифра оплат в подразделении\"", "Rep_ConsolidSalary.rdlc", (pw.Result as DataSet).Tables[0],
+                                new ReportParameter[] { new ReportParameter("CODE_SUBDIV", CodeSubdiv), new ReportParameter("P_DATE", EmpFilterItempProvider.SelectedDate.Value.ToString("MMMM yyyy")) }.ToList());
+                        });
+            }
+            else
+                if (e.Parameter.ToString() == "ExcelCodepayment")
+            {
+                FilterReporting f = new FilterReporting(EmpFilterItempProvider.SubdivID, EmpFilterItempProvider.SelectedDate, EmpFilterItempProvider.SelectedDate);
+                f.Owner = Window.GetWindow(this);
+                if (f.ShowDialog() == true)
+                {
+                    OracleDataAdapter a = new OracleDataAdapter(Queries.GetQueryWithSchema(@"SalaryReport/Rep_ConsolidSalaryToExcel.sql"), Connect.CurConnect);
+                    a.SelectCommand.Parameters.Add("p_subdiv_id", OracleDbType.Decimal, f.SubdivID, ParameterDirection.Input);
+                    a.SelectCommand.Parameters.Add("p_date_begin", OracleDbType.Date, f.DateBegin, ParameterDirection.Input);
+                    a.SelectCommand.Parameters.Add("p_date_end", OracleDbType.Date, f.DateEnd, ParameterDirection.Input);
+                    a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
+                    a.SelectCommand.BindByName = true;
+                    AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование отчета",
+                        a, a.SelectCommand,
+                        (s, pw) =>
+                        {
+                            SaveFileDialog sf = new SaveFileDialog();
+                            sf.Filter = "Excel файлы|*.xlsx";
+                            if (sf.ShowDialog() == true)
+                            {
+                                try
+                                {
+                                    ExcelHelper.PivotToTable((pw.Result as DataSet).Tables[0], sf.FileName, new string[] { "Вид оплат" }, new string[] { "Подразделение", "Дата" }, "Сумма");
+                                    Process.Start(sf.FileName);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.GetFormattedException(), "Ошибка формирования файла Excel");
+                                }
+                            }
+                        });
+                }
+            }
         }
 
         private void Rep_EmpSalaryListForAccount_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -2403,25 +2428,16 @@ namespace Salary.View
             f.AllowBegin = Visibility.Collapsed;
             if (f.ShowDialog() == true)
             {
-                OracleDataAdapter a = new OracleDataAdapter(string.Format("begin {1}.SALARY_TXT_REPORTS.{2}(:p_worker_ids, :p_date, :c);end;", Connect.SchemaApstaff, Connect.SchemaSalary, e.Parameter),
-                        Connect.CurConnect);
+                OracleDataAdapter a = new OracleDataAdapter($"begin SALARY.SALARY_TXT_REPORTS.{e.Parameter}(:p_worker_ids, :p_date, :c);end;", Connect.CurConnect);
                 a.SelectCommand.BindByName = true;
                 a.SelectCommand.Parameters.Add("p_worker_ids", OracleDbType.Array, f.SelectedRows.OfType<DataRowView>().Select(r => r.Row.Field2<Decimal>("WORKER_ID")).ToArray(), ParameterDirection.Input).UdtTypeName = "SALARY.NUMBER_COLLECTION_TYPE";
                 a.SelectCommand.Parameters.Add("p_date", OracleDbType.Date, f.DateEnd, ParameterDirection.Input);
                 a.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
                 AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Формирование отчета",
-                    (s, pw) =>
-                    {
-                        DataTable t = new DataTable();
-                        a.Fill(t);
-                        pw.Result = t;
-                    }, a, a.SelectCommand,
+                     a, a.SelectCommand,
                         (p, s) =>
                         {
-                            if (s.Cancelled) return;
-                            else if (s.Error != null) MessageBox.Show(s.Error.GetFormattedException(), "Ошибка формирования отчета");
-                            else
-                            {
+                            
                                 System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog();
                                 sf.DefaultExt = "TXT";
                                 sf.Filter = "Текстовые файлы (.txt)|*.txt";
@@ -2437,7 +2453,7 @@ namespace Salary.View
                                             FileStream fs = File.Create(sf.FileName);
                                             fs.Close();
                                         }
-                                        File.AppendAllLines(sf.FileName, (s.Result as DataTable).Rows.OfType<DataRow>().Select(w => w[0].ToString()), Encoding.GetEncoding(866));
+                                        File.AppendAllLines(sf.FileName, (s.Result as DataSet).Tables[0].Rows.OfType<DataRow>().Select(w => w[0].ToString()), Encoding.GetEncoding(866));
                                         MessageBox.Show("Записи успешно добавлены в файл для печати!");
                                     }
                                     catch (Exception ex)
@@ -2445,7 +2461,6 @@ namespace Salary.View
                                         MessageBox.Show(ex.Message, "Ошибка записи в файл");
                                     }
                                 }
-                            }
                         });
             }
         }
@@ -3372,6 +3387,38 @@ namespace Salary.View
                         MessageBox.Show(Window.GetWindow(this), "Операция выполнена", "Успешно");
                     }
                     );
+            }
+        }
+
+        /// <summary>
+        /// Выгрузка данных в срань госпоню - ZARPL.dbf без табельных только по заказам и категориям видалм оплат
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UnloadToZarpl_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (!CheckVfpOleDb.IsInstalled())
+                MessageBox.Show("Не установлен драйвер FoxPro. Обратитесь к системным администраторам для установки", "Ошибка записи", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            else
+            {
+                OracleDataAdapter oda = new OracleDataAdapter(Queries.GetQueryWithSchema(@"Upload/UploadSalaryToZARPL.sql"), Connect.CurConnect);
+                oda.SelectCommand.BindByName = true;
+                oda.SelectCommand.Parameters.Add("p_date", OracleDbType.Date, EmpFilterItempProvider.SelectedDate, ParameterDirection.Input);
+                oda.SelectCommand.Parameters.Add("c", OracleDbType.RefCursor, ParameterDirection.Output);
+                AbortableBackgroundWorker.RunAsyncWithWaitDialog(this, "Получение данных с сервера", oda, oda.SelectCommand,
+                    (p, pw) =>
+                    {
+                        var d = EmpFilterItempProvider.SelectedDate.Value;
+                        OpenFileDialog sf = new OpenFileDialog();
+                        sf.Filter = "Файлы DBF|*.dbf";
+                        sf.InitialDirectory = @"H:\OTD_3\ARM_EU\DBFS";
+                        sf.FileName = $"ZARPL{d.Year.ToString().Substring(2, 2)}";
+                        if (sf.ShowDialog() == true)
+                        {
+                            DBFWriter.WriteDataTableToDBF(sf.FileName, (pw.Result as DataSet).Tables[0], $"pm={d.Month.ToString()} and pg={d.Year}", true);
+                            MessageBox.Show($"Записано {(pw.Result as DataSet).Tables[0].Rows.Count} записей в дбфку:{sf.FileName}");
+                        }
+                    });
             }
         }
     }

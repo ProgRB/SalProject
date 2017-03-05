@@ -13,7 +13,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="485" d:DesignWidth="1201"
-             x:Name="_this"
+             x:Name="_this" Background="White"
              >
     <UserControl.CommandBindings>
         <CommandBinding Command="cmd:AppCommands.AddClientAccount" CanExecute="AddAccount_CanExecute" Executed="AddAccount_Executed"/>
@@ -34,6 +34,7 @@
         <CommandBinding Command="cmd:AppCommands.RepTypeBankEmpTransfer" CanExecute="ReportSubdiv_CanExecute" Executed="RepTypeBankEmpTransfer_Executed"/>
         <CommandBinding Command="cmd:AppCommands.RepEmpTransferByRegisters" CanExecute="ReportSubdiv_CanExecute" Executed="RepEmpTransferByRegisters_Executed"/>
         <CommandBinding Command="cmd:AppCommands.CopyAccountsFromMainWork" CanExecute="EditRetentSignComb_CanExecute" Executed="CopyAccountsFromMainWork_Executed"/>
+        <CommandBinding Command="cmd:AppCommands.Rep_CompareRetent401402" CanExecute="ReportSubdiv_CanExecute" Executed="Rep_CompareRetent401402_Executed"/>
     </UserControl.CommandBindings>
     
     <UserControl.Resources>
@@ -134,6 +135,8 @@
                                 <Separator/>
                                 <MenuItem Command="cmd:AppCommands.Rep_AddPremiumRegister" CommandParameter="401" Header="Реестр ДСВ" InputGestureText="401"/>
                                 <MenuItem Command="cmd:AppCommands.Rep_AddPremiumRegister" CommandParameter="402" Header="Реестр взносов в НПФ Первый пром. альянс" InputGestureText="402"/>
+                                <Separator/>
+                                <MenuItem Command="cmd:AppCommands.Rep_CompareRetent401402" Header="Протокол изменений по взносам 401, 402"/>
                             </MenuItem>
                             <Separator/>
                             <MenuItem Header="Возможные ошибки перечислений" Command="cmd:AppCommands.RepSalaryErrors"/>

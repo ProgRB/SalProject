@@ -360,6 +360,8 @@
                     <MenuItem Header="Свод заработной платы">
                         <MenuItem Header="Свод по подразделению" Command="vm:AppCommands.Rep_SubConsolidation"></MenuItem>
                         <MenuItem Header="Свод по заводу" Command="vm:AppCommands.Rep_ConsolidDept"></MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Сводная таблица видов оплат в Excel" Command="vm:AppCommands.Rep_ConsolidSalary" CommandParameter="ExcelCodepayment"/>
                     </MenuItem>
                     <Separator/>
                     <MenuItem Header="Отчеты по заработной плате">
@@ -510,6 +512,7 @@
                     <MenuItem Header="Печать расчета средних">
                         <MenuItem Command="vm:AppCommands.RepAVGPrintACPD" Header="Средняя стоимость рабочего дня" CommandParameter="SelectEmpAvgMissionDay"/>
                         <MenuItem Command="vm:AppCommands.RepAVGPrintACPD" Header="Средняя стоимость рабочего часа" CommandParameter="SelectEmpAvgMissionHour"/>
+                        <MenuItem Command="vm:AppCommands.RepAVGPrintACPD" Header="Средняя стоимость календарного дня" CommandParameter="SelectEmpAvgCalendDay"/>
                     </MenuItem>
                     <Separator/>
                     <MenuItem Header="Печать документов больничных и пособий" Command="vm:AppCommands.RepPrintSalDocACPD"/>
@@ -534,6 +537,9 @@
                             <Image Source="/Images/uploadfile_3232.png" Height="20" Stretch="Uniform"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Command="vm:AppCommands.UnloadSalaryToZarpl" CommandManager.CanExecute="Report_CanExecute" CommandManager.Executed="UnloadToZarpl_Executed">
+                    </MenuItem>
+                    <Separator/>
                     <MenuItem Header="Выгрузка данных в ПФР">
                         <MenuItem Command="vm:AppCommands.UnloadPFR_Dop" Header="Данные по доп тарифам за вредные условия труда за квартал" CommandParameter="ipfrdop_5"/>
                         <MenuItem Command="vm:AppCommands.UnloadPFR_Dop" Header="Данные по ОПС за квартал" CommandParameter="ipfrosn_5"/>

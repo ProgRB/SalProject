@@ -185,7 +185,7 @@ namespace Salary
 
         private static bool ReConnect()
         {
-            while (_connect.State!= System.Data.ConnectionState.Open || !Ping())
+            while (_connect.State!= System.Data.ConnectionState.Open || !_connect.Ping())
             {
                 Thread.Sleep(1000);
                 _connect.Close();
@@ -209,7 +209,7 @@ namespace Salary
             get
             {
                 if (_connect == null) return _connect;
-                if (!Ping())
+                if (!_connect.Ping())
                 {
                     if (ConnectionBroken != null) // Если сервер не пингуется, то сообщаем что соединение сброшено
                         ConnectionBroken(null, EventArgs.Empty);
@@ -237,35 +237,7 @@ namespace Salary
             }
         }
         
-        /// <summary>
-        /// Пытаемся пропинговать сервер и порт на доступность.
-        /// </summary>
-        /// <returns></returns>
-        public static bool Ping()
-        {
-            try
-            {
-                new OracleCommand("select null from dual", _connect).ExecuteNonQuery();
-                return true;
-            }
-            catch
-            {
-                try
-                {
-                    TcpClient tc = new TcpClient(parameters["server"], int.Parse(parameters["port"]));
-                    tc.Close();
-                    if (_connect.State == System.Data.ConnectionState.Open)
-                        _connect.Close();
-                    _connect.Open();
-                    new OracleCommand("select null from dual", _connect).ExecuteNonQuery();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
+        
         public static string SchemaApstaff
         {
             get { return _schema1; }
@@ -550,6 +522,38 @@ namespace Salary
             return null;
         }
     }
+
+    public static class ConnectionExtention
+    {
+        /// <summary>
+        /// Пытаемся пропинговать сервер и порт на доступность.
+        /// </summary>
+        /// <returns></returns>
+        public static bool Ping(this OracleConnection connect)
+        {
+            try
+            {
+                new OracleCommand("select null from dual", connect).ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                try
+                {
+                    if (connect.State == System.Data.ConnectionState.Open)
+                        connect.Close();
+                    connect.Open();
+                    new OracleCommand("select null from dual", connect).ExecuteNonQuery();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
 
     
 }

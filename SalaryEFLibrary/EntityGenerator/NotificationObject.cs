@@ -31,4 +31,5 @@ namespace SalaryEFLibrary
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
+
 }

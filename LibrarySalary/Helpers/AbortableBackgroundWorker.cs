@@ -8,13 +8,24 @@ using Oracle.DataAccess.Client;
 using Salary.View;
 using System.Windows;
 using System.Data;
+using System.Linq.Expressions;
 
 namespace Salary.Helpers
 {
-    public class AbortableBackgroundWorker : BackgroundWorker
+    public class AbortableBackgroundWorker : BackgroundWorker, INotifyPropertyChanged
     {
 
         private Thread workerThread;
+        private string _currentStatus;
+        private string _tempStatus;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged<T>(Expression<Func<T>> action)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(((MemberExpression)action.Body).Member.Name));
+        }
+
 
         protected override void OnDoWork(DoWorkEventArgs e)
         {
@@ -42,14 +53,28 @@ namespace Salary.Helpers
 
         public void Abort()
         {
-            if (ExecutingCommand != null)
-                ExecutingCommand.Cancel();
-            else
-                if (workerThread != null)
+            if (this.IsBusy) // если задача уже работает то прерываем команду, и там возникнет событие заверщения задачи и удалит сама поток
+            {
+                if (ExecutingCommand != null)
+                    ExecutingCommand.Cancel();
+                else
+                    if (workerThread != null)
                 {
                     workerThread.Abort();
                     workerThread = null;
                 }
+            }
+            else // иначе просто удаляем из очереди 
+            {
+                lock (Queue)
+                {
+                    if (this.waitDialog != null && waitDialog.IsLoaded)
+                        waitDialog.Close();
+                    Queue.Remove(this);
+                }
+                //WaitWindow.RepositionAllWindows();
+            }
+
         }
 
         public OracleCommand ExecutingCommand
@@ -64,19 +89,108 @@ namespace Salary.Helpers
             set;
         }
 
+        public WaitWindow WaitWindow
+        {
+            get
+            {
+                return waitDialog;
+            }
+        }
+
         public static void RunAsyncWithWaitDialog(DependencyObject sender, string caption, DoWorkEventHandler dowork,
-            object argument, OracleCommand executingCommand, RunWorkerCompletedEventHandler workComplete)
+            object argument, OracleCommand executingCommand, RunWorkerCompletedEventHandler workComplete, bool inQueue = true)
         {
             AbortableBackgroundWorker bw = new AbortableBackgroundWorker();
+            bw.WorkerSupportsCancellation = true;
+            bw.WorkerReportsProgress = true;
             bw.DoWork += dowork;
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
             bw.RunWorkerCompleted += workComplete;
-            WaitWindow f = new WaitWindow(caption, bw);
+            bw.ProgressChanged += Bw_ProgressChanged;
+            bw.ExecutingCommand = executingCommand;
+            bw.Argument = argument;
+            bw.InQueue = inQueue;
+            bw.CurrentStatus = caption;
+            WaitWindow f = new WaitWindow(bw);
             f.Owner = Window.GetWindow(sender);
             bw.waitDialog = f;
             f.Show();
-            bw.ExecutingCommand = executingCommand;
-            bw.RunWorkerAsync(argument);
+            
+            if (bw.InQueue)
+            {
+                Queue.Enqueue(bw);
+            }
+            else
+                bw.RunWorkerAsync(argument);
+        }
+
+        static LibrarySalary.Helpers.ConnectionQueue _queue;
+        public static LibrarySalary.Helpers.ConnectionQueue Queue
+        {
+            get
+            {
+                if (_queue == null)
+                {
+                    _queue = new LibrarySalary.Helpers.ConnectionQueue();
+                }
+                return _queue;
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// Строка  - надпись на экране что сейчас происходит
+        /// </summary>
+        public string CurrentStatus
+        {
+            get
+            {
+                return _currentStatus;
+            }
+            set
+            {
+                _currentStatus = value;
+                RaisePropertyChanged(() => CurrentStatus);
+            }
+        }
+        string firstStatus;
+        private bool _inQueue = false;
+
+        /// <summary>
+        /// Временный статус для выполнения операции
+        /// </summary>
+        public string TempStatus
+        {
+            get
+            {
+                return _tempStatus;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    CurrentStatus = firstStatus;
+                }
+                else
+                {
+                    _tempStatus = value;
+                    firstStatus = CurrentStatus;
+                    CurrentStatus = value;
+                }
+            }
+
+        }
+
+        public object Argument
+        {
+            get;set;
+        }
+
+        private static void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            
         }
 
         static void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -133,6 +247,29 @@ namespace Salary.Helpers
                     else
                         workSuccessEnded(p, pw);
                 });
+        }
+
+        /// <summary>
+        /// Находится ли в очереди задача
+        /// </summary>
+        public bool InQueue
+        {
+            get
+            {
+                return _inQueue;
+            }
+            set
+            {
+                _inQueue = value;
+                RaisePropertyChanged(() => InQueue);
+            }
+        }
+
+        public Point GetWaitwindowPosition()
+        {
+            if (waitDialog != null)
+                return new Point(waitDialog.Left, waitDialog.Top);
+            return new Point(0, 0);
         }
     }
 }
