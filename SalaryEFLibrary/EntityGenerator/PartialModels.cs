@@ -435,4 +435,22 @@ namespace EntityGenerator
         }
     }
 
+
+    public partial class TaxDocumPayment
+    {
+        public int? PayDateMonth
+        {
+            get
+            {
+                return PayDate?.Month;
+            }
+            set
+            {
+                if (value == null)
+                    PayDate = null;
+                else
+                    PayDate = new DateTime(PayDate.Value.Year, value.Value, PayDate.Value.Day);
+            }
+        }
+    }
 }

@@ -97,7 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibrarySalary\LibrarySalary.csproj">
-      <Project>{16B25109-FEB6-419A-9A58-4BF1D6E26E3F}</Project>
+      <Project>{16b25109-feb6-419a-9a58-4bf1d6e26e3f}</Project>
       <Name>LibrarySalary</Name>
     </ProjectReference>
     <ProjectReference Include="..\SalaryEFLibrary\SalaryEFLibrary.csproj">

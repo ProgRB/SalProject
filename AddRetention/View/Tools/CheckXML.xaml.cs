@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using Salary.Helpers;
 using System.ComponentModel;
 using System.IO;
-using VSAX3;
+//using VSAX3;
 
 namespace Salary.View
 {
@@ -45,7 +45,7 @@ namespace Salary.View
 
         private void Start_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Model.StartCheckFile();
+           // Model.StartCheckFile();
         }
     }
 
@@ -122,12 +122,12 @@ namespace Salary.View
         }
         public CheckXMLModel()
         {
-            bw = new BackgroundWorker();
+           /* bw = new BackgroundWorker();
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
-            bw.DoWork += StartCheck;
+            bw.DoWork += StartCheck;*/
         }
 
-        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+       /* void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
                 MessageBox.Show(e.Error.Message, "Ошибка проверки файла");
@@ -181,7 +181,7 @@ namespace Salary.View
                 return _listTypeFile;
             }
         }
-
+        */
         TypeFileCheck _selectedTypeFile;
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Salary.View
         }
 
         private BackgroundWorker bw;
-
+/*
         /// <summary>
         /// Запуск проверки файла
         /// </summary>
@@ -342,7 +342,7 @@ namespace Salary.View
             reader.ErrorHandler.Errors.CopyTo(l);
             e.Result = l.ToList();
             reader.Close();
-        }
+        }*/
 
         /// <summary>
         /// Запущена ли проверка
